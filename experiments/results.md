@@ -32,5 +32,28 @@ train/test split.
 (0.0057 ms/sample). Random Forest matches accuracy but trains ~10x slower;
 MLP is slowest and less accurate.
 
+## Robustness checks
+
+**5-fold stratified CV (XGBoost, CICIDS2017):** macro-F1 = **0.9918 ± 0.0004**
+(folds: 0.9910, 0.9917, 0.9921, 0.9919, 0.9923) — confirms the single-split
+result is stable.
+
+**Confusion matrix (XGBoost, CICIDS2017 test):** TN=130129, FP=542, FN=224,
+TP=28172 (≈159k flows).
+
+## Cross-dataset validation — UNSW-NB15 (175,341 flows, 42 features, attack ratio 68%)
+
+| Model | Accuracy | Precision | Recall | macro-F1 | ROC-AUC |
+|---|---|---|---|---|---|
+| Logistic Regression | 0.8879 | 0.9108 | 0.9260 | 0.8698 | 0.9331 |
+| Random Forest | 0.9554 | 0.9678 | 0.9666 | 0.9487 | 0.9925 |
+| **XGBoost** | **0.9563** | 0.9667 | **0.9692** | **0.9497** | **0.9930** |
+| Deep model (MLP) | 0.9361 | **0.9757** | 0.9293 | 0.9284 | 0.9893 |
+
+Same pipeline + stratified 70/30 split. **XGBoost wins again** (macro-F1 0.9497,
+ROC-AUC 0.9930); model ranking (XGBoost ≳ RF > MLP > LR) is preserved across
+both datasets → the cost-aware conclusion generalizes, not a single-benchmark
+artifact. Data: HF `Mouwiya/UNSW-NB15` (public, no auth).
+
 > Reproduce: paste a single base64 one-liner (or run `ids_cicids2017.ipynb`)
 > in Colab; ~18 min end-to-end on the free CPU tier.

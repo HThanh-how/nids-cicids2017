@@ -44,7 +44,8 @@ the transition from an accurate offline classifier to a scalable,
 continuously serving system is frequently overlooked. In this paper we
 present a reproducible comparative study of classical machine learning and
 deep learning models for network intrusion detection on the widely used
-CICIDS2017 benchmark. We design a unified pipeline covering data cleaning,
+CICIDS2017 benchmark, with cross-dataset validation on UNSW-NB15. We design
+a unified pipeline covering data cleaning,
 feature selection, and class-imbalance handling, and we evaluate Logistic
 Regression, Random Forest, XGBoost, and a multilayer perceptron under a
 single protocol using accuracy, precision, recall, macro-F1, and ROC-AUC.
@@ -88,7 +89,8 @@ magnitude more expensive to serve may be the inferior choice.
 following contributions:
 \begin{itemize}
   \item A reproducible preprocessing and evaluation pipeline for the
-        CICIDS2017 dataset, released openly to support replication.
+        CICIDS2017 and UNSW-NB15 datasets, released openly to support
+        replication.
   \item A unified comparison of classical ML (Logistic Regression, Random
         Forest, XGBoost) and a deep learning model, evaluated jointly on
         accuracy, precision, recall, macro-F1, and ROC-AUC, together with
@@ -309,6 +311,35 @@ largely mitigate this, with XGBoost reaching a precision of 0.9811.
 Reducing the residual false negatives on under-represented attack families
 remains the principal avenue for improvement.
 
+\paragraph{Cross-dataset validation.}
+To assess whether our findings generalize beyond a single benchmark, we
+repeat the comparison on the UNSW-NB15 dataset~\cite{moustafa2015unswnb15}
+(175{,}341 flows, 42 features, attack ratio 68\%) under the same pipeline
+and a stratified 70/30 split. Table~\ref{tab:unsw} reports the results.
+Although the absolute scores are lower on this more balanced and harder
+dataset, the model ranking is preserved: XGBoost again achieves the best
+macro-F1 (0.9497) and ROC-AUC (0.9930), closely followed by Random Forest,
+with the linear baseline trailing. The consistency of this ordering across
+two independent datasets indicates that our cost-aware conclusion is not an
+artifact of a single benchmark.
+
+\begin{table}[t]
+\centering
+\caption{Detection performance on the UNSW-NB15 dataset (test set). Best
+value per column in bold.}
+\label{tab:unsw}
+\begin{tabular}{lccccc}
+\toprule
+Model & Accuracy & Precision & Recall & macro-F1 & ROC-AUC \\
+\midrule
+Logistic Regression & 0.8879 & 0.9108 & 0.9260 & 0.8698 & 0.9331 \\
+Random Forest       & 0.9554 & 0.9678 & 0.9666 & 0.9487 & 0.9925 \\
+XGBoost             & \textbf{0.9563} & 0.9667 & \textbf{0.9692} & \textbf{0.9497} & \textbf{0.9930} \\
+Deep model (MLP)    & 0.9361 & \textbf{0.9757} & 0.9293 & 0.9284 & 0.9893 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 % =====================================================================
 \section{Cloud-Native Deployment Design}
 \label{sec:deploy}
@@ -360,8 +391,8 @@ cluster, and released through an automated CI/CD pipeline.}
 \section{Conclusion and Future Work}
 \label{sec:conclusion}
 We presented a reproducible, cost-aware comparison of machine learning and
-deep learning models for network intrusion detection on CICIDS2017, paired
-with a cloud-native deployment design. Our results
+deep learning models for network intrusion detection on CICIDS2017 and
+UNSW-NB15, paired with a cloud-native deployment design. Our results
 (Tables~\ref{tab:results}--\ref{tab:cost}) indicate that XGBoost provides
 the best balance of detection quality (99.18\,\% macro-F1) and serving cost
 (18.58\,s training, 0.0057\,ms per-sample inference), reinforcing the view
