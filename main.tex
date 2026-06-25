@@ -262,6 +262,46 @@ while training in 18.58\,s versus 185.76\,s, and its inference cost is only
 our central argument that model selection for an operational IDS should
 weigh serving cost alongside accuracy.
 
+To verify that these results are not an artifact of the particular
+train/test partition, we additionally perform 5-fold stratified
+cross-validation for the best model on the training data: XGBoost attains a
+macro-F1 of $0.9918 \pm 0.0004$, confirming the stability of the reported
+performance. Figure~\ref{fig:roc} shows its ROC curve and
+Table~\ref{tab:cm} the confusion matrix on the test set, where only 542
+false positives and 224 false negatives occur out of roughly 159k flows.
+
+\begin{table}[t]
+\centering
+\caption{Confusion matrix of the XGBoost detector on the CICIDS2017 test set.}
+\label{tab:cm}
+\begin{tabular}{ll cc}
+\toprule
+ & & \multicolumn{2}{c}{Predicted} \\
+\cmidrule(lr){3-4}
+ & & Benign & Attack \\
+\midrule
+\multirow{2}{*}{Actual} & Benign & 130129 & 542 \\
+ & Attack & 224 & 28172 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[scale=4.2]
+\draw[->] (0,0) -- (1.08,0) node[right,font=\small] {FPR};
+\draw[->] (0,0) -- (0,1.08) node[above,font=\small] {TPR};
+\foreach \x in {0,0.5,1} \draw (\x,0) -- (\x,-0.02) node[below,font=\scriptsize] {\x};
+\foreach \y in {0.5,1} \draw (0,\y) -- (-0.02,\y) node[left,font=\scriptsize] {\y};
+\draw[gray,dashed] (0,0) -- (1,1);
+\draw[blue,very thick]
+  (0,0) -- (0,0.8023) -- (0.0317,0.9997) -- (0.0709,0.9999) --
+  (0.0973,0.9999) -- (0.1369,1.0) -- (1.0,1.0);
+\end{tikzpicture}
+\caption{ROC curve of the XGBoost detector on CICIDS2017 (AUC $=0.9998$).}
+\label{fig:roc}
+\end{figure}
+
 The relatively lower precision of the linear baseline (0.7324) reflects a
 higher false-positive rate on minority attack classes that share
 statistical characteristics with benign traffic; the tree-based ensembles
