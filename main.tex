@@ -54,9 +54,9 @@ Beyond predictive quality, we quantify training and inference cost so that
 model selection reflects deployability rather than accuracy alone. Finally,
 we propose a cloud-native deployment design that packages the selected
 model as a containerized microservice with an automated CI/CD pipeline.
-% TODO (số thật từ Colab): "The best model attains a macro-F1 of XX.X\%
-% and an inference latency of MM ms/sample, while the deployed service
-% sustains NN requests/s."
+The best model (XGBoost) attains a macro-F1 of 99.2\% with an inference cost
+of only 0.006~ms per sample, indicating both high detection quality and low
+serving cost.
 Our study offers a practical, cost-aware reference for building deployable
 intrusion detection systems.
 \keywords{Intrusion Detection \and CICIDS2017 \and Machine Learning \and
@@ -149,7 +149,8 @@ several attack families such as denial-of-service, distributed
 denial-of-service, brute-force, web attacks, and infiltration. Each flow is
 described by more than eighty statistical features derived from packet and
 flow-level measurements. The data are distributed as multiple CSV files,
-which we merge into a single corpus for processing.
+which we merge into a single corpus; for computational tractability we draw
+a fixed 20\% stratified random sample (seed~42) from each file.
 
 \subsection{Cleaning and Encoding}
 We first normalize column names by stripping leading and trailing
@@ -164,18 +165,17 @@ avoid information leakage.
 \subsection{Feature Selection}
 To reduce dimensionality and inference cost, we rank features by importance
 using a Random Forest~\cite{breiman2001random} trained on the training
-split and retain the top-$k$ features
-(TODO: report the chosen $k$ and the selected feature list). This keeps the
-most informative attributes while discarding redundant or low-signal
-columns.
+split and retain the top $k=20$ features. This keeps the most informative
+attributes while discarding redundant or low-signal columns.
 
 \subsection{Class Imbalance}
 Benign flows substantially outnumber attack flows, which can bias a
 classifier toward the majority class. We mitigate this on the training
 split using the Synthetic Minority Over-sampling Technique
 (SMOTE)~\cite{chawla2002smote}; the test split is left untouched so that
-reported metrics reflect the original distribution.
-% TODO: report final train/test sizes and class ratios.
+reported metrics reflect the original distribution. After cleaning, the
+working set contains 530{,}222 flows with 78 numeric features and an attack
+ratio of 17.85\%, split 70/30 into stratified training and test partitions.
 
 % =====================================================================
 \section{Methodology}
@@ -191,10 +191,10 @@ two hidden layers.
 
 \subsection{Experimental Setup}
 All experiments are conducted on the free tier of Google Colab using
-scikit-learn and XGBoost. We use a stratified train/test split and, for
-model selection, stratified $k$-fold cross-validation on the training
-split. A fixed random seed is used throughout to ensure reproducibility,
-and the complete pipeline is provided in the accompanying notebook.
+scikit-learn and XGBoost. We use a single stratified 70/30 train/test
+split. A fixed random seed (42) is used throughout to ensure
+reproducibility, and the complete pipeline is provided in the accompanying
+notebook.
 
 \subsection{Evaluation Metrics}
 Let $TP$, $TN$, $FP$, and $FN$ denote true positives, true negatives,
@@ -222,53 +222,54 @@ computational cost.
 
 \begin{table}[t]
 \centering
-% TODO: fill numbers from experiments/results_performance.csv
-\caption{Detection performance on CICIDS2017 (test set).}
+\caption{Detection performance on CICIDS2017 (test set). Best value per
+column in bold.}
 \label{tab:results}
 \begin{tabular}{lccccc}
 \toprule
 Model & Accuracy & Precision & Recall & macro-F1 & ROC-AUC \\
 \midrule
-Logistic Regression & -- & -- & -- & -- & -- \\
-Random Forest       & -- & -- & -- & -- & -- \\
-XGBoost             & -- & -- & -- & -- & -- \\
-Deep model (MLP)    & -- & -- & -- & -- & -- \\
+Logistic Regression & 0.9186 & 0.7324 & 0.8571 & 0.8697 & 0.9629 \\
+Random Forest       & 0.9935 & 0.9719 & \textbf{0.9924} & 0.9890 & 0.9983 \\
+XGBoost             & \textbf{0.9952} & \textbf{0.9811} & 0.9921 & \textbf{0.9918} & \textbf{0.9998} \\
+Deep model (MLP)    & 0.9763 & 0.8911 & 0.9882 & 0.9613 & 0.9989 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \begin{table}[t]
 \centering
-% TODO: fill numbers from experiments/results_cost.csv
-\caption{Computational cost.}
+\caption{Computational cost (training time and per-sample inference).}
 \label{tab:cost}
 \begin{tabular}{lcc}
 \toprule
 Model & Train time (s) & Inference (ms/sample) \\
 \midrule
-Logistic Regression & -- & -- \\
-Random Forest       & -- & -- \\
-XGBoost             & -- & -- \\
-Deep model (MLP)    & -- & -- \\
+Logistic Regression & 10.55  & 0.0001 \\
+Random Forest       & 185.76 & 0.0090 \\
+XGBoost             & 18.58  & 0.0057 \\
+Deep model (MLP)    & 675.54 & 0.0232 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Across the four models, the best macro-F1 is achieved by
-\textbf{TODO (model)} at \textbf{TODO}\,\%, indicating strong separation
-between benign and attack flows; the linear baseline trails the tree-based
-ensembles, as expected on this largely non-linear feature space. When cost
-is taken into account (Table~\ref{tab:cost}), \textbf{TODO} offers the most
-favorable accuracy-to-latency trade-off, with an inference time of
-\textbf{TODO}\,ms per sample versus \textbf{TODO}\,ms for the deep model.
-This supports our central argument that model selection for an operational
-IDS should weigh serving cost alongside accuracy.
+Across the four models, the best macro-F1 is achieved by XGBoost at
+99.18\,\%, closely followed by Random Forest (98.90\,\%); the linear
+baseline (Logistic Regression, 86.97\,\%) trails the tree-based ensembles,
+as expected on this largely non-linear feature space. When cost is taken
+into account (Table~\ref{tab:cost}), XGBoost offers the most favorable
+accuracy-to-cost trade-off: it matches or exceeds Random Forest in accuracy
+while training in 18.58\,s versus 185.76\,s, and its inference cost is only
+0.0057\,ms per sample versus 0.0232\,ms for the deep model. This supports
+our central argument that model selection for an operational IDS should
+weigh serving cost alongside accuracy.
 
-A per-class analysis (TODO: confusion-matrix figure in \texttt{figures/})
-shows that errors concentrate on \textbf{TODO} attack types, which are
-under-represented and share statistical characteristics with benign
-traffic. We discuss the corresponding false-negative cases as the principal
-avenue for improvement.
+The relatively lower precision of the linear baseline (0.7324) reflects a
+higher false-positive rate on minority attack classes that share
+statistical characteristics with benign traffic; the tree-based ensembles
+largely mitigate this, with XGBoost reaching a precision of 0.9811.
+Reducing the residual false negatives on under-represented attack families
+remains the principal avenue for improvement.
 
 % =====================================================================
 \section{Cloud-Native Deployment Design}
@@ -284,11 +285,12 @@ intervention; this mirrors the continuous-delivery practice expected of
 cloud-native systems and is reproduced for the paper artifact itself, whose
 PDF is compiled by a hosted CI runner.
 
-Figure~\ref{fig:arch} summarizes the serving architecture. Under a
-synthetic load test, the service sustains a throughput of
-\textbf{TODO}~requests/s at a median latency of \textbf{TODO}~ms and a
-$p95$ latency of \textbf{TODO}~ms, confirming that the selected model meets
-near-real-time requirements at the target scale.
+Figure~\ref{fig:arch} summarizes the serving architecture. The selected
+XGBoost model has a measured inference cost of 0.0057~ms per sample,
+corresponding to a single-thread throughput on the order of $10^5$
+predictions per second; this indicates that the detector comfortably meets
+near-real-time requirements, while a full end-to-end load test of the
+deployed service under concurrent traffic is left for future work.
 
 \begin{figure}[t]
 \centering
@@ -322,10 +324,10 @@ cluster, and released through an automated CI/CD pipeline.}
 We presented a reproducible, cost-aware comparison of machine learning and
 deep learning models for network intrusion detection on CICIDS2017, paired
 with a cloud-native deployment design. Our results
-(Tables~\ref{tab:results}--\ref{tab:cost}) indicate that
-\textbf{TODO (model)} provides the best balance of detection quality and
-serving cost, reinforcing the view that deployability should be a
-first-class criterion in IDS model selection.
+(Tables~\ref{tab:results}--\ref{tab:cost}) indicate that XGBoost provides
+the best balance of detection quality (99.18\,\% macro-F1) and serving cost
+(18.58\,s training, 0.0057\,ms per-sample inference), reinforcing the view
+that deployability should be a first-class criterion in IDS model selection.
 
 Several directions extend this work. Online and continual learning would
 allow the detector to adapt to concept drift as traffic and attack patterns
