@@ -15,6 +15,8 @@
 \usepackage{multirow}
 \usepackage{array}
 \usepackage{url}
+\usepackage{tikz}
+\usetikzlibrary{positioning,fit,arrows.meta}
 % NOTE: hyperref intentionally NOT loaded — it clashes with llncs
 % (\@xdblarg error). Springer adds hyperlinking for the final version.
 
@@ -290,11 +292,27 @@ near-real-time requirements at the target scale.
 
 \begin{figure}[t]
 \centering
-% \includegraphics[width=0.9\textwidth]{figures/architecture.pdf}
-% TODO: add the figure file figures/architecture.pdf and uncomment \includegraphics
-\caption{Cloud-native serving architecture: model microservice (FastAPI)
-containerized with Docker, deployed on Kubernetes, and released through an
-automated CI/CD pipeline.}
+\begin{tikzpicture}[
+  >={Stealth[length=2mm]},
+  box/.style={draw, rounded corners, align=center, font=\small,
+              minimum height=9mm, inner sep=5pt},
+  node distance=10mm and 12mm]
+  \node[box] (flows) {Network flows\\(CICIDS2017)};
+  \node[box, right=of flows] (pre) {Preprocessing\\and features};
+  \node[box, right=of pre] (svc) {IDS microservice\\(FastAPI, Docker)};
+  \node[box, right=of svc] (out) {Alerts /\\dashboard};
+  \node[box, above=10mm of svc] (cicd) {CI/CD pipeline\\(build--test--deploy)};
+  \draw[->] (flows) -- (pre);
+  \draw[->] (pre) -- (svc);
+  \draw[->] (svc) -- (out);
+  \draw[->, dashed] (cicd) -- (svc);
+  \node[draw, dotted, rounded corners, inner sep=9pt,
+        fit=(pre)(svc)(out),
+        label={[font=\small\itshape]below:Kubernetes cluster}] {};
+\end{tikzpicture}
+\caption{Cloud-native serving architecture: the selected model is exposed as a
+FastAPI microservice, containerized with Docker, deployed on a Kubernetes
+cluster, and released through an automated CI/CD pipeline.}
 \label{fig:arch}
 \end{figure}
 
