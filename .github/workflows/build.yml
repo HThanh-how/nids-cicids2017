@@ -1,0 +1,75 @@
+name: Build Paper PDF (IDS CICIDS2017)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Clean old build files
+        run: |
+          rm -f *.aux *.bbl *.bcf *.blg *.run.xml *.out *.toc *.lof *.lot || true
+
+      - name: Compile LaTeX (main.tex)
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: main.tex
+          # llncs + splncs04.bst -> bibtex (latexmk runs it automatically)
+          latexmk_use_xelatex: false
+
+      - name: Rename PDF
+        run: mv main.pdf IDS-CICIDS2017-paper.pdf
+
+      - name: List PDFs
+        if: always()
+        run: ls -la *.pdf || true
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: paper-pdf
+          path: IDS-CICIDS2017-paper.pdf
+
+      - name: Upload build logs (always)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: |
+            *.log
+            *.fls
+            *.fdb_latexmk
+
+  release:
+    if: github.event_name == 'push'
+    needs: build-pdf
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: paper-pdf
+          path: dist
+
+      - name: Create / update GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: IDS Paper - Build ${{ github.run_number }}
+          files: dist/IDS-CICIDS2017-paper.pdf
+          generate_release_notes: true

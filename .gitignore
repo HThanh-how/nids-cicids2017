@@ -1,0 +1,17 @@
+# LaTeX build artifacts (CI rebuilds these — keep repo clean)
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+main.pdf
+IDS-CICIDS2017-paper.pdf
+public/

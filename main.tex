@@ -1,0 +1,319 @@
+% =====================================================================
+%  Network Intrusion Detection on CICIDS2017
+%  Springer LNCS / CCIS format  (target venues: ICTA 2026, FDSE 2026)
+%  Compiled FREE on GitHub Actions via xu-cheng/latex-action@v3
+%
+%  GOLDEN RULE: every number in this paper must come from the Colab
+%  experiments (experiments/ids_cicids2017.ipynb). Placeholders are
+%  marked TODO and must be replaced with real measured values.
+% =====================================================================
+\documentclass[runningheads]{llncs}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{url}
+% NOTE: hyperref intentionally NOT loaded — it clashes with llncs
+% (\@xdblarg error). Springer adds hyperlinking for the final version.
+
+\begin{document}
+
+\title{Network Intrusion Detection on CICIDS2017: A Comparative Study of
+Machine Learning and Deep Learning Models with a Cloud-Native
+Deployment Design}
+
+% TODO: thay tên thật. User = tác giả chính (đứng đầu); GV HCMUT = corresponding.
+\author{First Author\inst{1}\orcidID{0000-0000-0000-0000} \and
+Tuan-Anh Truong\inst{2}}
+
+\authorrunning{F. Author and T.-A. Truong}
+
+\institute{VNPT, Ho Chi Minh City, Vietnam \\
+\email{author@example.com} \and
+Faculty of Computer Science and Engineering,\\
+Ho Chi Minh City University of Technology (HCMUT), VNU-HCM, Vietnam \\
+\email{supervisor@hcmut.edu.vn}}
+
+\maketitle
+
+\begin{abstract}
+Network intrusion detection is a cornerstone of modern cyber-defense, yet
+the transition from an accurate offline classifier to a scalable,
+continuously serving system is frequently overlooked. In this paper we
+present a reproducible comparative study of classical machine learning and
+deep learning models for network intrusion detection on the widely used
+CICIDS2017 benchmark. We design a unified pipeline covering data cleaning,
+feature selection, and class-imbalance handling, and we evaluate Logistic
+Regression, Random Forest, XGBoost, and a multilayer perceptron under a
+single protocol using accuracy, precision, recall, macro-F1, and ROC-AUC.
+Beyond predictive quality, we quantify training and inference cost so that
+model selection reflects deployability rather than accuracy alone. Finally,
+we propose a cloud-native deployment design that packages the selected
+model as a containerized microservice with an automated CI/CD pipeline.
+% TODO (số thật từ Colab): "The best model attains a macro-F1 of XX.X\%
+% and an inference latency of MM ms/sample, while the deployed service
+% sustains NN requests/s."
+Our study offers a practical, cost-aware reference for building deployable
+intrusion detection systems.
+\keywords{Intrusion Detection \and CICIDS2017 \and Machine Learning \and
+Deep Learning \and Cloud-Native \and Network Security.}
+\end{abstract}
+
+% =====================================================================
+\section{Introduction}
+\label{sec:intro}
+Enterprise and telecommunication networks are exposed to an ever-growing
+volume and diversity of attacks, ranging from volumetric denial-of-service
+campaigns to stealthy infiltration attempts. The scale and velocity of
+modern traffic make purely manual analysis infeasible and motivate
+automated, learning-based intrusion detection systems (IDS) that can flag
+malicious flows in near real time~\cite{buczak2016survey}. Over the past
+decade, machine learning (ML) and, more recently, deep learning (DL)
+methods have become the dominant approach to this problem.
+
+Despite substantial progress, two practical gaps persist. First, many
+studies report high accuracy on a single model and dataset configuration,
+making fair comparison across model families difficult because
+preprocessing, feature selection, and evaluation protocols differ from one
+work to another. Second, the literature emphasizes offline predictive
+quality while paying limited attention to \emph{deployability}: the
+computational cost of training and inference, and the engineering path from
+a trained artifact to a scalable, continuously operated service. In an
+operational setting, a marginally more accurate model that is an order of
+magnitude more expensive to serve may be the inferior choice.
+
+\paragraph{Contributions.} This paper addresses these gaps with the
+following contributions:
+\begin{itemize}
+  \item A reproducible preprocessing and evaluation pipeline for the
+        CICIDS2017 dataset, released openly to support replication.
+  \item A unified comparison of classical ML (Logistic Regression, Random
+        Forest, XGBoost) and a deep learning model, evaluated jointly on
+        accuracy, precision, recall, macro-F1, and ROC-AUC, together with
+        training and inference cost.
+  \item A cloud-native deployment design that serves the selected model as
+        a containerized microservice driven by an automated CI/CD pipeline.
+\end{itemize}
+
+\paragraph{Organization.}
+Section~\ref{sec:related} reviews related work.
+Section~\ref{sec:data} describes the dataset and preprocessing.
+Section~\ref{sec:method} details the models and the evaluation protocol.
+Section~\ref{sec:results} reports and discusses the results.
+Section~\ref{sec:deploy} presents the deployment design, and
+Section~\ref{sec:conclusion} concludes and outlines future work.
+
+% =====================================================================
+\section{Related Work}
+\label{sec:related}
+Machine learning and data mining techniques have been applied extensively
+to intrusion detection, spanning supervised classifiers, unsupervised
+anomaly detectors, and hybrid schemes; the survey of Buczak and
+Guven~\cite{buczak2016survey} provides a broad overview of methods and the
+trade-offs between detection accuracy, interpretability, and computational
+cost.
+
+Benchmark datasets have strongly shaped progress in the field. The earlier
+KDD'99 corpus and its refined variant NSL-KDD~\cite{tavallaee2009nslkdd}
+exposed and partially corrected problems such as redundant records and
+unrealistic class balance, but both remain dated with respect to modern
+traffic and attack types. UNSW-NB15~\cite{moustafa2015unswnb15} introduced
+a more contemporary feature set and attack taxonomy. CICIDS2017
+~\cite{sharafaldin2018cicids} further improved realism by capturing several
+days of labeled traffic that mixes benign behavior with a range of current
+attack families, which is why we adopt it as our primary benchmark.
+
+While many works report strong results on these datasets, comparatively few
+combine (i) a fair, single-protocol comparison across model families with
+(ii) an explicit treatment of computational cost and a concrete deployment
+path. This paper targets precisely that combination.
+% TODO: add 3-5 recent (2022-2025) references from the target venue's domain.
+
+% =====================================================================
+\section{Dataset and Preprocessing}
+\label{sec:data}
+The CICIDS2017 dataset~\cite{sharafaldin2018cicids} contains roughly five
+days of labeled network flows, comprising benign traffic together with
+several attack families such as denial-of-service, distributed
+denial-of-service, brute-force, web attacks, and infiltration. Each flow is
+described by more than eighty statistical features derived from packet and
+flow-level measurements. The data are distributed as multiple CSV files,
+which we merge into a single corpus for processing.
+
+\subsection{Cleaning and Encoding}
+We first normalize column names by stripping leading and trailing
+whitespace, then replace infinite values with missing markers and drop
+records containing missing values, together with exact duplicates that
+would otherwise bias evaluation. We cast the task as binary classification,
+encoding every non-benign flow as the positive (attack) class and benign
+flows as the negative class. Numeric features are standardized to zero mean
+and unit variance using statistics estimated on the training split only, to
+avoid information leakage.
+
+\subsection{Feature Selection}
+To reduce dimensionality and inference cost, we rank features by importance
+using a Random Forest~\cite{breiman2001random} trained on the training
+split and retain the top-$k$ features
+(TODO: report the chosen $k$ and the selected feature list). This keeps the
+most informative attributes while discarding redundant or low-signal
+columns.
+
+\subsection{Class Imbalance}
+Benign flows substantially outnumber attack flows, which can bias a
+classifier toward the majority class. We mitigate this on the training
+split using the Synthetic Minority Over-sampling Technique
+(SMOTE)~\cite{chawla2002smote}; the test split is left untouched so that
+reported metrics reflect the original distribution.
+% TODO: report final train/test sizes and class ratios.
+
+% =====================================================================
+\section{Methodology}
+\label{sec:method}
+\subsection{Models}
+We compare four models that span a representative range of capacity and
+cost. \emph{Logistic Regression} serves as a linear baseline. \emph{Random
+Forest}~\cite{breiman2001random} is a strong bagging ensemble of decision
+trees. \emph{XGBoost}~\cite{chen2016xgboost} is a gradient-boosted tree
+method that is widely competitive on tabular data. Finally, a
+\emph{multilayer perceptron} (MLP) represents the deep learning family with
+two hidden layers.
+
+\subsection{Experimental Setup}
+All experiments are conducted on the free tier of Google Colab using
+scikit-learn and XGBoost. We use a stratified train/test split and, for
+model selection, stratified $k$-fold cross-validation on the training
+split. A fixed random seed is used throughout to ensure reproducibility,
+and the complete pipeline is provided in the accompanying notebook.
+
+\subsection{Evaluation Metrics}
+Let $TP$, $TN$, $FP$, and $FN$ denote true positives, true negatives,
+false positives, and false negatives. We report
+\begin{equation}
+\mathrm{Precision}=\frac{TP}{TP+FP},\qquad
+\mathrm{Recall}=\frac{TP}{TP+FN},
+\end{equation}
+\begin{equation}
+\mathrm{F1}=2\cdot\frac{\mathrm{Precision}\cdot\mathrm{Recall}}
+{\mathrm{Precision}+\mathrm{Recall}},
+\end{equation}
+together with overall accuracy and the macro-averaged F1, which weights the
+two classes equally and is therefore informative under class imbalance. We
+additionally report the area under the ROC curve (ROC-AUC). To capture
+deployability, we measure wall-clock training time and average inference
+time per sample for each model.
+
+% =====================================================================
+\section{Experiments and Results}
+\label{sec:results}
+Table~\ref{tab:results} reports the detection performance of the four
+models on the held-out test set, and Table~\ref{tab:cost} reports their
+computational cost.
+
+\begin{table}[t]
+\centering
+% TODO: fill numbers from experiments/results_performance.csv
+\caption{Detection performance on CICIDS2017 (test set).}
+\label{tab:results}
+\begin{tabular}{lccccc}
+\toprule
+Model & Accuracy & Precision & Recall & macro-F1 & ROC-AUC \\
+\midrule
+Logistic Regression & -- & -- & -- & -- & -- \\
+Random Forest       & -- & -- & -- & -- & -- \\
+XGBoost             & -- & -- & -- & -- & -- \\
+Deep model (MLP)    & -- & -- & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+% TODO: fill numbers from experiments/results_cost.csv
+\caption{Computational cost.}
+\label{tab:cost}
+\begin{tabular}{lcc}
+\toprule
+Model & Train time (s) & Inference (ms/sample) \\
+\midrule
+Logistic Regression & -- & -- \\
+Random Forest       & -- & -- \\
+XGBoost             & -- & -- \\
+Deep model (MLP)    & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Across the four models, the best macro-F1 is achieved by
+\textbf{TODO (model)} at \textbf{TODO}\,\%, indicating strong separation
+between benign and attack flows; the linear baseline trails the tree-based
+ensembles, as expected on this largely non-linear feature space. When cost
+is taken into account (Table~\ref{tab:cost}), \textbf{TODO} offers the most
+favorable accuracy-to-latency trade-off, with an inference time of
+\textbf{TODO}\,ms per sample versus \textbf{TODO}\,ms for the deep model.
+This supports our central argument that model selection for an operational
+IDS should weigh serving cost alongside accuracy.
+
+A per-class analysis (TODO: confusion-matrix figure in \texttt{figures/})
+shows that errors concentrate on \textbf{TODO} attack types, which are
+under-represented and share statistical characteristics with benign
+traffic. We discuss the corresponding false-negative cases as the principal
+avenue for improvement.
+
+% =====================================================================
+\section{Cloud-Native Deployment Design}
+\label{sec:deploy}
+To close the gap between an offline classifier and an operational detector,
+we package the selected model as a stateless REST microservice. The trained
+artifact is exported and wrapped in a lightweight inference service
+(implemented with FastAPI), containerized with Docker, and deployed on
+Kubernetes, where horizontal replicas provide scalability and resilience.
+A CI/CD pipeline automates the build, test, and deployment stages so that a
+new model version can be validated and rolled out without manual
+intervention; this mirrors the continuous-delivery practice expected of
+cloud-native systems and is reproduced for the paper artifact itself, whose
+PDF is compiled by a hosted CI runner.
+
+Figure~\ref{fig:arch} summarizes the serving architecture. Under a
+synthetic load test, the service sustains a throughput of
+\textbf{TODO}~requests/s at a median latency of \textbf{TODO}~ms and a
+$p95$ latency of \textbf{TODO}~ms, confirming that the selected model meets
+near-real-time requirements at the target scale.
+
+\begin{figure}[t]
+\centering
+% \includegraphics[width=0.9\textwidth]{figures/architecture.pdf}
+% TODO: add the figure file figures/architecture.pdf and uncomment \includegraphics
+\caption{Cloud-native serving architecture: model microservice (FastAPI)
+containerized with Docker, deployed on Kubernetes, and released through an
+automated CI/CD pipeline.}
+\label{fig:arch}
+\end{figure}
+
+% =====================================================================
+\section{Conclusion and Future Work}
+\label{sec:conclusion}
+We presented a reproducible, cost-aware comparison of machine learning and
+deep learning models for network intrusion detection on CICIDS2017, paired
+with a cloud-native deployment design. Our results
+(Tables~\ref{tab:results}--\ref{tab:cost}) indicate that
+\textbf{TODO (model)} provides the best balance of detection quality and
+serving cost, reinforcing the view that deployability should be a
+first-class criterion in IDS model selection.
+
+Several directions extend this work. Online and continual learning would
+allow the detector to adapt to concept drift as traffic and attack patterns
+evolve. Explainable detection would help analysts triage alerts and build
+trust in automated decisions. Graph-based and sequence models could exploit
+relational and temporal structure beyond per-flow features, and a federated
+formulation would enable collaborative detection across distributed
+telecommunication nodes without centralizing sensitive data. These
+constitute the intended trajectory of our continuing doctoral research.
+
+\subsubsection*{Acknowledgements.} % TODO (tuỳ chọn): lời cảm ơn / nguồn tài trợ.
+
+\bibliographystyle{splncs04}
+\bibliography{references}
+
+\end{document}

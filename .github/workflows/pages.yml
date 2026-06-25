@@ -1,0 +1,57 @@
+name: Deploy PDF to GitHub Pages
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compile LaTeX (main.tex)
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: main.tex
+          latexmk_use_xelatex: false
+
+      - name: Prepare site
+        run: |
+          mkdir -p public
+          cp main.pdf public/paper.pdf
+          cat > public/index.html <<'EOF'
+          <!doctype html><html lang="en"><meta charset="utf-8">
+          <title>IDS on CICIDS2017 - Draft</title>
+          <body style="font-family:sans-serif;max-width:40rem;margin:3rem auto">
+          <h1>Network Intrusion Detection on CICIDS2017</h1>
+          <p>Latest auto-compiled draft (updated on every push):</p>
+          <p><a href="paper.pdf">Download paper.pdf</a></p>
+          </body></html>
+          EOF
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
