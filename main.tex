@@ -128,8 +128,15 @@ attack families, which is why we adopt it as our primary benchmark.
 While many works report strong results on these datasets, comparatively few
 combine (i) a fair, single-protocol comparison across model families with
 (ii) an explicit treatment of computational cost and a concrete deployment
-path. This paper targets precisely that combination.
-% TODO: add 3-5 recent (2022-2025) references from the target venue's domain.
+path. Recent studies confirm the continued relevance of CICIDS2017 and of
+strong tabular models: Talukder et al.~\cite{talukder2024ml} combine
+oversampling with stacking-based feature embedding to handle large and
+imbalanced traffic; Almuhanna and Dardouri~\cite{almuhanna2025dl} contrast
+deep learning and classical models for anomaly-based detection; and Xu and
+Liu~\cite{xu2025robust} systematically evaluate machine learning models on
+CICIDS2017. Our work complements these by jointly weighing detection quality
+against serving cost and by pairing the comparison with a deployable,
+cloud-native design.
 
 % =====================================================================
 \section{Dataset and Preprocessing}
