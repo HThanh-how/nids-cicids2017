@@ -8,6 +8,9 @@
 %  marked TODO and must be replaced with real measured values.
 % =====================================================================
 \documentclass[runningheads]{llncs}
+% Round 1 (double-blind): keep \anontrue -> hides authors.
+% Round 2 (camera-ready): change to \anonfalse -> shows full author info.
+\newif\ifanon\anontrue
 
 \usepackage{graphicx}
 \usepackage{booktabs}
@@ -26,16 +29,19 @@
 Machine Learning and Deep Learning Models with a Cloud-Native
 Deployment Design}
 
+\ifanon
+\author{Anonymous Author(s)}
+\institute{Affiliation withheld for double-blind review}
+\else
 \author{Huy-Thanh Pham\inst{1} \and Tuan-Anh Truong\inst{1} \and
 Vinh-Khuong Truong\inst{2}}
-
 \authorrunning{H.-T. Pham et al.}
-
 \institute{Faculty of Computer Science and Engineering,\\
 Ho Chi Minh City University of Technology (HCMUT), VNU-HCM, Vietnam \\
 \email{huythanh@clouds.io.vn, anhtt@hcmut.edu.vn}
 \and Ton Duc Thang University, Ho Chi Minh City, Vietnam \\
 \email{trvinhkhuong@gmail.com}}
+\fi
 
 \maketitle
 
@@ -408,7 +414,9 @@ formulation would enable collaborative detection across distributed
 telecommunication nodes without centralizing sensitive data. These
 constitute the intended trajectory of our continuing doctoral research.
 
+\ifanon\else
 \subsubsection*{Acknowledgements.} % TODO (tuỳ chọn): lời cảm ơn / nguồn tài trợ.
+\fi
 
 \bibliographystyle{splncs04}
 \bibliography{references}
