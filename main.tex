@@ -51,7 +51,7 @@ the transition from an accurate offline classifier to a scalable,
 continuously serving system is frequently overlooked. In this paper we
 present a reproducible comparative study of classical machine learning and
 deep learning models for network intrusion detection on the widely used
-CICIDS2017 benchmark, with cross-dataset validation on UNSW-NB15. We design
+CICIDS2017 benchmark, replicated independently on UNSW-NB15. We design
 a unified pipeline covering data cleaning,
 feature selection, and class-imbalance handling, and we evaluate Logistic
 Regression, Random Forest, XGBoost, and a multilayer perceptron under a
@@ -318,17 +318,21 @@ largely mitigate this, with XGBoost reaching a precision of 0.9811.
 Reducing the residual false negatives on under-represented attack families
 remains the principal avenue for improvement.
 
-\paragraph{Cross-dataset validation.}
-To assess whether our findings generalize beyond a single benchmark, we
+\paragraph{Independent-dataset replication.}
+To test whether the observed ordering is specific to one benchmark, we
 repeat the comparison on the UNSW-NB15 dataset~\cite{moustafa2015unswnb15}
 (175{,}341 flows, 42 features, attack ratio 68\%) under the same pipeline
-and a stratified 70/30 split. Table~\ref{tab:unsw} reports the results.
-Although the absolute scores are lower on this more balanced and harder
-dataset, the model ranking is preserved: XGBoost again achieves the best
-macro-F1 (0.9497) and ROC-AUC (0.9930), closely followed by Random Forest,
-with the linear baseline trailing. The consistency of this ordering across
-two independent datasets indicates that our cost-aware conclusion is not an
-artifact of a single benchmark.
+and a stratified 70/30 split. We stress that models are trained and
+evaluated \emph{within} each dataset: this is a replication of the protocol
+on independent data, not a transfer experiment, and it therefore says
+nothing about whether a detector fitted on one corpus would work on the
+other. Table~\ref{tab:unsw} reports the results. Although the absolute
+scores are lower on this more balanced and harder dataset, the model
+ranking is preserved: XGBoost again achieves the best macro-F1 (0.9497) and
+ROC-AUC (0.9930), closely followed by Random Forest, with the linear
+baseline trailing. The consistency of this ordering across two independent
+datasets indicates that our cost-aware conclusion is not an artifact of a
+single benchmark, but it does not establish cross-domain generalization.
 
 \begin{table}[t]
 \centering
@@ -362,11 +366,13 @@ cloud-native systems and is reproduced for the paper artifact itself, whose
 PDF is compiled by a hosted CI runner.
 
 Figure~\ref{fig:arch} summarizes the serving architecture. The selected
-XGBoost model has a measured inference cost of 0.0057~ms per sample,
-corresponding to a single-thread throughput on the order of $10^5$
-predictions per second; this indicates that the detector comfortably meets
-near-real-time requirements, while a full end-to-end load test of the
-deployed service under concurrent traffic is left for future work.
+XGBoost model has a measured inference cost of 0.0057~ms per sample when
+amortized over a full test batch on all available cores. We deliberately do
+not convert this figure into a service throughput: it excludes feature
+extraction, request parsing, serialization, network transport and
+concurrency effects, and it is therefore a lower bound on model cost rather
+than a property of the deployed system. Establishing the latter requires an
+end-to-end load test of the running service, which we report separately.
 
 \begin{figure}[t]
 \centering
