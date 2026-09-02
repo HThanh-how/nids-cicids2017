@@ -66,27 +66,33 @@ Ho Chi Minh City University of Technology (HCMUT), VNU-HCM, Vietnam \\
 \maketitle
 
 \begin{abstract}
-Network intrusion detection is a cornerstone of modern cyber-defense, yet
-the transition from an accurate offline classifier to a scalable,
-continuously serving system is frequently overlooked. In this paper we
-present a reproducible comparative study of classical machine learning and
-deep learning models for network intrusion detection on the widely used
-CICIDS2017 benchmark, replicated independently on UNSW-NB15. We design
-a unified pipeline covering data cleaning,
-feature selection, and class-imbalance handling, and we evaluate Logistic
-Regression, Random Forest, XGBoost, and a multilayer perceptron under a
-single protocol using accuracy, precision, recall, macro-F1, and ROC-AUC.
-Beyond predictive quality, we quantify training and inference cost so that
-model selection reflects deployability rather than accuracy alone. Finally,
-we propose a cloud-native deployment design that packages the selected
-model as a containerized microservice with an automated CI/CD pipeline.
-The best model (XGBoost) attains a macro-F1 of 99.2\% with an inference cost
-of only 0.006~ms per sample, indicating both high detection quality and low
-serving cost.
-Our study offers a practical, cost-aware reference for building deployable
-intrusion detection systems.
-\keywords{Intrusion Detection \and CICIDS2017 \and Machine Learning \and
-Deep Learning \and Cloud-Native \and Network Security.}
+Machine-learned intrusion detectors report near-perfect scores on public
+benchmarks, and practitioners do not see that performance in the field. We
+show that a large part of the discrepancy is produced by the evaluation
+itself, and we measure how large. Holding the models, the hyperparameters and
+the preprocessing fixed on CICIDS2017, and re-fitting feature selection,
+oversampling and scaling inside every training split, we compare a
+conventional stratified random split against a day-disjoint split in which no
+attack family is shared between training and test. Attack recall for XGBoost
+falls from 0.9935 to 0.3164 and macro-F1 from 0.9879 to 0.6887; Random Forest
+behaves the same way. The ranking of models does not survive either: Logistic
+Regression, the weakest detector under the random split, becomes the
+strongest under the day-disjoint one, so a benchmark that flatters a model can
+also select the wrong one. Repeating the conventional protocol over five
+seeds further shows that the usual claim of a best model is unsupported --
+XGBoost leads Random Forest by 0.00044 macro-F1, which neither a paired
+$t$-test nor a Wilcoxon signed-rank test separates from zero. We then
+translate the measured error rates into precision at operational attack
+prevalence, where benchmark precision does not transfer, and we report the
+measured end-to-end latency distribution of the model served as a
+containerised endpoint under controlled concurrency -- deliberately separate
+from the amortised per-sample model cost that the literature, and an earlier
+version of this work, mistook for a service throughput. The experiment
+driver, the serving implementation, the deployment manifests and the raw
+result files from which every table and figure here is generated are released
+with the paper.
+\keywords{Intrusion detection \and Evaluation methodology \and Data leakage
+\and CICIDS2017 \and Model serving \and Network security.}
 \end{abstract}
 
 % =====================================================================
@@ -632,24 +638,51 @@ absent rather than estimating them: extrapolating deployment behaviour from
 model cost is precisely the error this paper argues against.
 
 % =====================================================================
-\section{Conclusion and Future Work}
+\section{Conclusion}
 \label{sec:conclusion}
-We presented a reproducible, cost-aware comparison of machine learning and
-deep learning models for network intrusion detection on CICIDS2017 and
-UNSW-NB15, paired with a cloud-native deployment design. Our results
-(Tables~\ref{tab:results}--\ref{tab:cost}) indicate that XGBoost provides
-the best balance of detection quality (99.18\,\% macro-F1) and serving cost
-(18.58\,s training, 0.0057\,ms per-sample inference), reinforcing the view
-that deployability should be a first-class criterion in IDS model selection.
+We set out to measure how much of a benchmark intrusion-detection score is a
+property of the detector and how much is a property of the protocol. On
+CICIDS2017, with everything but the split held fixed, the answer is that most
+of the headline number is protocol. Attack recall for the two tree ensembles
+falls from about 0.99 to about 0.31 when no attack family is shared between
+training and test, and the ranking of the models inverts, so the conventional
+protocol does not merely inflate a score -- it can also recommend the wrong
+model.
 
-Several directions extend this work. Online and continual learning would
-allow the detector to adapt to concept drift as traffic and attack patterns
-evolve. Explainable detection would help analysts triage alerts and build
-trust in automated decisions. Graph-based and sequence models could exploit
-relational and temporal structure beyond per-flow features, and a federated
-formulation would enable collaborative detection across distributed
-telecommunication nodes without centralizing sensitive data. These
-constitute the intended trajectory of our continuing doctoral research.
+Three consequences follow for how such systems should be reported. First, a
+single split is not a result: over five seeds the difference between the two
+leading models is smaller than the seed-to-seed variation of the weaker two,
+and a paired test does not separate it from zero. Second, an aggregate binary
+score is not a result either, because it averages over families whose
+individual detectability differs by an order of magnitude, and the families
+that vanish into the average are not the harmless ones. Third, precision
+measured at benchmark prevalence does not survive the move to a production
+link, where the same error rates imply a very different alert queue.
+
+The engineering claim is subject to the same discipline. We report the
+latency distribution of the running service under controlled concurrency, and
+we do not derive it from the amortised per-sample cost of the model; the
+cluster-level properties we did not measure are named as unmeasured rather
+than estimated. An earlier version of this work made exactly the
+extrapolation we now argue against, which is part of why we argue against it.
+
+None of this says that learned intrusion detection does not work. It says
+that the published numbers answer a question -- can the model recognise more
+instances of attacks it has already seen? -- that is easier than the
+operational one. The gap between the two protocols is a usable estimate of
+that difference, it is cheap to compute, and we would encourage its reporting
+alongside the conventional figure rather than in place of it.
+
+Three directions follow directly. The protocol should be re-run on a
+corrected~\cite{lanvin2023errors} and on a contemporary corpus, to separate
+the effect of the split from the defects of this particular dataset.
+Detectors designed for unseen families -- one-class and anomaly-based
+formulations -- should be evaluated under the same day-disjoint protocol,
+where they may well overturn the ordering reported here. And the
+cluster-level serving measurements left open in
+Section~\ref{sec:limitations} should be completed, since autoscaling
+behaviour under attack-driven load spikes is precisely the case an intrusion
+detector must survive.
 
 \ifanon\else
 \subsubsection*{Acknowledgements.} % TODO (tuỳ chọn): lời cảm ơn / nguồn tài trợ.

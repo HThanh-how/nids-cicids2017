@@ -175,7 +175,7 @@ def fig_optimism_gap():
                markeredgecolor=MUTED, markersize=5, label="day-disjoint"),
     ]
     fig.legend(handles=handles, loc="lower center", ncol=2, frameon=False,
-               bbox_to_anchor=(0.5, -0.10))
+               bbox_to_anchor=(0.5, -0.19))
     save(fig, "fig_optimism_gap.pdf")
 
 
