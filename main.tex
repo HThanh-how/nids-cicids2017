@@ -466,6 +466,38 @@ and Heartbleed, while the test side contains botnet, DDoS, infiltration, port
 scanning and the three web-attack variants. Every attack the detector meets
 at test time is therefore of a type it has never seen.
 
+Table~\ref{tab:gap} and Figure~\ref{fig:gap} place the two protocols side by
+side. The effect is not a correction in the third decimal place. Attack
+recall for XGBoost falls from 0.9935 to 0.3164 and for Random Forest from
+0.9937 to 0.3109; macro-F1 falls by roughly 0.30 for both. Under the
+conventional protocol these models find essentially every attack in the test
+set. Under the day-disjoint protocol they miss about two in three.
+
+Figure~\ref{fig:confusion} shows where the errors go, and the direction is
+informative. The false-positive rate does not deteriorate -- it improves
+slightly, from 0.0073 to 0.0030 -- while false negatives rise from 185 flows
+to 36{,}506. The detector does not become noisy under the harder protocol.
+It becomes quiet, confident and wrong, which is the failure mode that a
+monitoring dashboard is least likely to reveal.
+
+The ranking of the models does not survive either. Logistic Regression is
+last under the random split, at macro-F1 0.8515 against 0.9879 for XGBoost;
+under the day-disjoint split it is first, at 0.7433 against 0.6887, and its
+attack recall of 0.4975 is more than half again the 0.3164 of XGBoost. The
+gap between protocols is therefore not a constant offset that leaves
+conclusions intact: it is larger for the models that score best, so the
+conventional protocol does not merely inflate the number, it can also
+recommend the wrong model. We return to this in Section~\ref{sec:p3}, where
+the per-family results supply the mechanism.
+
+One caveat belongs here rather than in the limitations, because it bounds
+what the comparison shows. The day boundary removes two confounds at once:
+near-duplicate flows from a single attack episode that a random split
+scatters across the train/test boundary, and the attack families themselves.
+This experiment cannot separate their contributions, and
+Section~\ref{sec:p3} addresses the family component directly with a protocol
+that holds the day structure fixed.
+
 \inputtable{day_disjoint}
 \resfig{fig_confusion}{Row-normalised confusion for XGBoost, averaged over seeds, with raw counts in parentheses. The false-positive rate improves slightly under the day-disjoint protocol while the false-negative rate rises by two orders of magnitude: the detector does not become noisier, it becomes blind.}{fig:confusion}
 \inputtable{optimism_gap}
@@ -523,8 +555,36 @@ in training and collapses when the family stands alone.}{fig:loo}
 
 \subsection{Feature Selection: Reproducible but Not Canonical}
 \label{sec:featstab}
+Papers that select the top-$k$ features usually print the resulting list, and
+a reader may take it as a statement about which flow properties carry the
+signal. Two measurements argue for reading it more narrowly.
+
+Across seeds the selection is highly reproducible: the mean pairwise Jaccard
+index between the top-20 sets is 0.756, and 15 of the 20 features are chosen
+by every seed. Across \emph{criteria} it is not. Impurity importance and
+permutation importance, computed on the same training split with the same
+forest, agree on only 0.20 of their top-20 -- four features out of twenty.
+The two rankings do not merely reorder each other; they largely disagree.
+Impurity favours packet-length statistics (packet-length variance, mean
+backward segment size, maximum packet length), while permutation importance
+puts destination port, forward inter-arrival minimum and the initial TCP
+window sizes at the top. Mutual information agrees closely with impurity
+(0.75) and barely with permutation (0.25).
+
+The divergence is the well-known bias of impurity importance towards
+high-cardinality and correlated continuous features, and it matters here for
+a specific reason: nothing in the aggregate scores would have revealed it.
+A pipeline built on either list would report a similar macro-F1. We
+therefore present the selected set as one defensible choice among several
+rather than as the informative subset, list it in full for reproducibility,
+and note that a paper reporting only the impurity list is reporting a
+property of the criterion as much as of the traffic.
+
 \inputtable{feature_stability}
-\resfig{fig_feature_stability}{The selected feature set is highly reproducible across seeds and much less so across importance criteria, so it should be read as one defensible choice rather than as the informative subset.}{fig:featstab}
+\resfig{fig_feature_stability}{The selected feature set is highly
+reproducible across seeds and largely irreproducible across importance
+criteria. A list obtained from one criterion should not be read as the set of
+informative features.}{fig:featstab}
 \inputtable{feature_list}
 
 \subsection{Independent Replication, and P4: Cross-Dataset Transfer}
