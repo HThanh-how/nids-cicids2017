@@ -1,0 +1,19 @@
+\begin{table}[t]
+\centering
+\caption{Feature alignment used for the transfer experiment. CICIDS2017 reports flow duration in microseconds and UNSW-NB15 in seconds, so the former is rescaled.}
+\label{tab:align}
+\footnotesize
+\begin{tabular}{lll}
+\hline
+CICIDS2017 & UNSW-NB15 & Scale \\
+\hline
+Flow Duration & dur & $\times 10^{-6}$ \\
+Total Fwd Packets & spkts & 1 \\
+Total Backward Packets & dpkts & 1 \\
+Total Length of Fwd Packets & sbytes & 1 \\
+Total Length of Bwd Packets & dbytes & 1 \\
+Fwd Packet Length Mean & smean & 1 \\
+Bwd Packet Length Mean & dmean & 1 \\
+\hline
+\end{tabular}
+\end{table}

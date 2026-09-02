@@ -1,0 +1,20 @@
+\begin{table}[t]
+\centering
+\caption{Cross-dataset transfer on the 7 aligned features: trained on one corpus, tested on the other, with no target-domain data. This is the experiment the earlier version of this work claimed but did not perform.}
+\label{tab:transfer}
+\footnotesize
+\begin{tabular}{llccccc}
+\hline
+Direction & Model & Accuracy & Macro-F1 & Recall & Precision & FPR \\
+\hline
+cicids2017 -> unsw-nb15 & Logistic Regression & 0.3265 & 0.2543 & 0.0113 & 0.9267 & 0.0019 \\
+cicids2017 -> unsw-nb15 & Random Forest & 0.3194 & 0.2421 & 0.0000 & 0.0000 & 0.0000 \\
+cicids2017 -> unsw-nb15 & XGBoost & 0.3194 & 0.2421 & 0.0001 & 0.6364 & 0.0001 \\
+cicids2017 -> unsw-nb15 & MLP & 0.3298 & 0.2641 & 0.0229 & 0.7502 & 0.0162 \\
+unsw-nb15 -> cicids2017 & Logistic Regression & 0.2213 & 0.2197 & 0.7545 & 0.1536 & 0.8933 \\
+unsw-nb15 -> cicids2017 & Random Forest & 0.3272 & 0.3017 & 0.3843 & 0.1076 & 0.6851 \\
+unsw-nb15 -> cicids2017 & XGBoost & 0.4515 & 0.4022 & 0.4642 & 0.1533 & 0.5512 \\
+unsw-nb15 -> cicids2017 & MLP & 0.4248 & 0.4155 & 0.8456 & 0.2144 & 0.6657 \\
+\hline
+\end{tabular}
+\end{table}

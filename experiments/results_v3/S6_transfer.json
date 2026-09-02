@@ -1,0 +1,174 @@
+{
+  "aligned_features": [
+    {
+      "cicids": "Flow Duration",
+      "unsw": "dur",
+      "scale": 1e-06
+    },
+    {
+      "cicids": "Total Fwd Packets",
+      "unsw": "spkts",
+      "scale": 1.0
+    },
+    {
+      "cicids": "Total Backward Packets",
+      "unsw": "dpkts",
+      "scale": 1.0
+    },
+    {
+      "cicids": "Total Length of Fwd Packets",
+      "unsw": "sbytes",
+      "scale": 1.0
+    },
+    {
+      "cicids": "Total Length of Bwd Packets",
+      "unsw": "dbytes",
+      "scale": 1.0
+    },
+    {
+      "cicids": "Fwd Packet Length Mean",
+      "unsw": "smean",
+      "scale": 1.0
+    },
+    {
+      "cicids": "Bwd Packet Length Mean",
+      "unsw": "dmean",
+      "scale": 1.0
+    }
+  ],
+  "results": {
+    "cicids2017 -> unsw-nb15": {
+      "Logistic Regression": {
+        "accuracy": 0.3264838229507075,
+        "precision_attack": 0.9267123287671233,
+        "recall_attack": 0.011337260455333875,
+        "macro_f1": 0.2543390798091732,
+        "roc_auc": 0.6577438451430295,
+        "pr_auc": 0.7650382131571469,
+        "mcc": 0.04836586466367781,
+        "balanced_accuracy": 0.5047132730848097,
+        "fpr": 0.0019107142857142858,
+        "fnr": 0.9886627395446661,
+        "tn": 55893,
+        "fp": 107,
+        "fn": 117988,
+        "tp": 1353
+      },
+      "Random Forest": {
+        "accuracy": 0.3193776697977085,
+        "precision_attack": 0.0,
+        "recall_attack": 0.0,
+        "macro_f1": 0.24206690556364846,
+        "roc_auc": 0.38152212200752467,
+        "pr_auc": 0.6380255458437091,
+        "mcc": 0.0,
+        "balanced_accuracy": 0.5,
+        "fpr": 0.0,
+        "fnr": 1.0,
+        "tn": 56000,
+        "fp": 0,
+        "fn": 119341,
+        "tp": 0
+      },
+      "XGBoost": {
+        "accuracy": 0.31939477931573335,
+        "precision_attack": 0.6363636363636364,
+        "recall_attack": 5.8655449510226994e-05,
+        "macro_f1": 0.24211977484363778,
+        "roc_auc": 0.5631510662872417,
+        "pr_auc": 0.683276179529682,
+        "mcc": -0.0007519023606641967,
+        "balanced_accuracy": 0.4999936134390408,
+        "fpr": 7.142857142857143e-05,
+        "fnr": 0.9999413445504898,
+        "tn": 55996,
+        "fp": 4,
+        "fn": 119334,
+        "tp": 7
+      },
+      "MLP": {
+        "accuracy": 0.32976314723880895,
+        "precision_attack": 0.7502061005770816,
+        "recall_attack": 0.02287562530898853,
+        "macro_f1": 0.264142148774511,
+        "roc_auc": 0.7783291541076172,
+        "pr_auc": 0.8457792007244996,
+        "mcc": 0.021727308822234413,
+        "balanced_accuracy": 0.5033217412259229,
+        "fpr": 0.016232142857142858,
+        "fnr": 0.9771243746910114,
+        "tn": 55091,
+        "fp": 909,
+        "fn": 116611,
+        "tp": 2730
+      }
+    },
+    "unsw-nb15 -> cicids2017": {
+      "Logistic Regression": {
+        "accuracy": 0.2213172506723432,
+        "precision_attack": 0.1536422758280931,
+        "recall_attack": 0.7545323923424756,
+        "macro_f1": 0.2196924681039559,
+        "roc_auc": 0.4916617470234924,
+        "pr_auc": 0.18190395475853474,
+        "mcc": -0.1567794432432212,
+        "balanced_accuracy": 0.43062698832957863,
+        "fpr": 0.8932784156833183,
+        "fnr": 0.2454676076575244,
+        "tn": 47002,
+        "fp": 393415,
+        "fn": 23234,
+        "tp": 71418
+      },
+      "Random Forest": {
+        "accuracy": 0.3271895774189871,
+        "precision_attack": 0.10758714928807624,
+        "recall_attack": 0.3843024975700461,
+        "macro_f1": 0.301652903842751,
+        "roc_auc": 0.25395323525467145,
+        "pr_auc": 0.11599896945946081,
+        "mcc": -0.23797251114500045,
+        "balanced_accuracy": 0.34960884011324156,
+        "fpr": 0.6850848173435631,
+        "fnr": 0.6156975024299539,
+        "tn": 138694,
+        "fp": 301723,
+        "fn": 58277,
+        "tp": 36375
+      },
+      "XGBoost": {
+        "accuracy": 0.45151373000491524,
+        "precision_attack": 0.15326046011970368,
+        "recall_attack": 0.46423741706461563,
+        "macro_f1": 0.4021793188540961,
+        "roc_auc": 0.4588137151183155,
+        "pr_auc": 0.1957957997266869,
+        "mcc": -0.06655359165695975,
+        "balanced_accuracy": 0.4565083211040296,
+        "fpr": 0.5512207748565564,
+        "fnr": 0.5357625829353844,
+        "tn": 197650,
+        "fp": 242767,
+        "fn": 50711,
+        "tp": 43941
+      },
+      "MLP": {
+        "accuracy": 0.42476951570731997,
+        "precision_attack": 0.21444954743007807,
+        "recall_attack": 0.845550014791024,
+        "macro_f1": 0.41554671920141806,
+        "roc_auc": 0.7002499132984535,
+        "pr_auc": 0.3925205918441303,
+        "mcc": 0.14943325688056247,
+        "balanced_accuracy": 0.5899438496518281,
+        "fpr": 0.6656623154873677,
+        "fnr": 0.15444998520897604,
+        "tn": 147248,
+        "fp": 293169,
+        "fn": 14619,
+        "tp": 80033
+      }
+    }
+  },
+  "note": "Train on one dataset, test on the other, using only the aligned feature subset. This is the transfer experiment the earlier version claimed but did not perform."
+}

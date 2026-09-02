@@ -589,10 +589,66 @@ informative features.}{fig:featstab}
 
 \subsection{Independent Replication, and P4: Cross-Dataset Transfer}
 \label{sec:transfer}
+Two experiments are commonly conflated under the heading of cross-dataset
+evaluation, and an earlier version of this work conflated them too. They
+answer different questions and give very different answers.
+
+\paragraph{Independent-dataset replication.}
+The first re-runs the entire protocol \emph{within} UNSW-NB15: same pipeline,
+same hyperparameters, same stratified holdout, but a different corpus.
+Table~\ref{tab:unsw} reports it. This checks whether the pattern observed on
+CICIDS2017 is an artefact of one benchmark, and it is a useful check. It is
+not evidence that a detector fitted on one corpus works on another, because
+no model here is ever asked to leave its own dataset.
+
 \inputtable{unsw}
+
+\paragraph{Genuine transfer.}
+The second fits on one corpus and evaluates on the other, with no
+target-domain data at all. The two datasets share no feature schema, so we
+align the seven flow-level quantities whose semantics match -- duration,
+forward and backward packet counts, forward and backward byte counts, and
+mean forward and backward packet sizes -- rescaling CICIDS2017 flow duration
+from microseconds to seconds. This reduced feature space is a confound we
+cannot remove: part of the degradation below is attributable to using seven
+features instead of twenty, and this experiment does not separate that
+component from the domain shift. It bounds the transfer result rather than
+invalidating it -- the failure reported below is far larger than any
+plausible cost of dropping thirteen features, given that the same pipeline
+reaches macro-F1 above 0.98 in-domain.
+
+Table~\ref{tab:transfer} and Figure~\ref{fig:transfer} show that transfer
+fails in both directions, and fails differently in each. Trained on
+CICIDS2017 and tested on UNSW-NB15, the models call almost everything benign:
+attack recall is 0.0000 for Random Forest, 0.0001 for XGBoost and 0.0229 for
+the MLP. Trained on UNSW-NB15 and tested on CICIDS2017 they do the opposite,
+flagging almost everything: false-positive rates run from 0.55 to 0.89, and
+precision falls to between 0.11 and 0.21 despite recall as high as 0.85.
+
+The direction of each failure matches the class balance of its source
+corpus. CICIDS2017 is 17.7\,\% attack and UNSW-NB15 is 68\,\% attack, and in
+each case the transferred model degenerates towards the majority decision of
+the corpus it was fitted on. What transfers is not a notion of malicious
+traffic but a threshold calibrated to one dataset's prevalence and feature
+scaling. Macro-F1 lands between 0.24 and 0.42 across all eight
+model--direction combinations, against 0.99 in-domain: as detectors, none of
+these transferred models is usable.
+
+We draw a deliberately narrow conclusion. This says that a flow-statistics
+classifier of this family, trained on one public corpus, does not carry to
+another, and it therefore contradicts the common practice of citing an
+in-domain benchmark score as evidence of general applicability. It does not
+show that cross-domain intrusion detection is impossible; domain adaptation,
+recalibration on a sample of target traffic, or features chosen for
+invariance rather than for in-domain accuracy are all untested here and are
+the obvious next step.
+
 \inputtable{alignment}
 \inputtable{transfer}
-\resfig{fig_transfer}{Cross-dataset transfer on the aligned feature space, in both directions.}{fig:transfer}
+\resfig{fig_transfer}{Cross-dataset transfer on the aligned feature space, in
+both directions. The failure is asymmetric: a model fitted on the
+attack-sparse corpus calls everything benign, and one fitted on the
+attack-heavy corpus calls everything an attack.}{fig:transfer}
 
 \subsection{What the Error Rates Mean in Operation}
 \label{sec:operational}
