@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\caption{Training and amortised inference cost, measured with a discarded warm-up pass and five repeats per split on the environment of Table~\ref{tab:env}. The per-sample figure is model cost amortised over a full test batch on all cores; it is a lower bound on service cost and is deliberately not converted into a throughput.}
+\label{tab:cost}
+\footnotesize
+\begin{tabular}{lrr}
+\hline
+Model & Training time (s) & Amortised inference (ms/flow) \\
+\hline
+Logistic Regression & 6.39\,$\pm$\,1.57 & 0.00005\,$\pm$\,0.00001 \\
+Random Forest & 32.65\,$\pm$\,2.48 & 0.00158\,$\pm$\,0.00026 \\
+XGBoost & 5.96\,$\pm$\,1.41 & 0.00106\,$\pm$\,0.00024 \\
+MLP & 81.82\,$\pm$\,36.98 & 0.00070\,$\pm$\,0.00007 \\
+\hline
+\end{tabular}
+\end{table}

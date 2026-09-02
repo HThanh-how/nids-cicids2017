@@ -2,8 +2,9 @@
 
 **Bến đỗ mới: SOICT 2026** — abstract 09/09/2026, full paper **16/09/2026**,
 notification 12/10, hội nghị 04–05/12 tại **TP.HCM**, Springer **CCIS** (Scopus + EI).
-Review **single-blind** (để tên thật, `\anonfalse`), giới hạn **12 trang chưa tính references**
-(ICTA chỉ cho 8 → nay dư chỗ cho toàn bộ thí nghiệm mới).
+Review **single-blind** (để tên thật, `\anonfalse`), **full paper 12--15 trang KỂ CẢ references**
+(ICTA chỉ cho 8 → nay dư chỗ cho toàn bộ thí nghiệm mới). Bản nộp **không
+được đánh số trang**. CCIS dùng chung template LNCS nên KHÔNG phải đổi class.
 
 Điểm số ICTA: R1 = −2 (reject), R2 = −1 (weak reject). Không reviewer nào nói bài **sai**;
 cả hai nói bài **chưa đủ bằng chứng cho những gì nó tuyên bố**. R1 viết sẵn danh sách
@@ -80,6 +81,59 @@ Cần đo và báo cáo:
 
 Kèm vào artifact: `Dockerfile`, manifest K8s (Deployment/Service/HPA + resource limits),
 hợp đồng API, kịch bản k6.
+
+## Tình trạng 02/09/2026
+
+**Chạy thí nghiệm ngay trên Admin-PC, không cần Colab.** Máy có 16 nhân,
+27,8 GiB RAM; đã cài `xgboost 3.4.1`, `imbalanced-learn 0.14.2`. Toàn bộ 8
+chặng chạy một lượt trong nền (`experiments/run_v3.log`), dữ liệu chỉ nạp một
+lần — nhanh và gọn hơn chia mẻ trên Colab.
+
+Đã xong:
+
+- `experiments/dump_hyperparams.py` — xuất trọn bộ siêu tham số từ **chính**
+  các đối tượng model mà thí nghiệm dựng lên, nên bảng trong bài không thể
+  lệch với thứ đã chạy (R1.5).
+- `experiments/make_tables.py` — sinh **mọi** bảng LaTeX thẳng từ
+  `results_v3/*.json`. Đây là cách biến nguyên tắc "chỉ số nào có trong JSON
+  mới được vào bài" thành cơ chế máy móc: không gõ tay số nào, chặng nào chưa
+  chạy thì thiếu bảng chứ không còn bảng cũ.
+- `serving/` — dịch vụ FastAPI thật (readiness gate để đo cold start từ bên
+  ngoài, header `X-Server-Time-Ms` để tách chi phí model khỏi hàng đợi),
+  `train_serving_model.py` đóng băng đúng model mà phần offline đã đánh giá,
+  `loadtest/bench.py` sinh tải vòng kín và báo cáo **phân phối** độ trễ,
+  `Dockerfile`, manifest K8s (probe + resource limit + HPA), `k6.js`.
+- `main.tex` — Related Work viết lại (có trích dẫn kiểm chứng), mục
+  **Evaluation Protocol** mới (4 giao thức chia dữ liệu, chống rò rỉ, xử lý
+  thống kê, PPV theo tỉ lệ thực tế), mục **Deployment and Measured Serving
+  Cost**, mục **Limitations**. Đã tắt ẩn danh (SOICT single-blind).
+  Dựng sạch, 12 trang.
+- `references.bib` — thêm 3 nguồn đã **xác minh qua Crossref**, không bịa.
+
+### Điều phải nói thẳng trong bài
+
+Tra cứu cho thấy **"chia ngẫu nhiên thổi phồng điểm" đã có người công bố
+trước**: Moczkodan & Ragab (arXiv 2606.11098, 2026) so chia ngẫu nhiên với
+chia theo thời gian và theo 5-tuple trên chính CICIDS2017; Xu & Liu
+(arXiv 2506.19877) đã báo cáo recall sụt mạnh trên tấn công lạ. Giấu chuyện
+này chính là cách nhanh nhất để ăn lại nhận xét "thiếu tính mới". Bài mới
+**trích dẫn thẳng** và định vị đóng góp ở ba chỗ họ để ngỏ: chia theo ngày
+(trên corpus này đồng thời là chia theo họ tấn công), quy đổi sang PPV ở tỉ
+lệ tấn công thực tế, và **đo** chi phí phục vụ.
+
+Thêm một khoảng trống có lợi: các bài IDS hiện hành vẫn quen báo cáo chi phí
+model khấu hao mỗi mẫu (0,039 ms; 0,0476 ms/mẫu) như bằng chứng triển khai
+được — đúng lỗi mà reviewer 2 bắt bài mình. Đo dịch vụ thật là chỗ đứng riêng.
+
+### Còn chặn
+
+- **Chưa có Docker/kubectl/k6 trên máy này.** Độ trễ p50/p95/p99, throughput
+  theo mức đồng thời và so sánh từng-bản-ghi vs theo-lô thì đo được ngay tại
+  đây (chạy sau khi thí nghiệm ML xong, để khỏi tranh CPU làm hỏng số đo).
+  Riêng HPA, cold start dưới áp lực lập lịch và phục hồi sau khi mất pod thì
+  **bắt buộc cần cụm K8s** — bài ghi rõ là *chưa đo*, không ước lượng.
+- Mục Results và Introduction/Conclusion viết lại sau khi JSON đủ.
+
 
 ## Trình tự 20 ngày
 

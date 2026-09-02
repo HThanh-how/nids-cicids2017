@@ -32,7 +32,13 @@ def load(stage):
 
 
 def esc(s):
-    return (str(s).replace("\\", r"\textbackslash{}").replace("_", r"\_")
+    # Some CICIDS2017 labels carry a cp1252 en-dash that survives as U+FFFD
+    # ("Web Attack <?> Brute Force"). Normalising it here keeps the label
+    # readable and keeps pdfLaTeX from choking on a non-ASCII byte.
+    t = "".join(c if ord(c) < 128 else "-" for c in str(s))
+    while "- -" in t:
+        t = t.replace("- -", "-")
+    return (t.replace("\\", r"\textbackslash{}").replace("_", r"\_")
             .replace("%", r"\%").replace("&", r"\&").replace("#", r"\#"))
 
 
@@ -117,8 +123,9 @@ def t_dataset():
         return
     fam = sorted(d["family_counts"].items(), key=lambda kv: -kv[1])
     rows = [[esc(k), f"{v:,}", f"{100 * v / d['n_rows']:.3f}"] for k, v in fam]
+    frac_pct = round(100 * d["sample_frac"])
     write("dataset.tex", table(
-        f"CICIDS2017 composition after cleaning, at a {d['sample_frac']:.0%} "
+        f"CICIDS2017 composition after cleaning, at a {frac_pct}\\,\\% "
         f"stratified subsample: {d['n_rows']:,} flows, {d['n_features']} "
         f"numeric features, attack ratio {d['attack_ratio']:.4f}.",
         "tab:dataset", "lrr", ["Label", "Flows", "Share (\\%)"], rows))
@@ -150,10 +157,13 @@ def t_holdout():
     if not d:
         return
     cfg = d["config"]
+    # A bare "%" would comment out the rest of the caption line in LaTeX.
+    tr_pct = round(100 * (1 - cfg["test_size"]))
+    te_pct = round(100 * cfg["test_size"])
     write("holdout.tex", table(
         f"Repeated stratified holdout on CICIDS2017: mean $\\pm$ half-width of "
         f"the 95\\,\\% confidence interval over {len(cfg['seeds'])} seeds, "
-        f"{1 - cfg['test_size']:.0%}/{cfg['test_size']:.0%} splits. Feature "
+        f"{tr_pct}\\,\\%/{te_pct}\\,\\% splits. Feature "
         f"selection, SMOTE and scaling are re-fitted inside every training "
         f"split.", "tab:holdout", "l" + "c" * len(PERF_COLS),
         PERF_HEAD, _perf_rows(d["summary"], PERF_COLS)))

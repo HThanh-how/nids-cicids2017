@@ -1,0 +1,18 @@
+\begin{table}[t]
+\centering
+\caption{Paired comparison of macro-F1 across the shared seeds. Positive differences favour the first model. Small absolute differences may still be statistically detectable; the paper reports both.}
+\label{tab:paired}
+\footnotesize
+\begin{tabular}{lrrrrr}
+\hline
+Comparison & $\Delta$ macro-F1 & $t$ & $p$ (paired $t$) & $p$ (Wilcoxon) & $n$ \\
+\hline
+Logistic Regression vs MLP & -0.09750 & -5.27 & 0.0062 & 0.0625 & 5 \\
+Logistic Regression vs Random Forest & -0.13590 & -12.98 & 0.0002 & 0.0625 & 5 \\
+Logistic Regression vs XGBoost & -0.13634 & -12.80 & 0.0002 & 0.0625 & 5 \\
+MLP vs Random Forest & -0.03840 & -2.63 & 0.0583 & 0.0625 & 5 \\
+MLP vs XGBoost & -0.03883 & -2.64 & 0.0575 & 0.0625 & 5 \\
+Random Forest vs XGBoost & -0.00044 & -1.90 & 0.1309 & 0.1875 & 5 \\
+\hline
+\end{tabular}
+\end{table}
