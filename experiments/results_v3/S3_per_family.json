@@ -1,0 +1,282 @@
+{
+  "per_family_random_split": {
+    "Logistic Regression": {
+      "BENIGN": {
+        "n": 132125,
+        "false_positive_rate": 0.08739451277199621
+      },
+      "Bot": {
+        "n": 120,
+        "recall": 0.275
+      },
+      "DDoS": {
+        "n": 7748,
+        "recall": 0.6330665978316985
+      },
+      "DoS GoldenEye": {
+        "n": 580,
+        "recall": 0.8982758620689655
+      },
+      "DoS Hulk": {
+        "n": 10517,
+        "recall": 0.9305885708852334
+      },
+      "DoS Slowhttptest": {
+        "n": 329,
+        "recall": 0.541033434650456
+      },
+      "DoS slowloris": {
+        "n": 318,
+        "recall": 0.29245283018867924
+      },
+      "FTP-Patator": {
+        "n": 373,
+        "recall": 0.5898123324396782
+      },
+      "Infiltration": {
+        "n": 1,
+        "recall": 1.0
+      },
+      "PortScan": {
+        "n": 8008,
+        "recall": 0.9657842157842158
+      },
+      "SSH-Patator": {
+        "n": 246,
+        "recall": 0.15447154471544716
+      },
+      "Web Attack \ufffd Brute Force": {
+        "n": 110,
+        "recall": 0.9272727272727272
+      },
+      "Web Attack \ufffd Sql Injection": {
+        "n": 3,
+        "recall": 0.3333333333333333
+      },
+      "Web Attack \ufffd XSS": {
+        "n": 43,
+        "recall": 1.0
+      }
+    },
+    "Random Forest": {
+      "BENIGN": {
+        "n": 132125,
+        "false_positive_rate": 0.007371807000946074
+      },
+      "Bot": {
+        "n": 120,
+        "recall": 0.7416666666666667
+      },
+      "DDoS": {
+        "n": 7748,
+        "recall": 0.998580278781621
+      },
+      "DoS GoldenEye": {
+        "n": 580,
+        "recall": 0.996551724137931
+      },
+      "DoS Hulk": {
+        "n": 10517,
+        "recall": 0.9996196634021108
+      },
+      "DoS Slowhttptest": {
+        "n": 329,
+        "recall": 0.9969604863221885
+      },
+      "DoS slowloris": {
+        "n": 318,
+        "recall": 0.9968553459119497
+      },
+      "FTP-Patator": {
+        "n": 373,
+        "recall": 1.0
+      },
+      "Infiltration": {
+        "n": 1,
+        "recall": 1.0
+      },
+      "PortScan": {
+        "n": 8008,
+        "recall": 0.9982517482517482
+      },
+      "SSH-Patator": {
+        "n": 246,
+        "recall": 0.9959349593495935
+      },
+      "Web Attack \ufffd Brute Force": {
+        "n": 110,
+        "recall": 0.09090909090909091
+      },
+      "Web Attack \ufffd Sql Injection": {
+        "n": 3,
+        "recall": 0.0
+      },
+      "Web Attack \ufffd XSS": {
+        "n": 43,
+        "recall": 0.023255813953488372
+      }
+    },
+    "XGBoost": {
+      "BENIGN": {
+        "n": 132125,
+        "false_positive_rate": 0.00681929990539262
+      },
+      "Bot": {
+        "n": 120,
+        "recall": 0.6333333333333333
+      },
+      "DDoS": {
+        "n": 7748,
+        "recall": 0.9989674754775426
+      },
+      "DoS GoldenEye": {
+        "n": 580,
+        "recall": 0.996551724137931
+      },
+      "DoS Hulk": {
+        "n": 10517,
+        "recall": 0.999334410953694
+      },
+      "DoS Slowhttptest": {
+        "n": 329,
+        "recall": 0.9969604863221885
+      },
+      "DoS slowloris": {
+        "n": 318,
+        "recall": 0.9968553459119497
+      },
+      "FTP-Patator": {
+        "n": 373,
+        "recall": 1.0
+      },
+      "Infiltration": {
+        "n": 1,
+        "recall": 1.0
+      },
+      "PortScan": {
+        "n": 8008,
+        "recall": 0.998001998001998
+      },
+      "SSH-Patator": {
+        "n": 246,
+        "recall": 0.9959349593495935
+      },
+      "Web Attack \ufffd Brute Force": {
+        "n": 110,
+        "recall": 0.09090909090909091
+      },
+      "Web Attack \ufffd Sql Injection": {
+        "n": 3,
+        "recall": 0.0
+      },
+      "Web Attack \ufffd XSS": {
+        "n": 43,
+        "recall": 0.023255813953488372
+      }
+    },
+    "MLP": {
+      "BENIGN": {
+        "n": 132125,
+        "false_positive_rate": 0.011867549668874173
+      },
+      "Bot": {
+        "n": 120,
+        "recall": 0.3416666666666667
+      },
+      "DDoS": {
+        "n": 7748,
+        "recall": 0.998580278781621
+      },
+      "DoS GoldenEye": {
+        "n": 580,
+        "recall": 0.9896551724137931
+      },
+      "DoS Hulk": {
+        "n": 10517,
+        "recall": 0.9976228962631929
+      },
+      "DoS Slowhttptest": {
+        "n": 329,
+        "recall": 0.993920972644377
+      },
+      "DoS slowloris": {
+        "n": 318,
+        "recall": 0.6446540880503144
+      },
+      "FTP-Patator": {
+        "n": 373,
+        "recall": 1.0
+      },
+      "Infiltration": {
+        "n": 1,
+        "recall": 0.0
+      },
+      "PortScan": {
+        "n": 8008,
+        "recall": 0.9915084915084915
+      },
+      "SSH-Patator": {
+        "n": 246,
+        "recall": 0.8455284552845529
+      },
+      "Web Attack \ufffd Brute Force": {
+        "n": 110,
+        "recall": 0.01818181818181818
+      },
+      "Web Attack \ufffd Sql Injection": {
+        "n": 3,
+        "recall": 0.0
+      },
+      "Web Attack \ufffd XSS": {
+        "n": 43,
+        "recall": 0.023255813953488372
+      }
+    }
+  },
+  "leave_one_family_out_xgboost": {
+    "DDoS": {
+      "n_heldout": 25744,
+      "unseen_recall": 0.6338175885643257
+    },
+    "PortScan": {
+      "n_heldout": 26822,
+      "unseen_recall": 0.0035791514428454253
+    },
+    "Bot": {
+      "n_heldout": 370,
+      "unseen_recall": 0.0
+    },
+    "Web Attack \ufffd Brute Force": {
+      "n_heldout": 314,
+      "unseen_recall": 0.0031847133757961785
+    },
+    "Web Attack \ufffd XSS": {
+      "n_heldout": 143,
+      "unseen_recall": 0.951048951048951
+    },
+    "SSH-Patator": {
+      "n_heldout": 757,
+      "unseen_recall": 0.002642007926023778
+    },
+    "FTP-Patator": {
+      "n_heldout": 1267,
+      "unseen_recall": 0.0007892659826361484
+    },
+    "DoS Hulk": {
+      "n_heldout": 35087,
+      "unseen_recall": 0.8824065893350813
+    },
+    "DoS Slowhttptest": {
+      "n_heldout": 1046,
+      "unseen_recall": 0.14244741873804972
+    },
+    "DoS GoldenEye": {
+      "n_heldout": 2017,
+      "unseen_recall": 0.7600396628656421
+    },
+    "DoS slowloris": {
+      "n_heldout": 1070,
+      "unseen_recall": 0.8841121495327103
+    }
+  }
+}

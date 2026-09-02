@@ -299,8 +299,10 @@ def fig_leave_one_out():
     y = np.arange(len(items))
     ax.barh(y, vals, height=0.62, color=COLOR["XGBoost"], zorder=3)
     for yi, v in zip(y, vals):
-        ax.text(v + 0.015, yi, f"{v:.2f}", va="center", fontsize=6.5,
-                color=MUTED)
+        # Rounding a near-zero recall to "0.00" would read as exactly zero,
+        # which is a different claim; show enough digits to tell them apart.
+        lab = f"{v:.4f}" if 0 < v < 0.01 else f"{v:.2f}"
+        ax.text(v + 0.015, yi, lab, va="center", fontsize=6.5, color=MUTED)
     ax.set_yticks(y)
     ax.set_yticklabels(names)
     ax.set_xlim(0, 1.1)

@@ -473,10 +473,53 @@ at test time is therefore of a type it has never seen.
 
 \subsection{P3: Per-Family Behaviour and Unseen Attack Types}
 \label{sec:p3}
+The aggregate scores of Section~\ref{sec:p1} are averages over families that
+behave very differently, and the average is dominated by the families with
+the most flows. Table~\ref{tab:family} and Figure~\ref{fig:family} break the
+random-split result down by label.
+
+Two things stand out. The first is that a macro-F1 of 0.988 coexists with
+web-attack recalls close to zero: on the same split, XGBoost detects SQL
+injection at 0.000 and cross-site scripting at 0.023. These families are
+small -- a few hundred flows -- so they cost the aggregate almost nothing,
+but they are not the families a defender would choose to miss.
+
+The second is that the model which looks worst in aggregate is the only one
+that detects them. Logistic Regression reaches 1.00 on cross-site scripting
+and 0.93 on web brute force where all three stronger models sit between 0.02
+and 0.09. The mechanism is visible in Table~\ref{tab:holdout}: Logistic
+Regression operates at a false-positive rate an order of magnitude higher
+than the ensembles, and that indiscriminate behaviour happens to catch rare
+families the better-calibrated models suppress. Whether this is a virtue
+depends on the alert budget, which is exactly the question
+Section~\ref{sec:operational} makes quantitative. What it is not is
+visible in a single macro-averaged number.
+
 \inputtable{per_family}
-\resfig{fig_per_family}{Recall by attack family under the random split. The aggregate score is an average over families whose individual detectability differs by an order of magnitude.}{fig:family}
+\resfig{fig_per_family}{Recall by attack family under the random split. The
+aggregate score is an average over families whose individual detectability
+differs by an order of magnitude, and the model with the weakest aggregate is
+the only one that detects the web-attack families at all.}{fig:family}
+
+\paragraph{Attacks never seen in training.}
+Leave-one-family-out removes a family from training entirely and then asks
+the detector to flag it. Figure~\ref{fig:loo} shows a sharp division rather
+than a gradient. Where a sibling variant remains in training the detector
+generalises well: holding out DoS~Hulk or DoS~slowloris still yields recall
+near 0.88, because other denial-of-service variants remain. Where the family
+stands alone it collapses: botnet traffic is detected at 0.000 and port
+scanning at 0.0036 across 26{,}822 held-out flows.
+
+The practical reading is narrow but firm. A supervised flow classifier of
+this kind interpolates within an attack family; it does not extrapolate to a
+new one. Port scanning is not an exotic case, and a detector that misses
+99.6\,\% of it when it was absent from training is not performing anomaly
+detection in any useful sense, however high its benchmark score.
+
 \inputtable{leave_one_out}
-\resfig{fig_leave_one_out}{Leave-one-family-out: recall on a family removed from training altogether.}{fig:loo}
+\resfig{fig_leave_one_out}{Leave-one-family-out: recall on a family removed
+from training altogether. Detection survives when a related variant remains
+in training and collapses when the family stands alone.}{fig:loo}
 
 \subsection{Feature Selection: Reproducible but Not Canonical}
 \label{sec:featstab}
