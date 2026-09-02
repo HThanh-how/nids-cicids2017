@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\caption{Independent-dataset replication on UNSW-NB15. Models are trained and tested \emph{within} UNSW-NB15 under the identical pipeline; this checks whether the ordering of models replicates on independent data and makes no claim about transfer.}
+\label{tab:unsw}
+\footnotesize
+\begin{tabular}{lccccccc}
+\hline
+Model & Accuracy & Macro-F1 & Recall & Precision & PR-AUC & MCC & FPR \\
+\hline
+Logistic Regression & 0.8878\,$\pm$\,0.0006 & 0.8695\,$\pm$\,0.0008 & 0.9275\,$\pm$\,0.0013 & 0.9094\,$\pm$\,0.0013 & 0.9488\,$\pm$\,0.0016 & 0.7394\,$\pm$\,0.0015 & 0.19686\,$\pm$\,0.00339 \\
+Random Forest & 0.9556\,$\pm$\,0.0005 & 0.9489\,$\pm$\,0.0006 & 0.9685\,$\pm$\,0.0008 & 0.9664\,$\pm$\,0.0008 & 0.9962\,$\pm$\,0.0002 & 0.8978\,$\pm$\,0.0011 & 0.07182\,$\pm$\,0.00179 \\
+XGBoost & 0.9570\,$\pm$\,0.0006 & 0.9504\,$\pm$\,0.0007 & 0.9721\,$\pm$\,0.0008 & 0.9650\,$\pm$\,0.0005 & 0.9967\,$\pm$\,0.0000 & 0.9008\,$\pm$\,0.0014 & 0.07523\,$\pm$\,0.00106 \\
+MLP & 0.9379\,$\pm$\,0.0026 & 0.9300\,$\pm$\,0.0026 & 0.9360\,$\pm$\,0.0063 & 0.9717\,$\pm$\,0.0027 & 0.9944\,$\pm$\,0.0002 & 0.8615\,$\pm$\,0.0045 & 0.05808\,$\pm$\,0.00612 \\
+\hline
+\end{tabular}
+\end{table}

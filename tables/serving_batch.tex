@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\caption{Batching trades latency for throughput. Flows per second is the quantity a deployment plan needs; request latency is what an inline sensor must tolerate.}
+\label{tab:servingbatch}
+\footnotesize
+\begin{tabular}{rrrrrr}
+\hline
+Batch size & Requests/s & Flows/s & p50 (ms) & p95 (ms) & p99 (ms) \\
+\hline
+1 & 303 & 303 & 25.09 & 40.24 & 49.53 \\
+16 & 275 & 4,406 & 27.55 & 44.47 & 55.26 \\
+64 & 215 & 13,747 & 35.24 & 56.96 & 67.43 \\
+256 & 135 & 34,662 & 55.48 & 87.80 & 134.07 \\
+\hline
+\end{tabular}
+\end{table}

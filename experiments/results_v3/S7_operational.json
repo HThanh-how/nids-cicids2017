@@ -1,0 +1,320 @@
+{
+  "S1_holdout": {
+    "Logistic Regression": {
+      "tpr": 0.9099661924214679,
+      "fpr": 0.10100435193945127,
+      "ppv_by_prevalence": {
+        "0.1": {
+          "ppv": 0.5002548164471791,
+          "false_alerts_per_million_flows": 90903.91674550614,
+          "true_alerts_per_million_flows": 90996.6192421468
+        },
+        "0.01": {
+          "ppv": 0.08341122699539284,
+          "false_alerts_per_million_flows": 99994.30842005675,
+          "true_alerts_per_million_flows": 9099.661924214679
+        },
+        "0.001": {
+          "ppv": 0.008937595277453941,
+          "false_alerts_per_million_flows": 100903.34758751182,
+          "true_alerts_per_million_flows": 909.966192421468
+        },
+        "0.0001": {
+          "ppv": 0.0009001968232889231,
+          "false_alerts_per_million_flows": 100994.25150425732,
+          "true_alerts_per_million_flows": 90.99661924214679
+        }
+      }
+    },
+    "MLP": {
+      "tpr": 0.9857374278067332,
+      "fpr": 0.03589782403027436,
+      "ppv_by_prevalence": {
+        "0.1": {
+          "ppv": 0.7531509692246232,
+          "false_alerts_per_million_flows": 32308.041627246923,
+          "true_alerts_per_million_flows": 98573.74278067332
+        },
+        "0.01": {
+          "ppv": 0.2171408602587021,
+          "false_alerts_per_million_flows": 35538.845789971616,
+          "true_alerts_per_million_flows": 9857.374278067333
+        },
+        "0.001": {
+          "ppv": 0.026751694153433814,
+          "false_alerts_per_million_flows": 35861.92620624408,
+          "true_alerts_per_million_flows": 985.7374278067332
+        },
+        "0.0001": {
+          "ppv": 0.002738706655126067,
+          "false_alerts_per_million_flows": 35894.23424787133,
+          "true_alerts_per_million_flows": 98.57374278067333
+        }
+      }
+    },
+    "Random Forest": {
+      "tpr": 0.9936751655162699,
+      "fpr": 0.007624597918637654,
+      "ppv_by_prevalence": {
+        "0.1": {
+          "ppv": 0.9354028011523874,
+          "false_alerts_per_million_flows": 6862.138126773889,
+          "true_alerts_per_million_flows": 99367.51655162699
+        },
+        "0.01": {
+          "ppv": 0.5682981288268469,
+          "false_alerts_per_million_flows": 7548.351939451277,
+          "true_alerts_per_million_flows": 9936.7516551627
+        },
+        "0.001": {
+          "ppv": 0.11540073516004373,
+          "false_alerts_per_million_flows": 7616.973320719017,
+          "true_alerts_per_million_flows": 993.6751655162698
+        },
+        "0.0001": {
+          "ppv": 0.012866101909812072,
+          "false_alerts_per_million_flows": 7623.8354588457905,
+          "true_alerts_per_million_flows": 99.36751655162699
+        }
+      }
+    },
+    "XGBoost": {
+      "tpr": 0.9934849978870263,
+      "fpr": 0.007264333017975402,
+      "ppv_by_prevalence": {
+        "0.1": {
+          "ppv": 0.9382555290693728,
+          "false_alerts_per_million_flows": 6537.899716177862,
+          "true_alerts_per_million_flows": 99348.49978870264
+        },
+        "0.01": {
+          "ppv": 0.5800850710203224,
+          "false_alerts_per_million_flows": 7191.689687795648,
+          "true_alerts_per_million_flows": 9934.849978870263
+        },
+        "0.001": {
+          "ppv": 0.12041434260985419,
+          "false_alerts_per_million_flows": 7257.068684957427,
+          "true_alerts_per_million_flows": 993.4849978870262
+        },
+        "0.0001": {
+          "ppv": 0.01349301994227196,
+          "false_alerts_per_million_flows": 7263.606584673605,
+          "true_alerts_per_million_flows": 99.34849978870264
+        }
+      }
+    }
+  },
+  "S2_day_disjoint": {
+    "Logistic Regression": {
+      "tpr": 0.4974627843834847,
+      "fpr": 0.05920172831977105,
+      "ppv_by_prevalence": {
+        "0.1": {
+          "ppv": 0.48284309727418023,
+          "false_alerts_per_million_flows": 53281.55548779394,
+          "true_alerts_per_million_flows": 49746.278438348476
+        },
+        "0.01": {
+          "ppv": 0.07823668424376187,
+          "false_alerts_per_million_flows": 58609.711036573346,
+          "true_alerts_per_million_flows": 4974.627843834847
+        },
+        "0.001": {
+          "ppv": 0.00834109445004444,
+          "false_alerts_per_million_flows": 59142.52659145128,
+          "true_alerts_per_million_flows": 497.46278438348463
+        },
+        "0.0001": {
+          "ppv": 0.0008396626366456957,
+          "false_alerts_per_million_flows": 59195.808146939075,
+          "true_alerts_per_million_flows": 49.74627843834847
+        }
+      }
+    },
+    "MLP": {
+      "tpr": 0.3466654183441002,
+      "fpr": 0.021069876175614188,
+      "ppv_by_prevalence": {
+        "0.1": {
+          "ppv": 0.6464089135521033,
+          "false_alerts_per_million_flows": 18962.888558052768,
+          "true_alerts_per_million_flows": 34666.541834410025
+        },
+        "0.01": {
+          "ppv": 0.14250917464321805,
+          "false_alerts_per_million_flows": 20859.177413858044,
+          "true_alerts_per_million_flows": 3466.654183441002
+        },
+        "0.001": {
+          "ppv": 0.01620274714747102,
+          "false_alerts_per_million_flows": 21048.806299438573,
+          "true_alerts_per_million_flows": 346.6654183441002
+        },
+        "0.0001": {
+          "ppv": 0.0016427744303186933,
+          "false_alerts_per_million_flows": 21067.769187996626,
+          "true_alerts_per_million_flows": 34.66654183441002
+        }
+      }
+    },
+    "Random Forest": {
+      "tpr": 0.310857285522579,
+      "fpr": 0.0029277003501681086,
+      "ppv_by_prevalence": {
+        "0.1": {
+          "ppv": 0.921860058384033,
+          "false_alerts_per_million_flows": 2634.9303151512977,
+          "true_alerts_per_million_flows": 31085.728552257904
+        },
+        "0.01": {
+          "ppv": 0.517492062712905,
+          "false_alerts_per_million_flows": 2898.4233466664277,
+          "true_alerts_per_million_flows": 3108.57285522579
+        },
+        "0.001": {
+          "ppv": 0.09607318875601399,
+          "false_alerts_per_million_flows": 2924.7726498179404,
+          "true_alerts_per_million_flows": 310.85728552257905
+        },
+        "0.0001": {
+          "ppv": 0.01050728371127238,
+          "false_alerts_per_million_flows": 2927.407580133092,
+          "true_alerts_per_million_flows": 31.0857285522579
+        }
+      }
+    },
+    "XGBoost": {
+      "tpr": 0.31642480416939733,
+      "fpr": 0.00300941288546892,
+      "ppv_by_prevalence": {
+        "0.1": {
+          "ppv": 0.9211529393470937,
+          "false_alerts_per_million_flows": 2708.471596922028,
+          "true_alerts_per_million_flows": 31642.480416939732
+        },
+        "0.01": {
+          "ppv": 0.5150506449389195,
+          "false_alerts_per_million_flows": 2979.318756614231,
+          "true_alerts_per_million_flows": 3164.2480416939734
+        },
+        "0.001": {
+          "ppv": 0.0952275524989259,
+          "false_alerts_per_million_flows": 3006.403472583451,
+          "true_alerts_per_million_flows": 316.42480416939736
+        },
+        "0.0001": {
+          "ppv": 0.01040612821639819,
+          "false_alerts_per_million_flows": 3009.111944180373,
+          "true_alerts_per_million_flows": 31.642480416939737
+        }
+      }
+    }
+  },
+  "S5_unsw_replication": {
+    "Logistic Regression": {
+      "tpr": 0.9275367985922968,
+      "fpr": 0.19685714285714284,
+      "ppv_by_prevalence": {
+        "0.1": {
+          "ppv": 0.34362746170039016,
+          "false_alerts_per_million_flows": 177171.42857142855,
+          "true_alerts_per_million_flows": 92753.67985922968
+        },
+        "0.01": {
+          "ppv": 0.04543098067427119,
+          "false_alerts_per_million_flows": 194888.57142857142,
+          "true_alerts_per_million_flows": 9275.367985922969
+        },
+        "0.001": {
+          "ppv": 0.00469430143414756,
+          "false_alerts_per_million_flows": 196660.2857142857,
+          "true_alerts_per_million_flows": 927.5367985922967
+        },
+        "0.0001": {
+          "ppv": 0.00047099771777896416,
+          "false_alerts_per_million_flows": 196837.45714285714,
+          "true_alerts_per_million_flows": 92.75367985922968
+        }
+      }
+    },
+    "MLP": {
+      "tpr": 0.9359997765550373,
+      "fpr": 0.058083333333333334,
+      "ppv_by_prevalence": {
+        "0.1": {
+          "ppv": 0.6416451893247114,
+          "false_alerts_per_million_flows": 52275.0,
+          "true_alerts_per_million_flows": 93599.97765550374
+        },
+        "0.01": {
+          "ppv": 0.1399887542097318,
+          "false_alerts_per_million_flows": 57502.5,
+          "true_alerts_per_million_flows": 9359.997765550374
+        },
+        "0.001": {
+          "ppv": 0.015874829317597372,
+          "false_alerts_per_million_flows": 58025.25,
+          "true_alerts_per_million_flows": 935.9997765550373
+        },
+        "0.0001": {
+          "ppv": 0.0016090453415067536,
+          "false_alerts_per_million_flows": 58077.525,
+          "true_alerts_per_million_flows": 93.59997765550374
+        }
+      }
+    },
+    "Random Forest": {
+      "tpr": 0.9684775018853168,
+      "fpr": 0.07182142857142856,
+      "ppv_by_prevalence": {
+        "0.1": {
+          "ppv": 0.5997246134780411,
+          "false_alerts_per_million_flows": 64639.2857142857,
+          "true_alerts_per_million_flows": 96847.75018853169
+        },
+        "0.01": {
+          "ppv": 0.11987889663080929,
+          "false_alerts_per_million_flows": 71103.21428571429,
+          "true_alerts_per_million_flows": 9684.775018853168
+        },
+        "0.001": {
+          "ppv": 0.013318248226926285,
+          "false_alerts_per_million_flows": 71749.60714285713,
+          "true_alerts_per_million_flows": 968.4775018853168
+        },
+        "0.0001": {
+          "ppv": 0.001346770638029551,
+          "false_alerts_per_million_flows": 71814.24642857142,
+          "true_alerts_per_million_flows": 96.84775018853169
+        }
+      }
+    },
+    "XGBoost": {
+      "tpr": 0.9721475853978717,
+      "fpr": 0.07522619047619047,
+      "ppv_by_prevalence": {
+        "0.1": {
+          "ppv": 0.5894721257390788,
+          "false_alerts_per_million_flows": 67703.57142857143,
+          "true_alerts_per_million_flows": 97214.75853978717
+        },
+        "0.01": {
+          "ppv": 0.11546325978624447,
+          "false_alerts_per_million_flows": 74473.92857142857,
+          "true_alerts_per_million_flows": 9721.475853978718
+        },
+        "0.001": {
+          "ppv": 0.012770728383304446,
+          "false_alerts_per_million_flows": 75150.96428571429,
+          "true_alerts_per_million_flows": 972.1475853978717
+        },
+        "0.0001": {
+          "ppv": 0.0012907603969251585,
+          "false_alerts_per_million_flows": 75218.66785714286,
+          "true_alerts_per_million_flows": 97.21475853978717
+        }
+      }
+    }
+  }
+}

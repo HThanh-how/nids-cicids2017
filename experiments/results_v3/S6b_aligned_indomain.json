@@ -1,0 +1,173 @@
+{
+  "n_aligned_features": 7,
+  "aligned_features": [
+    {
+      "cicids": "Flow Duration",
+      "unsw": "dur",
+      "scale": 1e-06
+    },
+    {
+      "cicids": "Total Fwd Packets",
+      "unsw": "spkts",
+      "scale": 1.0
+    },
+    {
+      "cicids": "Total Backward Packets",
+      "unsw": "dpkts",
+      "scale": 1.0
+    },
+    {
+      "cicids": "Total Length of Fwd Packets",
+      "unsw": "sbytes",
+      "scale": 1.0
+    },
+    {
+      "cicids": "Total Length of Bwd Packets",
+      "unsw": "dbytes",
+      "scale": 1.0
+    },
+    {
+      "cicids": "Fwd Packet Length Mean",
+      "unsw": "smean",
+      "scale": 1.0
+    },
+    {
+      "cicids": "Bwd Packet Length Mean",
+      "unsw": "dmean",
+      "scale": 1.0
+    }
+  ],
+  "cicids2017_in_domain": {
+    "Logistic Regression": {
+      "accuracy": 0.8453099594445587,
+      "precision_attack": 0.5416559556916174,
+      "recall_attack": 0.8162417241865051,
+      "macro_f1": 0.7759023353777819,
+      "roc_auc": 0.9063740940233964,
+      "pr_auc": 0.7819197816717409,
+      "mcc": 0.576297895225613,
+      "balanced_accuracy": 0.8338994808255137,
+      "fpr": 0.14844276253547778,
+      "fnr": 0.18375827581349485,
+      "tn": 112512,
+      "fp": 19613,
+      "fn": 5218,
+      "tp": 23178
+    },
+    "Random Forest": {
+      "accuracy": 0.9940132443730104,
+      "precision_attack": 0.9814678319469307,
+      "recall_attack": 0.9847513734328779,
+      "macro_f1": 0.9897344227054732,
+      "roc_auc": 0.9979924260789059,
+      "pr_auc": 0.9934606443606566,
+      "mcc": 0.9794708751259724,
+      "balanced_accuracy": 0.9903775788640264,
+      "fpr": 0.003996215704824976,
+      "fnr": 0.01524862656712213,
+      "tn": 131597,
+      "fp": 528,
+      "fn": 433,
+      "tp": 27963
+    },
+    "XGBoost": {
+      "accuracy": 0.9947981883990257,
+      "precision_attack": 0.9851776220821744,
+      "recall_attack": 0.9854204817579941,
+      "macro_f1": 0.991069533387956,
+      "roc_auc": 0.9994827007361624,
+      "pr_auc": 0.998018282401198,
+      "mcc": 0.9821390778438966,
+      "balanced_accuracy": 0.9911170526103121,
+      "fpr": 0.003186376537369915,
+      "fnr": 0.014579518242005917,
+      "tn": 131704,
+      "fp": 421,
+      "fn": 414,
+      "tp": 27982
+    },
+    "MLP": {
+      "accuracy": 0.9842076737623114,
+      "precision_attack": 0.9454338764683592,
+      "recall_attack": 0.9665093675165516,
+      "macro_f1": 0.9731196200559092,
+      "roc_auc": 0.9965424785001099,
+      "pr_auc": 0.9880843101217269,
+      "mcc": 0.9463259317469644,
+      "balanced_accuracy": 0.9772603602010383,
+      "fpr": 0.01198864711447493,
+      "fnr": 0.03349063248344837,
+      "tn": 130541,
+      "fp": 1584,
+      "fn": 951,
+      "tp": 27445
+    }
+  },
+  "unsw_nb15_in_domain": {
+    "Logistic Regression": {
+      "accuracy": 0.729882326103074,
+      "precision_attack": 0.8022507138458093,
+      "recall_attack": 0.8004357176772896,
+      "macro_f1": 0.6897361455357911,
+      "roc_auc": 0.7736032994042799,
+      "pr_auc": 0.835773102561142,
+      "mcc": 0.37947635528323037,
+      "balanced_accuracy": 0.6899797636005496,
+      "fpr": 0.4204761904761905,
+      "fnr": 0.1995642823227104,
+      "tn": 9736,
+      "fp": 7064,
+      "fn": 7145,
+      "tp": 28658
+    },
+    "Random Forest": {
+      "accuracy": 0.9397182670189913,
+      "precision_attack": 0.9603577676203374,
+      "recall_attack": 0.9506745244811887,
+      "macro_f1": 0.9310599023035032,
+      "roc_auc": 0.985275039302373,
+      "pr_auc": 0.9906291078259655,
+      "mcc": 0.8622334492519191,
+      "balanced_accuracy": 0.9335217860501182,
+      "fpr": 0.08363095238095238,
+      "fnr": 0.04932547551881127,
+      "tn": 15395,
+      "fp": 1405,
+      "fn": 1766,
+      "tp": 34037
+    },
+    "XGBoost": {
+      "accuracy": 0.93739900766116,
+      "precision_attack": 0.9642163582362349,
+      "recall_attack": 0.9430215345082814,
+      "macro_f1": 0.9288691226976618,
+      "roc_auc": 0.988364737824577,
+      "pr_auc": 0.9941645995281045,
+      "mcc": 0.8582703718949702,
+      "balanced_accuracy": 0.934219100587474,
+      "fpr": 0.07458333333333333,
+      "fnr": 0.05697846549171857,
+      "tn": 15547,
+      "fp": 1253,
+      "fn": 2040,
+      "tp": 33763
+    },
+    "MLP": {
+      "accuracy": 0.9258787521624242,
+      "precision_attack": 0.9564757053740056,
+      "recall_attack": 0.9335809848336731,
+      "macro_f1": 0.9158670766203543,
+      "roc_auc": 0.9831036920955014,
+      "pr_auc": 0.9913037298713486,
+      "mcc": 0.8323539630880037,
+      "balanced_accuracy": 0.9215226352739794,
+      "fpr": 0.09053571428571429,
+      "fnr": 0.06641901516632684,
+      "tn": 15279,
+      "fp": 1521,
+      "fn": 2378,
+      "tp": 33425
+    }
+  },
+  "note": "Ordinary in-domain stratified holdout restricted to the seven features used for transfer. Compare against the twenty-feature in-domain results (S1, S5) to separate the cost of the reduced feature space from the domain shift measured in S6."
+}

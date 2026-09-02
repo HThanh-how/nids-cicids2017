@@ -1,0 +1,278 @@
+{
+  "service_meta": {
+    "model": "XGBoost",
+    "n_features": 20,
+    "features": [
+      "Packet Length Variance",
+      "Avg Bwd Segment Size",
+      "Max Packet Length",
+      "Packet Length Std",
+      "Bwd Packet Length Std",
+      "Average Packet Size",
+      "Bwd Packet Length Max",
+      "Bwd Packet Length Mean",
+      "Total Length of Bwd Packets",
+      "Packet Length Mean",
+      "Subflow Fwd Packets",
+      "Total Fwd Packets",
+      "Subflow Fwd Bytes",
+      "Destination Port",
+      "Total Length of Fwd Packets",
+      "Fwd Packet Length Max",
+      "PSH Flag Count",
+      "Bwd Header Length",
+      "Subflow Bwd Bytes",
+      "Fwd Header Length"
+    ],
+    "offline_metrics_random_split": {
+      "accuracy": 0.9929853414817998,
+      "precision_attack": 0.9690079801871216,
+      "recall_attack": 0.9920763487815185,
+      "macro_f1": 0.9880672210230439,
+      "roc_auc": 0.999787551193467,
+      "pr_auc": 0.9988877023861132,
+      "mcc": 0.9762353649606981,
+      "balanced_accuracy": 0.9926285244380629,
+      "fpr": 0.00681929990539262,
+      "fnr": 0.007923651218481476,
+      "tn": 131224,
+      "fp": 901,
+      "fn": 225,
+      "tp": 28171
+    },
+    "load_seconds": 1.9484819999779575
+  },
+  "single": [
+    {
+      "concurrency": 1,
+      "requests_measured": 3511,
+      "errors": 0,
+      "error_kinds": [],
+      "duration_s": 20.0,
+      "throughput_rps": 175.55,
+      "latency_ms": {
+        "mean": 5.687036314410614,
+        "stdev": 1.1498547194881172,
+        "min": 3.859899996314198,
+        "max": 25.29820002382621,
+        "p50": 5.433099984657019,
+        "p90": 7.100299990270287,
+        "p95": 7.816049997927621,
+        "p99": 9.585300047183416,
+        "p99.9": 12.566129985498115
+      },
+      "server_time_ms": {
+        "mean": 2.027805069780689,
+        "p50": 1.8616,
+        "p90": 2.6514,
+        "p95": 3.14925,
+        "p99": 4.499110000000002,
+        "p99.9": 8.132216999999958
+      }
+    },
+    {
+      "concurrency": 8,
+      "requests_measured": 6187,
+      "errors": 0,
+      "error_kinds": [],
+      "duration_s": 20.0,
+      "throughput_rps": 309.35,
+      "latency_ms": {
+        "mean": 25.874349652395598,
+        "stdev": 8.195917672071207,
+        "min": 10.787100007291883,
+        "max": 136.491900018882,
+        "p50": 24.36179999494925,
+        "p90": 35.40955998469144,
+        "p95": 39.228309999452904,
+        "p99": 50.08767001563683,
+        "p99.9": 120.6456102214292
+      },
+      "server_time_ms": {
+        "mean": 8.972969209633101,
+        "p50": 7.2864,
+        "p90": 16.703559999999996,
+        "p95": 20.829239999999995,
+        "p99": 30.047644000000005,
+        "p99.9": 40.70568780000015
+      }
+    },
+    {
+      "concurrency": 32,
+      "requests_measured": 3769,
+      "errors": 0,
+      "error_kinds": [],
+      "duration_s": 20.0,
+      "throughput_rps": 188.45,
+      "latency_ms": {
+        "mean": 172.23177381223027,
+        "stdev": 196.73950335494007,
+        "min": 19.939200021326542,
+        "max": 1741.6048999875784,
+        "p50": 90.19560000160709,
+        "p90": 423.03491999628017,
+        "p95": 578.471799986437,
+        "p99": 933.9614479802551,
+        "p99.9": 1424.3808800163677
+      },
+      "server_time_ms": {
+        "mean": 3.449837728840541,
+        "p50": 2.3939,
+        "p90": 4.887179999999998,
+        "p95": 7.78676,
+        "p99": 24.558372000000023,
+        "p99.9": 50.236729599999954
+      }
+    },
+    {
+      "concurrency": 128,
+      "requests_measured": 2565,
+      "errors": 0,
+      "error_kinds": [],
+      "duration_s": 20.0,
+      "throughput_rps": 128.25,
+      "latency_ms": {
+        "mean": 1156.8346717345871,
+        "stdev": 1445.3721674460162,
+        "min": 37.56710002198815,
+        "max": 12767.766800010577,
+        "p50": 608.4252999862656,
+        "p90": 3081.302239990327,
+        "p95": 4828.260700008833,
+        "p99": 6187.356187978296,
+        "p99.9": 9184.186584402085
+      },
+      "server_time_ms": {
+        "mean": 5.220970916179337,
+        "p50": 2.6503,
+        "p90": 9.704839999999997,
+        "p95": 17.230940000000015,
+        "p99": 48.34474400000005,
+        "p99.9": 99.98227720000304
+      }
+    }
+  ],
+  "batch": [
+    {
+      "concurrency": 8,
+      "requests_measured": 6066,
+      "errors": 0,
+      "error_kinds": [],
+      "duration_s": 20.0,
+      "throughput_rps": 303.3,
+      "latency_ms": {
+        "mean": 26.402851335117912,
+        "stdev": 9.130888863693013,
+        "min": 10.783699981402606,
+        "max": 160.1344999508001,
+        "p50": 25.090600014664233,
+        "p90": 36.145949998172,
+        "p95": 40.24012498848606,
+        "p99": 49.52935003384487,
+        "p99.9": 135.15841446176663
+      },
+      "server_time_ms": {
+        "mean": 10.401089713155292,
+        "p50": 8.5087,
+        "p90": 19.878,
+        "p95": 24.176175,
+        "p99": 33.00676500000007,
+        "p99.9": 52.20556000000064
+      },
+      "batch_size": 1,
+      "flows_per_s": 303.3
+    },
+    {
+      "concurrency": 8,
+      "requests_measured": 5507,
+      "errors": 0,
+      "error_kinds": [],
+      "duration_s": 20.0,
+      "throughput_rps": 275.35,
+      "latency_ms": {
+        "mean": 29.091776611034145,
+        "stdev": 9.473826011358957,
+        "min": 11.924699996598065,
+        "max": 146.61769999656826,
+        "p50": 27.545600023586303,
+        "p90": 40.02582001267,
+        "p95": 44.4710700016003,
+        "p99": 55.258839998859905,
+        "p99.9": 139.30322802625625
+      },
+      "server_time_ms": {
+        "mean": 11.567426257490467,
+        "p50": 9.5945,
+        "p90": 21.35806,
+        "p95": 26.59997,
+        "p99": 37.89225799999999,
+        "p99.9": 53.13874480000003
+      },
+      "batch_size": 16,
+      "flows_per_s": 4405.6
+    },
+    {
+      "concurrency": 8,
+      "requests_measured": 4296,
+      "errors": 0,
+      "error_kinds": [],
+      "duration_s": 20.0,
+      "throughput_rps": 214.8,
+      "latency_ms": {
+        "mean": 37.3017954839617,
+        "stdev": 11.765327410042111,
+        "min": 14.770500012673438,
+        "max": 138.86940001975745,
+        "p50": 35.237150004832074,
+        "p90": 51.804550021188334,
+        "p95": 56.9563750323141,
+        "p99": 67.42520501138642,
+        "p99.9": 126.87842951272602
+      },
+      "server_time_ms": {
+        "mean": 17.080872695530726,
+        "p50": 14.15935,
+        "p90": 32.7876,
+        "p95": 38.411225,
+        "p99": 47.540135,
+        "p99.9": 96.08761849999992
+      },
+      "batch_size": 64,
+      "flows_per_s": 13747.2
+    },
+    {
+      "concurrency": 8,
+      "requests_measured": 2708,
+      "errors": 0,
+      "error_kinds": [],
+      "duration_s": 20.0,
+      "throughput_rps": 135.4,
+      "latency_ms": {
+        "mean": 59.13020428402939,
+        "stdev": 17.938886053886904,
+        "min": 17.530600016471,
+        "max": 182.4283999740146,
+        "p50": 55.482950003352016,
+        "p90": 79.6974399825558,
+        "p95": 87.79510499152822,
+        "p99": 134.06686300353604,
+        "p99.9": 164.62833849043807
+      },
+      "server_time_ms": {
+        "mean": 21.64113216395864,
+        "p50": 17.11875,
+        "p90": 42.12313000000001,
+        "p95": 51.638715,
+        "p99": 65.97184499999999,
+        "p99.9": 117.43893329999982
+      },
+      "batch_size": 256,
+      "flows_per_s": 34662.4
+    }
+  ],
+  "cold_start": {
+    "process_launch_to_ready_s": 7.826175199996214,
+    "model_load_s": 1.9484819999779575,
+    "note": "Measured from process launch to the first successful readiness response on this host. Pod scheduling, image pull and node-level contention are not included and are not measured in this paper."
+  }
+}

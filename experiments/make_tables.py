@@ -184,6 +184,40 @@ def t_holdout():
              "$p$ (Wilcoxon)", "$n$"], rows))
 
 
+def t_protocols():
+    """Both protocols in one table.
+
+    Printing them separately makes the reader hold eight numbers in mind to
+    perform the comparison the paper is about; interleaving the rows puts the
+    comparison on the page and costs half the space.
+    """
+    d1, d2 = load("S1_holdout"), load("S2_day_disjoint")
+    if not (d1 and d2):
+        return
+    cols = ["macro_f1", "recall_attack", "precision_attack", "pr_auc",
+            "mcc", "fpr"]
+    head = ["Model", "Protocol", "Macro-F1", "Recall", "Precision", "PR-AUC",
+            "MCC", "FPR"]
+    rows = []
+    for m in models_in(d1["summary"]):
+        if m not in d2["summary"]:
+            continue
+        for tag, blob in (("random", d1), ("day-disj.", d2)):
+            s = blob["summary"][m]
+            rows.append([esc(m) if tag == "random" else "",
+                         tag] + [mean_ci(s[c], 4 if c != "fpr" else 5)
+                                 for c in cols])
+    cfg = d1["config"]
+    write("protocols.tex", table(
+        f"Detection performance under both splitting protocols on identical "
+        f"data, as mean $\\pm$ half-width of the 95\\,\\% confidence interval "
+        f"over {len(cfg['seeds'])} and {len(d2['runs']) // 4} seeds "
+        f"respectively. Selection, SMOTE and scaling are re-fitted inside "
+        f"every training split. Only the split differs between the two rows "
+        f"of each model.", "tab:protocols", "ll" + "c" * len(cols),
+        head, rows))
+
+
 def t_day_disjoint():
     d2, d1 = load("S2_day_disjoint"), load("S1_holdout")
     if not d2:
@@ -412,7 +446,7 @@ def t_serving():
 
 
 def main():
-    for fn in (t_environment, t_dataset, t_holdout, t_day_disjoint, t_family,
+    for fn in (t_environment, t_dataset, t_holdout, t_protocols, t_day_disjoint, t_family,
                t_features, t_unsw, t_transfer, t_operational, t_cost,
                t_serving):
         try:

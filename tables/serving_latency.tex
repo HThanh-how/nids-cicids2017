@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\caption{Measured end-to-end serving performance of the deployed service, single-flow endpoint, closed loop. The server-time column is the in-process scoring time reported by the service, so the difference from the p50 is queueing, parsing and transport.}
+\label{tab:serving}
+\footnotesize
+\begin{tabular}{rrrrrrrr}
+\hline
+Clients & Requests/s & p50 (ms) & p95 (ms) & p99 (ms) & p99.9 (ms) & Server (ms) & Errors \\
+\hline
+1 & 176 & 5.43 & 7.82 & 9.59 & 12.57 & 2.028 & 0 \\
+8 & 309 & 24.36 & 39.23 & 50.09 & 120.65 & 8.973 & 0 \\
+32 & 188 & 90.20 & 578.47 & 933.96 & 1424.38 & 3.450 & 0 \\
+128 & 128 & 608.43 & 4828.26 & 6187.36 & 9184.19 & 5.221 & 0 \\
+\hline
+\end{tabular}
+\end{table}
