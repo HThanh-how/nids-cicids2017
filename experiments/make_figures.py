@@ -424,6 +424,10 @@ def fig_serving():
                  zorder=3)
     ax1.set_ylabel("latency (ms)")
     ax1.set_xscale("log", base=2)
+    # Latency spans three orders of magnitude between the lightest and the
+    # heaviest level; on a linear axis the saturated point flattens every
+    # other reading to the baseline.
+    ax1.set_yscale("log")
     ax1.legend(frameon=False, ncol=3, loc="upper left")
     ax1.set_title("Measured service latency and throughput", pad=6)
     tidy(ax1)

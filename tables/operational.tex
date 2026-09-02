@@ -1,24 +1,24 @@
-\begin{table}[t]
+\begin{table}[htbp]
 \centering
 \caption{Precision at operational prevalence. Benchmark attack ratios are far above what a production sensor sees, and precision degrades with prevalence even when TPR and FPR are held fixed. The last column is the analyst burden: false alerts per million flows at a 0.1\,\% attack rate.}
 \label{tab:operational}
-\footnotesize
-\begin{tabular}{llrrrrrrr}
+\scriptsize
+\begin{tabular}{llrrrrrr}
 \hline
-Protocol & Model & TPR & FPR & PPV@10\% & PPV@1\% & PPV@0.1\% & PPV@0.01\% & FA/10$^6$ \\
+Protocol & Model & TPR & FPR & PPV@1\% & PPV@0.1\% & PPV@0.01\% & FA/10$^6$ \\
 \hline
-Random split & Logistic Regression & 0.9100 & 0.10100 & 0.500 & 0.083 & 0.009 & 0.0009 & 100,903 \\
-Random split & Random Forest & 0.9937 & 0.00762 & 0.935 & 0.568 & 0.115 & 0.0129 & 7,617 \\
-Random split & XGBoost & 0.9935 & 0.00726 & 0.938 & 0.580 & 0.120 & 0.0135 & 7,257 \\
-Random split & MLP & 0.9857 & 0.03590 & 0.753 & 0.217 & 0.027 & 0.0027 & 35,862 \\
-Day-disjoint & Logistic Regression & 0.4975 & 0.05920 & 0.483 & 0.078 & 0.008 & 0.0008 & 59,143 \\
-Day-disjoint & Random Forest & 0.3109 & 0.00293 & 0.922 & 0.517 & 0.096 & 0.0105 & 2,925 \\
-Day-disjoint & XGBoost & 0.3164 & 0.00301 & 0.921 & 0.515 & 0.095 & 0.0104 & 3,006 \\
-Day-disjoint & MLP & 0.3467 & 0.02107 & 0.646 & 0.143 & 0.016 & 0.0016 & 21,049 \\
-UNSW-NB15 & Logistic Regression & 0.9275 & 0.19686 & 0.344 & 0.045 & 0.005 & 0.0005 & 196,660 \\
-UNSW-NB15 & Random Forest & 0.9685 & 0.07182 & 0.600 & 0.120 & 0.013 & 0.0013 & 71,750 \\
-UNSW-NB15 & XGBoost & 0.9721 & 0.07523 & 0.589 & 0.115 & 0.013 & 0.0013 & 75,151 \\
-UNSW-NB15 & MLP & 0.9360 & 0.05808 & 0.642 & 0.140 & 0.016 & 0.0016 & 58,025 \\
+Random split & Logistic Regression & 0.9100 & 0.10100 & 0.083 & 0.009 & 0.0009 & 100,903 \\
+Random split & Random Forest & 0.9937 & 0.00762 & 0.568 & 0.115 & 0.0129 & 7,617 \\
+Random split & XGBoost & 0.9935 & 0.00726 & 0.580 & 0.120 & 0.0135 & 7,257 \\
+Random split & MLP & 0.9857 & 0.03590 & 0.217 & 0.027 & 0.0027 & 35,862 \\
+Day-disjoint & Logistic Regression & 0.4975 & 0.05920 & 0.078 & 0.008 & 0.0008 & 59,143 \\
+Day-disjoint & Random Forest & 0.3109 & 0.00293 & 0.517 & 0.096 & 0.0105 & 2,925 \\
+Day-disjoint & XGBoost & 0.3164 & 0.00301 & 0.515 & 0.095 & 0.0104 & 3,006 \\
+Day-disjoint & MLP & 0.3467 & 0.02107 & 0.143 & 0.016 & 0.0016 & 21,049 \\
+UNSW-NB15 & Logistic Regression & 0.9275 & 0.19686 & 0.045 & 0.005 & 0.0005 & 196,660 \\
+UNSW-NB15 & Random Forest & 0.9685 & 0.07182 & 0.120 & 0.013 & 0.0013 & 71,750 \\
+UNSW-NB15 & XGBoost & 0.9721 & 0.07523 & 0.115 & 0.013 & 0.0013 & 75,151 \\
+UNSW-NB15 & MLP & 0.9360 & 0.05808 & 0.140 & 0.016 & 0.0016 & 58,025 \\
 \hline
 \end{tabular}
 \end{table}

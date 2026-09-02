@@ -50,10 +50,16 @@ def write(name, body):
 
 
 def table(caption, label, colspec, header, rows, note=None, small=True):
-    lines = [r"\begin{table}[t]", r"\centering",
+    # [htbp] rather than [t]: with this many small floats, top-only placement
+    # leaves half-empty pages and costs more than a page across the document.
+    lines = [r"\begin{table}[htbp]", r"\centering",
              rf"\caption{{{caption}}}", rf"\label{{{label}}}"]
     if small:
-        lines.append(r"\footnotesize")
+        # Wide or long tables get one size smaller: at \footnotesize they run
+        # past the text block or push a page break, and the numbers stay
+        # legible in print at \scriptsize.
+        lines.append(r"\scriptsize" if (len(rows) > 8 or len(header) >= 7)
+                     else r"\footnotesize")
     lines += [rf"\begin{{tabular}}{{{colspec}}}", r"\hline",
               " & ".join(header) + r" \\", r"\hline"]
     lines += [" & ".join(r) + r" \\" for r in rows]
@@ -194,17 +200,21 @@ def t_protocols():
     d1, d2 = load("S1_holdout"), load("S2_day_disjoint")
     if not (d1 and d2):
         return
-    cols = ["macro_f1", "recall_attack", "precision_attack", "pr_auc",
-            "mcc", "fpr"]
-    head = ["Model", "Protocol", "Macro-F1", "Recall", "Precision", "PR-AUC",
-            "MCC", "FPR"]
+    # Four metrics, not seven: each cell carries a mean and an interval, and
+    # at seven the table runs 100pt past the text block. The remaining
+    # metrics are in the released result files.
+    cols = ["macro_f1", "recall_attack", "precision_attack", "fpr"]
+    head = ["Model", "Protocol", "Macro-F1", "Recall", "Precision", "FPR"]
+    # Short model names: the full ones push this table past the text block.
+    short = {"Logistic Regression": "LogReg", "Random Forest": "RF",
+             "XGBoost": "XGBoost", "MLP": "MLP"}
     rows = []
     for m in models_in(d1["summary"]):
         if m not in d2["summary"]:
             continue
         for tag, blob in (("random", d1), ("day-disj.", d2)):
             s = blob["summary"][m]
-            rows.append([esc(m) if tag == "random" else "",
+            rows.append([short.get(m, esc(m)) if tag == "random" else "",
                          tag] + [mean_ci(s[c], 4 if c != "fpr" else 5)
                                  for c in cols])
     cfg = d1["config"]
@@ -375,10 +385,13 @@ def t_operational():
         for m in models_in(per):
             v = per[m]
             c = v["ppv_by_prevalence"]
+            # The 10 % column is dropped: no production link runs at that
+            # prevalence, and the extra column pushed the table past the
+            # text block. It remains in the released result files.
             rows.append([
                 esc(pretty.get(stage, stage)), esc(m),
                 f"{v['tpr']:.4f}", f"{v['fpr']:.5f}",
-                f"{c['0.1']['ppv']:.3f}", f"{c['0.01']['ppv']:.3f}",
+                f"{c['0.01']['ppv']:.3f}",
                 f"{c['0.001']['ppv']:.3f}", f"{c['0.0001']['ppv']:.4f}",
                 f"{c['0.001']['false_alerts_per_million_flows']:,.0f}"])
     write("operational.tex", table(
@@ -386,8 +399,8 @@ def t_operational():
         "above what a production sensor sees, and precision degrades with "
         "prevalence even when TPR and FPR are held fixed. The last column is "
         "the analyst burden: false alerts per million flows at a "
-        "0.1\\,\\% attack rate.", "tab:operational", "llrrrrrrr",
-        ["Protocol", "Model", "TPR", "FPR", "PPV@10\\%", "PPV@1\\%",
+        "0.1\\,\\% attack rate.", "tab:operational", "llrrrrrr",
+        ["Protocol", "Model", "TPR", "FPR", "PPV@1\\%",
          "PPV@0.1\\%", "PPV@0.01\\%", "FA/10$^6$"], rows))
 
 
@@ -402,8 +415,8 @@ def t_cost():
                      mean_ci(s["per_sample_ms"], 5)])
     write("cost.tex", table(
         "Training and amortised inference cost, measured with a discarded "
-        "warm-up pass and five repeats per split on the environment of "
-        "Table~\\ref{tab:env}. The per-sample figure is model cost amortised "
+        "warm-up pass and five repeats per split, on the machine described in "
+        "the text. The per-sample figure is model cost amortised "
         "over a full test batch on all cores; it is a lower bound on service "
         "cost and is deliberately not converted into a throughput.",
         "tab:cost", "lrr",

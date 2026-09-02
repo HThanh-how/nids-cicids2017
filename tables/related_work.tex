@@ -1,29 +1,30 @@
 % Hand-compiled from the cited papers themselves (not from our measurements).
 % An entry is filled only where the paper states the item; "--" means the paper
-% does not report it. This table is the answer to the reviewer's request for a
-% structured positioning against recent work.
-\begin{table}[t]
+% does not report it. This is the structured positioning the reviewer asked
+% for. Column widths are set explicitly: the natural widths ran 74pt past the
+% LNCS text block.
+\begin{table}[htbp]
 \centering
-\caption{Positioning against prior work on CICIDS2017. Columns are the
-properties a reader needs in order to know how much a reported score means:
-how train and test were separated, whether attack types were reported
-individually, whether results were repeated, whether cost was measured, and
-whether a running service was ever benchmarked.}
+\caption{Positioning against prior work on CICIDS2017. The columns are what a
+reader needs in order to judge a reported score: how train and test were
+separated, whether attack types were reported individually, whether results
+were repeated over seeds, whether cost was measured, and whether a running
+service was ever benchmarked.}
 \label{tab:related}
-\footnotesize
-\begin{tabular}{lllcccc}
+\scriptsize
+\begin{tabular}{@{}p{3.0cm}p{3.1cm}cccc@{}}
 \hline
-Work & Data & Split protocol & Per-family & Repeats & Cost & Serving \\
+Work & Split protocol & Family & Seeds & Cost & Serving \\
 \hline
-Sharafaldin et al.~\cite{sharafaldin2018cicids} & CICIDS2017 & random & yes & -- & -- & -- \\
-Engelen et al.~\cite{engelen2021troubleshooting} & CICIDS2017 & random & yes & -- & -- & -- \\
-Lanvin et al.~\cite{lanvin2023errors} & CICIDS2017 & random & yes & -- & -- & -- \\
-Moczkodan and Ragab~\cite{moczkodan2026transformers} & CICIDS2017 & temporal, 5-tuple & -- & -- & -- & -- \\
-Xu and Liu~\cite{xu2025robust} & CICIDS2017 & -- & yes & -- & -- & -- \\
+Sharafaldin et al.~\cite{sharafaldin2018cicids} & random & yes & -- & -- & -- \\
+Engelen et al.~\cite{engelen2021troubleshooting} & random & yes & -- & -- & -- \\
+Lanvin et al.~\cite{lanvin2023errors} & random & yes & -- & -- & -- \\
+Moczkodan and Ragab~\cite{moczkodan2026transformers} & temporal, 5-tuple & -- & -- & -- & -- \\
+Xu and Liu~\cite{xu2025robust} & -- & yes & -- & -- & -- \\
 \hline
-This paper & \begin{tabular}[t]{@{}l@{}}CICIDS2017\\ UNSW-NB15\end{tabular}
-  & \begin{tabular}[t]{@{}l@{}}random, day-disjoint,\\ family-disjoint, transfer\end{tabular}
-  & yes & yes & yes & yes \\
+This paper & random, day-disjoint, family-disjoint, transfer & yes & yes & yes & yes \\
 \hline
 \end{tabular}
+\par\smallskip
+\scriptsize All rows evaluate on CICIDS2017; this paper adds UNSW-NB15.
 \end{table}
