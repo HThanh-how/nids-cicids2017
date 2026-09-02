@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\caption{The optimism of a random split. Same pipeline, same hyperparameters, same data; only the split protocol differs. The gap is the quantity this paper reports.}
+\label{tab:gap}
+\footnotesize
+\begin{tabular}{lrrrrrr}
+\hline
+Model & F1 random & F1 day-disj. & $\Delta$ & Recall random & Recall day-disj. & $\Delta$ \\
+\hline
+Logistic Regression & 0.8515 & 0.7433 & -0.1082 & 0.9100 & 0.4975 & -0.4125 \\
+Random Forest & 0.9874 & 0.6852 & -0.3022 & 0.9937 & 0.3109 & -0.6828 \\
+XGBoost & 0.9879 & 0.6887 & -0.2992 & 0.9935 & 0.3164 & -0.6771 \\
+MLP & 0.9491 & 0.6928 & -0.2563 & 0.9857 & 0.3467 & -0.6391 \\
+\hline
+\end{tabular}
+\end{table}

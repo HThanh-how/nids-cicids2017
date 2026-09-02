@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\caption{Day-disjoint evaluation: trained on Mon--Tue--Wed, tested on Thu--Fri. On CICIDS2017 each attack family is confined to a single capture day, so this split is also family-disjoint: every attack in the test set is of a type absent from training.}
+\label{tab:daydisjoint}
+\footnotesize
+\begin{tabular}{lccccccc}
+\hline
+Model & Accuracy & Macro-F1 & Recall & Precision & PR-AUC & MCC & FPR \\
+\hline
+Logistic Regression & 0.8335\,$\pm$\,0.0030 & 0.7433\,$\pm$\,0.0005 & 0.4975\,$\pm$\,0.0128 & 0.7291\,$\pm$\,0.0224 & 0.6115\,$\pm$\,0.0052 & 0.5056\,$\pm$\,0.0061 & 0.05920\,$\pm$\,0.00803 \\
+Random Forest & 0.8310\,$\pm$\,0.0003 & 0.6852\,$\pm$\,0.0007 & 0.3109\,$\pm$\,0.0009 & 0.9713\,$\pm$\,0.0014 & 0.7517\,$\pm$\,0.1367 & 0.4934\,$\pm$\,0.0013 & 0.00293\,$\pm$\,0.00014 \\
+XGBoost & 0.8323\,$\pm$\,0.0008 & 0.6887\,$\pm$\,0.0021 & 0.3164\,$\pm$\,0.0033 & 0.9711\,$\pm$\,0.0005 & 0.7565\,$\pm$\,0.0881 & 0.4981\,$\pm$\,0.0030 & 0.00301\,$\pm$\,0.00002 \\
+MLP & 0.8259\,$\pm$\,0.0042 & 0.6928\,$\pm$\,0.0029 & 0.3467\,$\pm$\,0.0214 & 0.8451\,$\pm$\,0.0665 & 0.5952\,$\pm$\,0.0138 & 0.4664\,$\pm$\,0.0162 & 0.02107\,$\pm$\,0.01238 \\
+\hline
+\end{tabular}
+\end{table}
