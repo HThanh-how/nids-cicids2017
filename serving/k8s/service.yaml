@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ids-inference
+spec:
+  type: NodePort
+  selector: {app: ids-inference}
+  ports:
+    - {name: http, port: 8000, targetPort: 8000, nodePort: 30800}

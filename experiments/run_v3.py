@@ -638,18 +638,41 @@ def stage8():
         info["imbalanced_learn"] = imblearn.__version__
     except Exception:
         pass
-    for cmd, key in ((["cat", "/proc/cpuinfo"], "cpu_model"),
-                     (["free", "-h"], "memory")):
+    if os.name == "nt":
+        info["cpu_model"] = os.environ.get("PROCESSOR_IDENTIFIER")
         try:
-            txt = subprocess.run(cmd, capture_output=True, text=True,
-                                 timeout=10).stdout
-            if key == "cpu_model":
-                line = [l for l in txt.splitlines() if "model name" in l]
-                info[key] = line[0].split(":", 1)[1].strip() if line else None
-            else:
-                info[key] = txt.strip().splitlines()[1] if txt else None
+            import ctypes
+
+            class _MS(ctypes.Structure):
+                _fields_ = [("dwLength", ctypes.c_ulong),
+                            ("dwMemoryLoad", ctypes.c_ulong),
+                            ("ullTotalPhys", ctypes.c_ulonglong),
+                            ("ullAvailPhys", ctypes.c_ulonglong),
+                            ("ullTotalPageFile", ctypes.c_ulonglong),
+                            ("ullAvailPageFile", ctypes.c_ulonglong),
+                            ("ullTotalVirtual", ctypes.c_ulonglong),
+                            ("ullAvailVirtual", ctypes.c_ulonglong),
+                            ("ullAvailExtendedVirtual", ctypes.c_ulonglong)]
+
+            st = _MS()
+            st.dwLength = ctypes.sizeof(_MS)
+            ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(st))
+            info["memory"] = f"{st.ullTotalPhys / 2**30:.1f} GiB total"
         except Exception:
-            info[key] = None
+            info["memory"] = None
+    else:
+        for cmd, key in ((["cat", "/proc/cpuinfo"], "cpu_model"),
+                         (["free", "-h"], "memory")):
+            try:
+                txt = subprocess.run(cmd, capture_output=True, text=True,
+                                     timeout=10).stdout
+                if key == "cpu_model":
+                    line = [l for l in txt.splitlines() if "model name" in l]
+                    info[key] = line[0].split(":", 1)[1].strip() if line else None
+                else:
+                    info[key] = txt.strip().splitlines()[1] if txt else None
+            except Exception:
+                info[key] = None
     print(json.dumps(info, indent=2))
     save("S8_environment", info)
 

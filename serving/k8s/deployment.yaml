@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ids-inference
+  labels: {app: ids-inference}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: ids-inference}
+  template:
+    metadata:
+      labels: {app: ids-inference}
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+      containers:
+        - name: api
+          image: ids-inference:3.0
+          imagePullPolicy: IfNotPresent
+          ports: [{containerPort: 8000, name: http}]
+          env:
+            - {name: OMP_NUM_THREADS, value: "1"}
+          # Requests and limits are reported in the paper: latency figures are
+          # meaningless without the resource envelope they were measured in.
+          resources:
+            requests: {cpu: "500m", memory: "512Mi"}
+            limits:   {cpu: "1000m", memory: "1Gi"}
+          # Readiness gates traffic until the model is in memory; the gap
+          # between pod start and readiness is the cold start we report.
+          readinessProbe:
+            httpGet: {path: /readyz, port: http}
+            initialDelaySeconds: 1
+            periodSeconds: 1
+            failureThreshold: 60
+          livenessProbe:
+            httpGet: {path: /healthz, port: http}
+            initialDelaySeconds: 10
+            periodSeconds: 10

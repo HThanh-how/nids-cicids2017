@@ -1,0 +1,4 @@
+loadtest/
+k8s/
+__pycache__/
+*.pyc

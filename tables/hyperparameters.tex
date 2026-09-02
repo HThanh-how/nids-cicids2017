@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\caption{Complete hyperparameter specification. No tuning was performed; the values are fixed a priori and identical across every split, seed and dataset.}
+\label{tab:hyper}
+\footnotesize
+\begin{tabular}{lp{8.2cm}}
+\hline
+Model & Setting \\
+\hline
+Logistic Regression & penalty=l2, C=1.0, solver=lbfgs, max\_iter=1000 \\
+Random Forest & n\_estimators=200, max\_depth=None, min\_samples\_split=2, min\_samples\_leaf=1, max\_features=sqrt, criterion=gini \\
+XGBoost & n\_estimators=300, max\_depth=8, learning\_rate=0.3, subsample=1.0, colsample\_bytree=1.0, reg\_lambda=1.0, tree\_method=hist \\
+MLP & hidden\_layer\_sizes=(128, 64), activation=relu, solver=adam, alpha=0.0001, batch\_size=200, learning\_rate\_init=0.001, max\_iter=50, early\_stopping=True \\
+\hline
+\end{tabular}
+\end{table}

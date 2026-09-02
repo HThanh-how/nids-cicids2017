@@ -1,0 +1,22 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ids-inference
+spec:
+  scaleTargetRef: {apiVersion: apps/v1, kind: Deployment, name: ids-inference}
+  minReplicas: 1
+  maxReplicas: 8
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target: {type: Utilization, averageUtilization: 60}
+  # Explicit windows so the measured scale-up delay is a property of the
+  # configuration reported in the paper, not of a cluster-specific default.
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies: [{type: Pods, value: 4, periodSeconds: 15}]
+    scaleDown:
+      stabilizationWindowSeconds: 120
+      policies: [{type: Pods, value: 1, periodSeconds: 60}]
