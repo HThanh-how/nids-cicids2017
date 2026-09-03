@@ -458,10 +458,43 @@ def t_serving():
              "p99 (ms)"], rows))
 
 
+def t_scaling():
+    """Replica scaling with and without maths-thread pinning, plus what the
+    measured memory says about the Deployment's resource request."""
+    d = load("S10_scaling")
+    if not d:
+        return
+    free = {r["replicas"]: r for r in d.get("scaling_threads_unpinned", [])}
+    pin = {r["replicas"]: r for r in d.get("scaling_threads_pinned", [])}
+    if not (free and pin):
+        return
+    rows = []
+    for n in sorted(pin):
+        f, p = free.get(n), pin[n]
+        rows.append([
+            str(n), str(p["clients"]),
+            f"{f['throughput_rps']:,.0f}" if f else "--",
+            f"{p['throughput_rps']:,.0f}",
+            f"{f['latency_ms']['p95']:,.0f}" if f else "--",
+            f"{p['latency_ms']['p95']:,.0f}",
+            f"{max(p['rss_mib_per_replica_busy']):.0f}",
+        ])
+    write("scaling.tex", table(
+        "Replica scaling on one host, with the offered load per replica held "
+        "constant at eight clients. \\emph{Default} leaves the numerical "
+        "libraries free to use every core; \\emph{pinned} restricts each "
+        "replica to one maths thread, as the container image does. The load "
+        "generator shares the host, so the figures past four replicas are "
+        "bounded by client contention as well as by the service.",
+        "tab:scaling", "rrrrrrr",
+        ["Replicas", "Clients", "req/s default", "req/s pinned",
+         "p95 default (ms)", "p95 pinned (ms)", "RSS/replica (MiB)"], rows))
+
+
 def main():
     for fn in (t_environment, t_dataset, t_holdout, t_protocols, t_day_disjoint, t_family,
                t_features, t_unsw, t_transfer, t_operational, t_cost,
-               t_serving):
+               t_serving, t_scaling):
         try:
             fn()
         except Exception as exc:

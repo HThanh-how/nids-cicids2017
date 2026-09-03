@@ -1,0 +1,16 @@
+\begin{table}[htbp]
+\centering
+\caption{Replica scaling on one host, with the offered load per replica held constant at eight clients. \emph{Default} leaves the numerical libraries free to use every core; \emph{pinned} restricts each replica to one maths thread, as the container image does. The load generator shares the host, so the figures past four replicas are bounded by client contention as well as by the service.}
+\label{tab:scaling}
+\scriptsize
+\begin{tabular}{rrrrrrr}
+\hline
+Replicas & Clients & req/s default & req/s pinned & p95 default (ms) & p95 pinned (ms) & RSS/replica (MiB) \\
+\hline
+1 & 8 & 269 & 404 & 44 & 26 & 177 \\
+2 & 16 & 138 & 389 & 262 & 88 & 176 \\
+4 & 32 & 98 & 277 & 793 & 285 & 176 \\
+8 & 64 & 88 & 133 & 1,805 & 1,252 & 176 \\
+\hline
+\end{tabular}
+\end{table}

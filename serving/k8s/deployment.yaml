@@ -20,12 +20,19 @@ spec:
           imagePullPolicy: IfNotPresent
           ports: [{containerPort: 8000, name: http}]
           env:
+            # Measured, not assumed: leaving the numerical libraries free to
+            # use every core makes replication counterproductive -- throughput
+            # fell from 269 to 88 req/s as replicas went 1 to 8. Pinning is
+            # worth 1.5-2.8x at every replica count (see S10_scaling.json).
             - {name: OMP_NUM_THREADS, value: "1"}
-          # Requests and limits are reported in the paper: latency figures are
-          # meaningless without the resource envelope they were measured in.
+            - {name: OPENBLAS_NUM_THREADS, value: "1"}
+            - {name: MKL_NUM_THREADS, value: "1"}
+          # Derived from measurement rather than habit: resident memory is
+          # 176 MiB per replica pinned, flat in replica count. The request
+          # leaves ~45 % headroom and the limit twice the observed peak.
           resources:
-            requests: {cpu: "500m", memory: "512Mi"}
-            limits:   {cpu: "1000m", memory: "1Gi"}
+            requests: {cpu: "500m", memory: "256Mi"}
+            limits:   {cpu: "1000m", memory: "512Mi"}
           # Readiness gates traffic until the model is in memory; the gap
           # between pod start and readiness is the cold start we report.
           readinessProbe:

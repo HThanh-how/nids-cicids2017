@@ -1,0 +1,823 @@
+{
+  "host": {
+    "logical_cores": 16,
+    "total_memory_gib": 27.809436798095703
+  },
+  "scaling_threads_unpinned": [
+    {
+      "replicas": 1,
+      "omp_threads": null,
+      "clients": 8,
+      "clients_per_replica": 8,
+      "throughput_rps": 269.0833333333333,
+      "errors": 0,
+      "latency_ms": {
+        "p50": 28.355700022075325,
+        "p95": 43.933639989700154,
+        "p99": 53.44106001313776,
+        "mean": 29.817783152293753
+      },
+      "cold_start_s": {
+        "max": 3.162562500045169,
+        "mean": 3.162562500045169
+      },
+      "cpu_percent_per_replica_busy": [
+        0.0
+      ],
+      "rss_mib_per_replica_idle": [
+        181.98046875
+      ],
+      "rss_mib_per_replica_busy": [
+        190.8984375
+      ]
+    },
+    {
+      "replicas": 2,
+      "omp_threads": null,
+      "clients": 16,
+      "clients_per_replica": 8,
+      "throughput_rps": 138.0,
+      "errors": 0,
+      "latency_ms": {
+        "p50": 94.781050021993,
+        "p95": 261.87725002819207,
+        "p99": 371.2519649794561,
+        "mean": 116.998081641565
+      },
+      "cold_start_s": {
+        "max": 3.6029971999814734,
+        "mean": 1.8075596999842674
+      },
+      "cpu_percent_per_replica_busy": [
+        0.0,
+        0.0
+      ],
+      "rss_mib_per_replica_idle": [
+        181.01171875,
+        180.47265625
+      ],
+      "rss_mib_per_replica_busy": [
+        188.13671875,
+        187.33984375
+      ]
+    },
+    {
+      "replicas": 4,
+      "omp_threads": null,
+      "clients": 32,
+      "clients_per_replica": 8,
+      "throughput_rps": 98.5,
+      "errors": 1,
+      "latency_ms": {
+        "p50": 262.154099997133,
+        "p95": 792.7201650250939,
+        "p99": 1333.9816439844437,
+        "mean": 334.71405219911895
+      },
+      "cold_start_s": {
+        "max": 3.6170525000197813,
+        "mean": 0.9239103999861982
+      },
+      "cpu_percent_per_replica_busy": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rss_mib_per_replica_idle": [
+        181.6171875,
+        181.4765625,
+        182.2578125,
+        181.55078125
+      ],
+      "rss_mib_per_replica_busy": [
+        193.18359375,
+        193.05859375,
+        195.66796875,
+        191.734375
+      ]
+    },
+    {
+      "replicas": 8,
+      "omp_threads": null,
+      "clients": 64,
+      "clients_per_replica": 8,
+      "throughput_rps": 87.58333333333333,
+      "errors": 1,
+      "latency_ms": {
+        "p50": 659.5798999769613,
+        "p95": 1805.4059000278357,
+        "p99": 2712.5644000188913,
+        "mean": 813.6588901983725
+      },
+      "cold_start_s": {
+        "max": 4.184897699975409,
+        "mean": 0.5648137625030358
+      },
+      "cpu_percent_per_replica_busy": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rss_mib_per_replica_idle": [
+        181.2421875,
+        181.1328125,
+        181.203125,
+        181.671875,
+        180.90625,
+        181.84765625,
+        181.078125,
+        181.44140625
+      ],
+      "rss_mib_per_replica_busy": [
+        187.15234375,
+        187.3125,
+        187.0859375,
+        188.453125,
+        188.9375,
+        183.43359375,
+        185.66796875,
+        186.69140625
+      ]
+    }
+  ],
+  "scaling_threads_pinned": [
+    {
+      "replicas": 1,
+      "omp_threads": 1,
+      "clients": 8,
+      "clients_per_replica": 8,
+      "throughput_rps": 404.1666666666667,
+      "errors": 0,
+      "latency_ms": {
+        "p50": 19.12429998628795,
+        "p95": 26.221039975644093,
+        "p99": 34.8785050224979,
+        "mean": 19.820184659323242
+      },
+      "cold_start_s": {
+        "max": 32.46104550000746,
+        "mean": 32.46104550000746
+      },
+      "cpu_percent_per_replica_busy": [
+        0.0
+      ],
+      "rss_mib_per_replica_idle": [
+        176.55859375
+      ],
+      "rss_mib_per_replica_busy": [
+        176.80859375
+      ]
+    },
+    {
+      "replicas": 2,
+      "omp_threads": 1,
+      "clients": 16,
+      "clients_per_replica": 8,
+      "throughput_rps": 389.0,
+      "errors": 0,
+      "latency_ms": {
+        "p50": 33.57890000916086,
+        "p95": 87.51893000153356,
+        "p99": 137.93544200249013,
+        "mean": 41.27776679505982
+      },
+      "cold_start_s": {
+        "max": 4.1361723999725655,
+        "mean": 2.07473794996622
+      },
+      "cpu_percent_per_replica_busy": [
+        0.0,
+        0.0
+      ],
+      "rss_mib_per_replica_idle": [
+        176.24609375,
+        176.13671875
+      ],
+      "rss_mib_per_replica_busy": [
+        176.43359375,
+        176.203125
+      ]
+    },
+    {
+      "replicas": 4,
+      "omp_threads": 1,
+      "clients": 32,
+      "clients_per_replica": 8,
+      "throughput_rps": 276.5833333333333,
+      "errors": 0,
+      "latency_ms": {
+        "p50": 89.37770000193268,
+        "p95": 284.6854500123299,
+        "p99": 464.6790559962395,
+        "mean": 118.01526619528798
+      },
+      "cold_start_s": {
+        "max": 3.1130627000238746,
+        "mean": 0.7926413250097539
+      },
+      "cpu_percent_per_replica_busy": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rss_mib_per_replica_idle": [
+        177.828125,
+        176.66796875,
+        177.52734375,
+        176.70703125
+      ],
+      "rss_mib_per_replica_busy": [
+        175.7890625,
+        175.55859375,
+        175.3828125,
+        175.3984375
+      ]
+    },
+    {
+      "replicas": 8,
+      "omp_threads": 1,
+      "clients": 64,
+      "clients_per_replica": 8,
+      "throughput_rps": 133.16666666666666,
+      "errors": 0,
+      "latency_ms": {
+        "p50": 402.31464998214506,
+        "p95": 1252.0044149889147,
+        "p99": 2095.9641640045443,
+        "mean": 512.9977019392397
+      },
+      "cold_start_s": {
+        "max": 5.182372700015549,
+        "mean": 0.8076893750039744
+      },
+      "cpu_percent_per_replica_busy": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rss_mib_per_replica_idle": [
+        173.890625,
+        173.40234375,
+        174.08203125,
+        173.953125,
+        176.19921875,
+        174.3046875,
+        177.68359375,
+        176.09765625
+      ],
+      "rss_mib_per_replica_busy": [
+        175.5234375,
+        174.90234375,
+        175.265625,
+        175.4140625,
+        175.30859375,
+        175.59375,
+        175.29296875,
+        175.421875
+      ]
+    }
+  ],
+  "fault_recovery": {
+    "runs": [
+      {
+        "replicas": 4,
+        "clients": 32,
+        "killed_port": 8203,
+        "kill_second": 10,
+        "failed_requests": 35,
+        "total_ok": 8040,
+        "baseline_rps_before_kill": 328.7,
+        "restart_seconds": 3.119145300006494,
+        "throughput_recovered_at_second": 19,
+        "seconds_to_recover": 9,
+        "per_second": [
+          {
+            "second": 0,
+            "ok": 217,
+            "failed": 0
+          },
+          {
+            "second": 1,
+            "ok": 335,
+            "failed": 0
+          },
+          {
+            "second": 2,
+            "ok": 370,
+            "failed": 0
+          },
+          {
+            "second": 3,
+            "ok": 350,
+            "failed": 0
+          },
+          {
+            "second": 4,
+            "ok": 364,
+            "failed": 0
+          },
+          {
+            "second": 5,
+            "ok": 333,
+            "failed": 0
+          },
+          {
+            "second": 6,
+            "ok": 325,
+            "failed": 0
+          },
+          {
+            "second": 7,
+            "ok": 326,
+            "failed": 0
+          },
+          {
+            "second": 8,
+            "ok": 322,
+            "failed": 0
+          },
+          {
+            "second": 9,
+            "ok": 345,
+            "failed": 0
+          },
+          {
+            "second": 10,
+            "ok": 75,
+            "failed": 3
+          },
+          {
+            "second": 12,
+            "ok": 96,
+            "failed": 32
+          },
+          {
+            "second": 13,
+            "ok": 176,
+            "failed": 0
+          },
+          {
+            "second": 14,
+            "ok": 155,
+            "failed": 0
+          },
+          {
+            "second": 15,
+            "ok": 134,
+            "failed": 0
+          },
+          {
+            "second": 16,
+            "ok": 145,
+            "failed": 0
+          },
+          {
+            "second": 17,
+            "ok": 140,
+            "failed": 0
+          },
+          {
+            "second": 18,
+            "ok": 195,
+            "failed": 0
+          },
+          {
+            "second": 19,
+            "ok": 337,
+            "failed": 0
+          },
+          {
+            "second": 20,
+            "ok": 316,
+            "failed": 0
+          },
+          {
+            "second": 21,
+            "ok": 302,
+            "failed": 0
+          },
+          {
+            "second": 22,
+            "ok": 315,
+            "failed": 0
+          },
+          {
+            "second": 23,
+            "ok": 286,
+            "failed": 0
+          },
+          {
+            "second": 24,
+            "ok": 303,
+            "failed": 0
+          },
+          {
+            "second": 25,
+            "ok": 349,
+            "failed": 0
+          },
+          {
+            "second": 26,
+            "ok": 365,
+            "failed": 0
+          },
+          {
+            "second": 27,
+            "ok": 322,
+            "failed": 0
+          },
+          {
+            "second": 28,
+            "ok": 360,
+            "failed": 0
+          },
+          {
+            "second": 29,
+            "ok": 350,
+            "failed": 0
+          },
+          {
+            "second": 30,
+            "ok": 32,
+            "failed": 0
+          }
+        ],
+        "note": "One replica of four is killed outright and restarted by a supervisor. A Kubernetes Service would additionally remove the dead endpoint from rotation; this client does not, so the failure count is an upper bound on what a cluster would lose."
+      },
+      {
+        "replicas": 4,
+        "clients": 32,
+        "killed_port": 8213,
+        "kill_second": 10,
+        "failed_requests": 35,
+        "total_ok": 8686,
+        "baseline_rps_before_kill": 210.1,
+        "restart_seconds": 3.1295097999973223,
+        "throughput_recovered_at_second": 18,
+        "seconds_to_recover": 8,
+        "per_second": [
+          {
+            "second": 0,
+            "ok": 98,
+            "failed": 0
+          },
+          {
+            "second": 1,
+            "ok": 169,
+            "failed": 0
+          },
+          {
+            "second": 2,
+            "ok": 197,
+            "failed": 0
+          },
+          {
+            "second": 3,
+            "ok": 131,
+            "failed": 0
+          },
+          {
+            "second": 4,
+            "ok": 143,
+            "failed": 0
+          },
+          {
+            "second": 5,
+            "ok": 171,
+            "failed": 0
+          },
+          {
+            "second": 6,
+            "ok": 217,
+            "failed": 0
+          },
+          {
+            "second": 7,
+            "ok": 270,
+            "failed": 0
+          },
+          {
+            "second": 8,
+            "ok": 368,
+            "failed": 0
+          },
+          {
+            "second": 9,
+            "ok": 337,
+            "failed": 0
+          },
+          {
+            "second": 10,
+            "ok": 62,
+            "failed": 3
+          },
+          {
+            "second": 12,
+            "ok": 96,
+            "failed": 32
+          },
+          {
+            "second": 13,
+            "ok": 146,
+            "failed": 0
+          },
+          {
+            "second": 14,
+            "ok": 131,
+            "failed": 0
+          },
+          {
+            "second": 15,
+            "ok": 145,
+            "failed": 0
+          },
+          {
+            "second": 16,
+            "ok": 139,
+            "failed": 0
+          },
+          {
+            "second": 17,
+            "ok": 158,
+            "failed": 0
+          },
+          {
+            "second": 18,
+            "ok": 271,
+            "failed": 0
+          },
+          {
+            "second": 19,
+            "ok": 338,
+            "failed": 0
+          },
+          {
+            "second": 20,
+            "ok": 307,
+            "failed": 0
+          },
+          {
+            "second": 21,
+            "ok": 510,
+            "failed": 0
+          },
+          {
+            "second": 22,
+            "ok": 527,
+            "failed": 0
+          },
+          {
+            "second": 23,
+            "ok": 596,
+            "failed": 0
+          },
+          {
+            "second": 24,
+            "ok": 631,
+            "failed": 0
+          },
+          {
+            "second": 25,
+            "ok": 616,
+            "failed": 0
+          },
+          {
+            "second": 26,
+            "ok": 619,
+            "failed": 0
+          },
+          {
+            "second": 27,
+            "ok": 594,
+            "failed": 0
+          },
+          {
+            "second": 28,
+            "ok": 398,
+            "failed": 0
+          },
+          {
+            "second": 29,
+            "ok": 269,
+            "failed": 0
+          },
+          {
+            "second": 30,
+            "ok": 32,
+            "failed": 0
+          }
+        ],
+        "note": "One replica of four is killed outright and restarted by a supervisor. A Kubernetes Service would additionally remove the dead endpoint from rotation; this client does not, so the failure count is an upper bound on what a cluster would lose."
+      },
+      {
+        "replicas": 4,
+        "clients": 32,
+        "killed_port": 8223,
+        "kill_second": 10,
+        "failed_requests": 35,
+        "total_ok": 8337,
+        "baseline_rps_before_kill": 326.2,
+        "restart_seconds": 3.1336902999901213,
+        "throughput_recovered_at_second": 18,
+        "seconds_to_recover": 8,
+        "per_second": [
+          {
+            "second": 0,
+            "ok": 235,
+            "failed": 0
+          },
+          {
+            "second": 1,
+            "ok": 303,
+            "failed": 0
+          },
+          {
+            "second": 2,
+            "ok": 331,
+            "failed": 0
+          },
+          {
+            "second": 3,
+            "ok": 302,
+            "failed": 0
+          },
+          {
+            "second": 4,
+            "ok": 352,
+            "failed": 0
+          },
+          {
+            "second": 5,
+            "ok": 366,
+            "failed": 0
+          },
+          {
+            "second": 6,
+            "ok": 348,
+            "failed": 0
+          },
+          {
+            "second": 7,
+            "ok": 337,
+            "failed": 0
+          },
+          {
+            "second": 8,
+            "ok": 319,
+            "failed": 0
+          },
+          {
+            "second": 9,
+            "ok": 369,
+            "failed": 0
+          },
+          {
+            "second": 10,
+            "ok": 71,
+            "failed": 3
+          },
+          {
+            "second": 12,
+            "ok": 114,
+            "failed": 32
+          },
+          {
+            "second": 13,
+            "ok": 259,
+            "failed": 0
+          },
+          {
+            "second": 14,
+            "ok": 169,
+            "failed": 0
+          },
+          {
+            "second": 15,
+            "ok": 169,
+            "failed": 0
+          },
+          {
+            "second": 16,
+            "ok": 162,
+            "failed": 0
+          },
+          {
+            "second": 17,
+            "ok": 180,
+            "failed": 0
+          },
+          {
+            "second": 18,
+            "ok": 306,
+            "failed": 0
+          },
+          {
+            "second": 19,
+            "ok": 367,
+            "failed": 0
+          },
+          {
+            "second": 20,
+            "ok": 352,
+            "failed": 0
+          },
+          {
+            "second": 21,
+            "ok": 328,
+            "failed": 0
+          },
+          {
+            "second": 22,
+            "ok": 334,
+            "failed": 0
+          },
+          {
+            "second": 23,
+            "ok": 317,
+            "failed": 0
+          },
+          {
+            "second": 24,
+            "ok": 338,
+            "failed": 0
+          },
+          {
+            "second": 25,
+            "ok": 314,
+            "failed": 0
+          },
+          {
+            "second": 26,
+            "ok": 291,
+            "failed": 0
+          },
+          {
+            "second": 27,
+            "ok": 313,
+            "failed": 0
+          },
+          {
+            "second": 28,
+            "ok": 340,
+            "failed": 0
+          },
+          {
+            "second": 29,
+            "ok": 319,
+            "failed": 0
+          },
+          {
+            "second": 30,
+            "ok": 32,
+            "failed": 0
+          }
+        ],
+        "note": "One replica of four is killed outright and restarted by a supervisor. A Kubernetes Service would additionally remove the dead endpoint from rotation; this client does not, so the failure count is an upper bound on what a cluster would lose."
+      }
+    ],
+    "repeats": 3,
+    "failed_requests": {
+      "values": [
+        35,
+        35,
+        35
+      ],
+      "median": 35,
+      "max": 35
+    },
+    "restart_seconds": {
+      "values": [
+        3.119145300006494,
+        3.1295097999973223,
+        3.1336902999901213
+      ],
+      "median": 3.1295097999973223
+    },
+    "seconds_to_recover": {
+      "values": [
+        9,
+        8,
+        8
+      ],
+      "median": 8,
+      "max": 9
+    }
+  },
+  "not_measured": [
+    "image pull",
+    "pod placement and kubelet admission",
+    "HPA control-loop sync delay"
+  ]
+}

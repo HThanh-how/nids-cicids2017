@@ -1,11 +1,10 @@
 % =====================================================================
 %  Network Intrusion Detection on CICIDS2017
-%  Springer LNCS / CCIS format  (target venues: ICTA 2026, FDSE 2026)
-%  Compiled FREE on GitHub Actions via xu-cheng/latex-action@v3
+%  Springer CCIS format (LNCS class)  --  target venue: SOICT 2026
 %
-%  GOLDEN RULE: every number in this paper must come from the Colab
-%  experiments (experiments/ids_cicids2017.ipynb). Placeholders are
-%  marked TODO and must be replaced with real measured values.
+%  GOLDEN RULE: every number in this paper comes from
+%  experiments/results_v3/*.json via make_tables.py and make_figures.py.
+%  Nothing measured is typed by hand.
 % =====================================================================
 % SOICT requires the submitted PDF to carry no page numbers, so the
 % running heads are dropped for submission.
@@ -37,7 +36,7 @@
 \newcommand{\resfig}[3]{%
   \IfFileExists{figures/#1.pdf}{%
     \begin{figure}[htbp]\centering
-    \includegraphics[width=0.80\textwidth]{figures/#1}
+    \includegraphics[width=0.88\textwidth]{figures/#1}
     \caption{#2}\label{#3}
     \end{figure}}{}}
 
@@ -64,9 +63,8 @@
 \begin{document}
 \thispagestyle{empty}
 
-\title{Network Intrusion Detection on CICIDS2017: A Comparative Study of
-Machine Learning and Deep Learning Models with a Cloud-Native
-Deployment Design}
+\title{How Optimistic Is Your Intrusion-Detection Benchmark?
+Leakage-Resistant Evaluation and Measured Serving Cost}
 
 \ifanon
 \author{Anonymous Author(s)}
@@ -103,11 +101,11 @@ XGBoost leads Random Forest by 0.00044 macro-F1, which neither a paired
 $t$-test nor a Wilcoxon signed-rank test separates from zero. We then
 translate the measured error rates into precision at operational attack
 prevalence, where benchmark precision does not transfer, and we measure the model served as a
-containerised endpoint under controlled load: it sustains 309~requests/s
+containerised endpoint under controlled load: it sustains 404~requests/s
 before latency collapses, where the amortised per-sample model cost -- the
 figure the literature, and an earlier version of this work, mistakes for a
-service throughput -- would predict roughly $9.5\times10^{5}$~flows/s, an
-overstatement of three orders of magnitude. The experiment
+service throughput -- would predict $9.5\times10^{5}$~flows/s, an
+overstatement by a factor of 2{,}300. The experiment
 driver, the serving implementation, the deployment manifests and the raw
 result files from which every table and figure here is generated are released
 with the paper.
@@ -161,8 +159,8 @@ released with the paper.
 
 \section{Related Work}
 \label{sec:related}
-Buczak and Guven~\cite{buczak2016survey} survey the method families and their
-cost trade-offs; our concern is evaluation rather than models.
+Buczak and Guven~\cite{buczak2016survey} survey the method families; our
+concern is evaluation rather than models.
 
 NSL-KDD~\cite{tavallaee2009nslkdd} corrected redundant records in KDD'99,
 UNSW-NB15~\cite{moustafa2015unswnb15} introduced a contemporary feature set,
@@ -408,11 +406,10 @@ detector to flag it, and the outcome divides rather than
 grades. Where a sibling variant remains, generalisation holds: holding out
 DoS~Hulk or DoS~slowloris still yields recall near 0.88. Where the family
 stands alone it collapses: botnet traffic is detected at 0.000 and port
-scanning at 0.0036 across 26{,}822 held-out flows. A supervised flow
-classifier of this kind interpolates within a family and does not extrapolate
-to a new one -- and a detector missing 99.6\,\% of port scanning when it was
-absent from training is not performing anomaly detection in any useful sense,
-whatever its benchmark score.
+scanning at 0.0036 across 26{,}822 held-out flows. A supervised flow classifier of this kind interpolates within a family and
+does not extrapolate to a new one; a detector missing 99.6\,\% of port
+scanning when it was absent from training is not performing anomaly detection
+in any useful sense, whatever its benchmark score.
 
 % [trimmed for page limit] \resfig{fig_leave_one_out} -- every
 % value it shows is stated in the paragraph above.
@@ -456,7 +453,7 @@ almost nothing in-domain, so what follows is domain shift, not feature
 starvation.
 
 Transfer fails in both directions, and differently in each
-(Table~\ref{tab:transfer}). Fitted on CICIDS2017 and tested on UNSW-NB15,
+below. Fitted on CICIDS2017 and tested on UNSW-NB15,
 the models call almost everything benign: attack recall is 0.0000 for Random
 Forest, 0.0001 for XGBoost, 0.0229 for the MLP. Fitted on UNSW-NB15 and
 tested on CICIDS2017 they do the opposite, with false-positive rates from
@@ -469,7 +466,8 @@ in-domain: none of these transferred models is usable.
 
 % [trimmed for page limit] values are given in the text
 %\inputtable{unsw}
-\inputtable{transfer}
+% [trimmed for page limit] every value is quoted in the text
+%\inputtable{transfer}
 
 The conclusion is deliberately narrow. A flow-statistics classifier of this
 family, trained on one public corpus, does not carry to another, which
@@ -496,14 +494,12 @@ alerts per million flows. At one in ten thousand, precision is 0.013.
 \inputtable{operational}
 
 Comparing protocols in that table produces a result easy to misread. Moving
-from the random split to the day-disjoint one, the alert burden of XGBoost
-\emph{improves}: false alerts per million fall from 7{,}257 to 3{,}006, and
-precision at one in a thousand barely moves, 0.120 to 0.095. An operator
-watching alert volume and spot-checking precision would see a system that had
-got quieter and no less accurate, while recall had in fact fallen from 0.9935
-to 0.3164. The degradation is invisible in exactly the signals a deployment
-has -- an argument for holding out attack families during evaluation rather
-than hoping to notice later.
+to the day-disjoint protocol, the alert burden of XGBoost \emph{improves}:
+false alerts per million fall from 7{,}257 to 3{,}006 and precision at one in
+a thousand barely moves, 0.120 to 0.095, while recall falls from 0.9935 to
+0.3164. An operator watching alert volume would see a system that had got
+quieter and no less accurate. The degradation is invisible in exactly the
+signals a deployment has.
 
 The inversion of Section~\ref{sec:p2} does not, however, recommend Logistic
 Regression. Its false-positive rate is an order of magnitude above the
@@ -560,51 +556,89 @@ whether an inline sensor is usable.
 \subsection{Results}
 \label{sec:servingresults}
 A single replica sustains 309~requests/s at eight concurrent clients, at a
-median of 24~ms and a 95th percentile of 39~ms. Beyond that, throughput does
+median of 24~ms and a 95th percentile of 39~ms, with the numerical libraries
+left at their default thread setting. Beyond that, throughput does
 not merely stop rising but falls: 188~requests/s at 32 clients with a 95th
 percentile of 578~ms, and 128~requests/s at 128 clients with a 99th
-percentile of 6.2~s. No request failed at any level. This is ordinary
-congestion collapse for a single-worker service, and it is why we report a
-distribution and a saturation point rather than a peak rate.
+percentile of 6.2~s. No request failed at any level. This is ordinary congestion collapse for a single-worker service, and it is
+why we report a distribution and a saturation point rather than a peak
+rate.
 
-\inputtable{serving_latency}
-\resfig{fig_serving}{Measured latency distribution and sustained throughput
-against concurrent clients, on a logarithmic latency axis: the tail grows by
-two orders of magnitude while throughput peaks at eight clients and declines.
-Two panels share one x axis rather than overloading a single plot with two
-scales.}{fig:serving}
+% [trimmed for page limit] the concurrency sweep, as a table and as a figure.
+% Every value it carried is quoted in the paragraphs around it, and
+% Figure~\ref{fig:scaling} now carries the serving story visually.
+%\inputtable{serving_latency}
+%\resfig{fig_serving}{...}{fig:serving}
 
 The amortised model cost of Section~\ref{sec:cost}, 0.001056~ms per flow,
-inverts to about $9.5\times10^{5}$~flows/s. The service sustains
-309~requests/s on the single-flow path -- an overstatement of roughly three
-orders of magnitude. Batching recovers much but not all of the gap: at a
+inverts to about $9.5\times10^{5}$~flows/s. The best configuration we
+measured sustains 404~requests/s on the single-flow path
+(Section~\ref{sec:replication}) -- an overstatement by a factor of roughly
+2{,}300, and the sweep above, run at the library's default thread setting,
+is slower still. Batching recovers much but not all of the gap: at a
 batch of 256 the same replica processes 34{,}662~flows/s, still 27 times
 below the extrapolation, at a 95th-percentile request latency of 88~ms. The
 residue is what the amortised figure omits -- HTTP parsing, JSON
 deserialisation, per-request interpreter overhead, scheduling and queueing.
 An earlier version of this work quoted $10^{5}$~predictions/s on exactly that
 basis; no care taken in the offline evaluation would have caught the error,
-only running the service does. Batching is thus a deployment policy with a
-measurable price on each side -- 114 times the flow throughput for twice the
-median request latency -- which an inline sensor cannot spend and an
-out-of-band pipeline can, and which is invisible in any offline model
-comparison.
+only running the service does. Batching is thus a deployment policy with a measurable price on each side
+-- 114 times the flow throughput for twice the median request latency --
+invisible in any offline model comparison.
 
 From process launch to the first successful readiness response the service
 takes 7.83~s, of which 1.95~s is loading and warming the model; this bounds
 how fast capacity can be added, excluding the scheduling and image-pull
 components a cluster would add.
 
-\subsection{What Is Not Measured}
-These numbers characterise a single replica under controlled load on the
-machine of Section~\ref{sec:cost}. Autoscaling response, cold start under
-scheduling pressure, and request loss during pod replacement are properties
-of a cluster rather than of a process, and we do not report them. The
-deployment manifests -- resource requests and limits, both probes, and a
-horizontal autoscaler with explicit scale-up and scale-down windows -- and
-the load profile are released so those measurements can be made. We state
-their absence rather than estimating them: substituting an extrapolation for
-a measurement here is the error this paper argues against.
+\subsection{Replication, Failure and the Resource Envelope}
+\label{sec:replication}
+Three properties usually deferred to a cluster need no scheduler, only more
+than one replica and the willingness to kill one. We run $N$ independent
+service processes, round-robin the load across them at eight clients per
+replica, kill one under load, and record CPU and memory throughout.
+
+\inputtable{scaling}
+\resfig{fig_scaling}{Replica scaling on a single host. Whether replication
+adds capacity at all is decided by one environment variable: with the maths
+libraries left free to use every core, throughput \emph{falls} as replicas
+are added.}{fig:scaling}
+
+\paragraph{One environment variable decides whether replication works.}
+Each replica scores a single 20-feature row per request, and by default the
+numerical libraries fan that work across every core, so replicas contend for
+the same sixteen: throughput \emph{falls} monotonically from 269 to
+88~requests/s as replicas go from one to eight. Restricting each replica to
+one maths thread -- what the container image sets, and what we had previously
+asserted without evidence -- is worth between 1.5 and 2.8 times the
+throughput at every replica count, and 404 against 269~requests/s even for a
+single replica, where no contention between replicas exists. The fan-out
+costs more than it saves at this problem size. Past two replicas throughput
+declines even when pinned, but the load generator is a Python process on the
+same cores, so that portion of the curve is bounded by client contention as
+well as by the service; the thread setting is the part that transfers to any
+host.
+
+\paragraph{Losing a replica costs 35 requests.}
+With four replicas under load we killed one outright and let a supervisor
+restart it, as a Deployment would, repeating the injection three times. Every
+run lost exactly 35 requests of roughly 8{,}000, the replica was serving
+again after 3.13~s, and aggregate throughput returned to its pre-failure
+level 8~s after the kill. A Kubernetes Service would also remove the dead
+endpoint from rotation, which this client does not, so 35 is an upper bound
+on what a cluster would lose.
+
+\paragraph{The resource envelope, measured rather than assumed.}
+Resident memory is 176~MiB per replica when pinned, 189--196~MiB when not,
+and flat in the number of replicas. Our Deployment requested 512~MiB and
+limited at 1~GiB, chosen before any measurement and roughly three and six
+times the observed peak; they are now set from this measurement, which is the
+discipline the rest of the paper applies to accuracy.
+
+\paragraph{What still requires a cluster.}
+Image pull, pod placement and kubelet admission, and the sync delay of the
+autoscaler's own control loop are properties of the scheduler rather than of
+the service. They are not measured here and we do not estimate them.
 
 \section{Limitations}
 \label{sec:limitations}
@@ -617,19 +651,19 @@ inflates the other; the size of the gap on a corrected or modern corpus is
 not established here.
 
 Day-disjoint is not the only leakage-resistant split: grouping by five-tuple
-or by timestamp~\cite{moczkodan2026transformers} isolates different sources
-of optimism, and a factorial over splitting strategies would separate
+or by timestamp~\cite{moczkodan2026transformers} would separate
 near-duplicate flows from unseen families more cleanly. All hyperparameters
 are fixed a priori, so absolute scores are not the best each family could
-reach, and we would expect tuning against a random-split validation set to
-widen the gap rather than close it. The operational precision figures follow
+reach; we would expect tuning against a random-split validation set to widen
+the gap rather than close it. The operational precision figures follow
 exactly from Equation~\ref{eq:ppv} given the measured rates, but assume those
 rates transfer to a link with a different traffic mix, which
 Section~\ref{sec:transfer} suggests is optimistic; read them as an upper
-bound. Finally, the serving numbers describe a single replica: autoscaling
-response, cold start under scheduling pressure and loss during pod
-replacement are properties of a cluster, and are named as unmeasured rather
-than estimated.
+bound. Finally, the serving measurements are single-host: replica scaling past
+four replicas is bounded by the co-resident load generator as well as by the
+service, and image pull, pod placement and the autoscaler's control-loop
+delay are properties of a scheduler, named as unmeasured rather than
+estimated.
 
 \section{Conclusion}
 \label{sec:conclusion}
@@ -663,11 +697,10 @@ intrusion detector must survive.
 
 % Required by ICTA 2026 (placed immediately before References).
 \subsubsection*{AI Declaration.}
-Generative AI tools (Anthropic Claude) were used to assist with language
-editing, LaTeX preparation, and scaffolding of the experiment code. All
-experiments were designed and executed by the authors, every reported number
-is an actual measured result, and the authors have reviewed and verified all
-content and take full responsibility for this paper.
+Generative AI tools (Anthropic Claude) assisted with language editing,
+LaTeX preparation and scaffolding of the experiment code. All experiments
+were designed and executed by the authors, every reported number is an actual
+measured result, and the authors take full responsibility for this paper.
 
 \bibliographystyle{splncs04}
 \bibliography{references}

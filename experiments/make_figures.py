@@ -261,7 +261,7 @@ def fig_per_family():
     M = np.array([[per[m].get(f, {}).get("recall", np.nan) for m in models]
                   for f in fams], dtype=float)
 
-    fig, ax = plt.subplots(figsize=(WIDTH, 0.26 * len(fams) + 1.1))
+    fig, ax = plt.subplots(figsize=(WIDTH, 0.185 * len(fams) + 0.95))
     im = ax.imshow(M, cmap="Blues", vmin=0, vmax=1, aspect="auto")
     ax.set_xticks(range(len(models)))
     ax.set_xticklabels([SHORT[m] for m in models])
@@ -503,10 +503,47 @@ def fig_confusion():
     save(fig, "fig_confusion.pdf")
 
 
+def fig_scaling():
+    """Whether adding a replica adds capacity depends on a single environment
+    variable. Two panels share the x axis rather than sharing a plot."""
+    d = load("S10_scaling")
+    if not d:
+        return
+    series = [("scaling_threads_unpinned", "threads unpinned", "#eb6834", "s"),
+              ("scaling_threads_pinned", "one maths thread", "#2a78d6", "o")]
+    if not all(d.get(k) for k, _, _, _ in series):
+        return
+
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(WIDTH, 3.1), sharex=True,
+                                   gridspec_kw={"height_ratios": [1, 1]})
+    for key, lab, col, mk in series:
+        rows = sorted(d[key], key=lambda r: r["replicas"])
+        n = [r["replicas"] for r in rows]
+        ax1.plot(n, [r["throughput_rps"] for r in rows], color=col, marker=mk,
+                 markersize=4, linewidth=1.3, label=lab, zorder=3)
+        ax2.plot(n, [r["latency_ms"]["p95"] for r in rows], color=col,
+                 marker=mk, markersize=4, linewidth=1.3, zorder=3)
+    ax1.set_ylabel("requests / s")
+    ax1.set_ylim(bottom=0)
+    ax1.legend(frameon=False, loc="lower left")
+    ax1.set_title("Replica scaling on one host, eight clients per replica",
+                  pad=6)
+    tidy(ax1)
+    ax2.set_yscale("log")
+    ax2.set_ylabel("p95 latency (ms)")
+    ax2.set_xlabel("replicas (log scale)")
+    ax2.set_xscale("log", base=2)
+    ticks = sorted({r["replicas"] for r in d[series[0][0]]})
+    ax2.set_xticks(ticks)
+    ax2.set_xticklabels([str(t) for t in ticks])
+    tidy(ax2)
+    save(fig, "fig_scaling.pdf")
+
+
 def main():
     for fn in (fig_optimism_gap, fig_seed_spread, fig_ppv, fig_per_family,
                fig_leave_one_out, fig_cost, fig_feature_stability,
-               fig_transfer, fig_serving, fig_confusion):
+               fig_transfer, fig_serving, fig_confusion, fig_scaling):
         try:
             fn()
         except Exception as exc:
