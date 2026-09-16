@@ -116,46 +116,42 @@ with the paper.
 % =====================================================================
 \section{Introduction}
 \label{sec:intro}
-Learning-based intrusion detection reports extraordinary accuracy on public
-benchmarks -- macro-F1 above 0.98 is routine -- and practitioners do not
-observe it in the field. The discrepancy is usually attributed to concept
-drift or to the age of the corpora. We examine a more immediate contributor:
-much of the reported accuracy is an artefact of how the benchmark is split
-and of what the reported metric measures.
+Learning-based intrusion detection reports macro-F1 above 0.98 as a matter
+of routine on public benchmarks, and practitioners do not observe it in the
+field. The discrepancy is usually attributed to concept drift or to the age
+of the corpora. We examine a more immediate contributor: much of the reported
+accuracy is an artefact of how the benchmark is split and of what the metric
+measures.
 
-A random split rewards recognition rather than detection. Flows from one
-attack episode are numerous and near-identical, and a random split scatters
-them across the train/test boundary, so a model scores well by recognising
-near-duplicates it has memorised. That random splits flatter intrusion
-detectors has been observed
-before~\cite{moczkodan2026transformers,xu2025robust} and we do not claim the
-observation; we contribute a protocol that removes the confound and a
-measurement of what it costs. Separately, precision depends on the prevalence
-of attacks, and benchmarks carry orders of magnitude more attack traffic than
-a production link, so a precision measured at a 17.7\,\% attack rate says
-little about the alert queue at one in a thousand. A third gap is
-engineering: papers routinely support a deployment claim with an
-\emph{amortised per-sample model cost}, which omits feature extraction,
-parsing, serialisation, transport and concurrency. It is a lower bound on the
-cost of the model, not a property of a service. An earlier version of this
-work converted such a figure into a throughput, which prompted this study.
+A random split rewards recognition rather than detection: flows from one
+attack episode are numerous and near-identical, a random split scatters them
+across the train/test boundary, and a model scores well by recognising
+near-duplicates it has memorised. That this flatters intrusion detectors has
+been observed before~\cite{moczkodan2026transformers,xu2025robust}; we do not
+claim the observation but contribute a protocol that removes the confound
+and a measurement of what it costs. Separately, precision depends on
+prevalence, and benchmarks carry orders of magnitude more attack traffic
+than a production link. And papers routinely support a deployment claim with
+an \emph{amortised per-sample model cost}, which omits parsing,
+serialisation, transport and concurrency and is not a property of a service;
+an earlier version of this work converted such a figure into a throughput,
+which prompted this study.
 
 \paragraph{Contributions.}
 Holding models, hyperparameters and preprocessing fixed and varying only the
-evaluation, we contribute a pipeline in which scaling, selection and
+evaluation, we contribute: a pipeline in which scaling, selection and
 oversampling are re-fitted \emph{inside} every training split
 (Section~\ref{sec:leakage}); four splitting protocols on identical data --
-repeated holdout, day-disjoint (which here is also family-disjoint),
-leave-one-family-out and genuine cross-dataset transfer
-(Section~\ref{sec:method}); paired tests over repeated seeds, showing the
-commonly reported ranking of the leading models to be unsupported
-(Section~\ref{sec:paired}); measured error rates translated into precision
-and alert burden at operational prevalence (Section~\ref{sec:operational});
-and an end-to-end measurement of the deployed service, reported separately
-from model cost (Section~\ref{sec:serving}). The experiment driver, serving
-implementation, container and Kubernetes definitions, load profile and raw
-results -- from which every table and figure here is generated -- are
-released with the paper.
+repeated holdout, day-disjoint (here also family-disjoint),
+leave-one-family-out and cross-dataset transfer (Section~\ref{sec:method});
+paired tests over repeated seeds showing the usual ranking of the leading
+models to be unsupported (Section~\ref{sec:paired}); error rates translated
+into precision and alert burden at operational prevalence
+(Section~\ref{sec:operational}); and an end-to-end measurement of the
+deployed service, including replication and failure recovery, reported
+separately from model cost (Section~\ref{sec:serving}). The driver, service,
+container and Kubernetes definitions, load profiles and raw results -- from
+which every table and figure is generated -- are released with the paper.
 
 \section{Related Work}
 \label{sec:related}
@@ -216,93 +212,64 @@ fixes that protocol precisely enough to be re-run.
 
 \subsection{Models, Hyperparameters and Leakage Control}
 \label{sec:leakage}
-We compare Logistic Regression as a linear baseline, Random
-Forest~\cite{breiman2001random}, XGBoost~\cite{chen2016xgboost} and a
-two-hidden-layer multilayer perceptron. Every hyperparameter is fixed a
-priori and identical across every split, seed and dataset, and we perform no
-tuning. Logistic Regression uses an $\ell_2$ penalty with $C=1$, the
-\texttt{lbfgs} solver and at most 1000 iterations. Random Forest uses 200
-trees, unlimited depth, minimum split size 2, minimum leaf size 1,
-$\sqrt{d}$ features per split and the Gini criterion. XGBoost uses 300
-rounds, maximum depth 8, learning rate 0.3, no subsampling of rows or
-columns, $\lambda=1$ and the \texttt{hist} tree method. The perceptron uses
-hidden layers $(128,64)$, ReLU activations, Adam with $\alpha=10^{-4}$,
-batch size 200, initial learning rate $10^{-3}$, and at most 50 epochs with
-early stopping. The complete machine-readable specification, exported from
-the objects the experiments instantiate, is released with the artefact.
+We compare Logistic Regression, Random Forest~\cite{breiman2001random},
+XGBoost~\cite{chen2016xgboost} and a two-hidden-layer perceptron, with every
+hyperparameter fixed a priori and identical across every split, seed and
+dataset; we perform no tuning, so no model is advantaged by a larger search
+budget and nothing can have been selected on test data. Logistic Regression:
+$\ell_2$, $C=1$, \texttt{lbfgs}, 1000 iterations. Random Forest: 200 trees,
+unlimited depth, $\sqrt{d}$ features per split, Gini. XGBoost: 300 rounds,
+depth 8, learning rate 0.3, no subsampling, $\lambda=1$, \texttt{hist}.
+Perceptron: layers $(128,64)$, ReLU, Adam, $\alpha=10^{-4}$, batch 200,
+learning rate $10^{-3}$, 50 epochs with early stopping. The machine-readable
+specification is released with the artefact.
 
-Absolute scores are therefore not the best attainable, but no model is
-advantaged by a larger search budget and no hyperparameter can have been
-selected on test data. Since the paper reports differences between protocols
-on a fixed pipeline, this removes a confound rather than weakening the
-result.
-
+Preprocessing fitted before the split leaks test information into training,
+and feature selection is the worst offender. For every split in every
+protocol, therefore, the scaler is fitted on the training portion only, the
+Random-Forest ranking selecting the top $k=20$ features is computed on the
+scaled training portion only, and SMOTE~\cite{chawla2002smote} is applied to
+the training portion only, after selection. The selected set is thus a random
+variable; its stability is reported in Section~\ref{sec:featstab}.
 
 \subsection{Four Splitting Protocols}
-The same pipeline is evaluated under four separations of training from test.
-Reporting them side by side is the point: only the last two resemble what a
-deployed sensor faces.
-
+The same pipeline is evaluated under four separations of training from test;
+only the last two resemble what a deployed sensor faces.
 \textbf{(P1) Repeated stratified holdout} -- a 70/30 split over five seeds,
-the conventional protocol and our reference point. One split cannot separate
-a real difference between models from split-to-split noise.
-
+the conventional protocol and our reference point.
 \textbf{(P2) Day-disjoint} -- training on Monday--Wednesday, testing on
-Thursday--Friday, so no capture day appears on both sides and the
-near-duplicate flows a random split scatters across the boundary are removed.
-Each attack family on CICIDS2017 was executed on one specific day, so this
-split is necessarily also \emph{family-disjoint}: every attack at test time is
-of a type absent from training.
-
-\textbf{(P3) Leave-one-family-out} -- P2 confounds the day boundary with the
-family boundary; P3 separates them by removing one family from training
-entirely and asking the model to flag it, family by family.
-
+Thursday--Friday, which removes the near-duplicate flows a random split
+scatters across the boundary. Each attack family on CICIDS2017 was executed
+on one day, so this split is also \emph{family-disjoint}: every attack at
+test time is of a type absent from training.
+\textbf{(P3) Leave-one-family-out} -- one family removed from training
+entirely and the model asked to flag it, separating the family boundary from
+the day boundary.
 \textbf{(P4) Cross-dataset transfer} -- fitted on one corpus, evaluated on
-the other with no target-domain data. The corpora share no schema, so
-transfer requires an explicit alignment (Section~\ref{sec:transfer}). We
-distinguish this from \emph{independent-dataset replication}, in which the
-protocol is re-run within UNSW-NB15 to check whether the model ordering
-reproduces; the two are frequently conflated, including in an earlier version
+the other with no target-domain data, on an explicit feature alignment
+(Section~\ref{sec:transfer}). We distinguish this from
+\emph{independent-dataset replication}, re-running the protocol within
+UNSW-NB15; the two are frequently conflated, including in an earlier version
 of this work, and only P4 speaks to cross-domain behaviour.
 
 \subsection{Statistical Treatment and Metrics}
 \label{sec:stats}
-Every protocol that admits repetition is repeated over multiple seeds, with
-all models evaluated on identical splits, so comparisons are paired. We
-report means with the half-width of the 95\,\% confidence interval, and for
-the leading pair a paired $t$-test and a Wilcoxon signed-rank test over the
-shared seeds, so that a claim of superiority rests on a test rather than on
-a difference in the fourth decimal place.
-
-Alongside accuracy, precision, recall and macro-F1 we report the false
-positive and false negative rates, the Matthews correlation coefficient,
-balanced accuracy, and the area under both the ROC and the
-precision--recall curve; PR-AUC is the more informative of the two under
-heavy imbalance, since ROC-AUC is insensitive to the absolute number of
-false positives when negatives dominate.
-
-\paragraph{Operational prevalence.}
-Precision depends on prevalence while TPR and FPR do not, so a precision
-measured on a benchmark does not transfer to deployment. For prevalence
-$\pi$, the precision implied by a measured $(\mathrm{TPR}, \mathrm{FPR})$ is
+Every repeatable protocol is run over multiple seeds with all models on
+identical splits, so comparisons are paired; we report means with 95\,\%
+confidence half-widths, and for the leading pair a paired $t$-test and a
+Wilcoxon signed-rank test. Alongside accuracy, precision, recall and
+macro-F1 we report false-positive and false-negative rates, MCC, balanced
+accuracy, ROC-AUC and PR-AUC, the last being the informative one under heavy
+imbalance. Precision depends on prevalence while TPR and FPR do not, so a
+benchmark precision does not transfer to deployment; for prevalence $\pi$,
 \begin{equation}
 \label{eq:ppv}
 \mathrm{PPV}(\pi)=\frac{\pi\cdot\mathrm{TPR}}
 {\pi\cdot\mathrm{TPR}+(1-\pi)\cdot\mathrm{FPR}},
 \end{equation}
-which we evaluate at $\pi \in \{10^{-1},10^{-2},10^{-3},10^{-4}\}$ together
-with the number of false alerts per million flows -- the quantity that
-decides whether a detector is usable at all.
+evaluated at $\pi \in \{10^{-1},\dots,10^{-4}\}$ with the implied false
+alerts per million flows.
 
-\subsection{Cost Measurement}
-Training time and inference time are measured on the environment of
-Section~\ref{sec:cost}. Inference is timed after a discarded warm-up pass, as
-the mean of five repeats, on the full test batch with all cores available.
-The resulting per-sample figure is an amortised lower bound on model cost.
-We do not convert it into a service throughput. What a service actually
-sustains is measured separately, on the running endpoint, in
-Section~\ref{sec:serving}.
 
 % =====================================================================
 \section{Results}
@@ -348,185 +315,140 @@ Section~\ref{sec:cost} shows are not negligible.
 
 \subsection{P2: Day-Disjoint, and the Optimism of a Random Split}
 \label{sec:p2}
-Training uses Monday--Wednesday and testing Thursday--Friday, and the two
-sides share no attack family: training holds the denial-of-service variants,
-both brute-force families and Heartbleed, testing holds botnet, DDoS,
-infiltration, port scanning and the three web-attack variants.
-
-The effect is not a third-decimal correction. Attack recall for XGBoost falls
-from 0.9935 to 0.3164 and for Random Forest from 0.9937 to 0.3109, macro-F1
-falling by roughly 0.30 for both: models that find essentially every attack
-under the conventional protocol miss two in three under this one.
-Figure~\ref{fig:confusion} shows where the errors go, and the direction
-matters. The false-positive rate does not deteriorate -- it improves, from
-0.0073 to 0.0030 -- while false negatives rise from 185 flows to 36{,}506.
-The detector does not become noisy; it becomes quiet, confident and wrong,
-the failure a monitoring dashboard is least likely to reveal.
+Training uses Monday--Wednesday and testing Thursday--Friday; training holds
+the denial-of-service variants, both brute-force families and Heartbleed,
+testing holds botnet, DDoS, infiltration, port scanning and the three
+web-attack variants. Attack recall for XGBoost falls from 0.9935 to 0.3164
+and for Random Forest from 0.9937 to 0.3109, macro-F1 by roughly 0.30 for
+both: models that find essentially every attack under the conventional
+protocol miss two in three under this one. Figure~\ref{fig:confusion} shows
+where the errors go. The false-positive rate \emph{improves}, from 0.0073 to
+0.0030, while false negatives rise from 185 flows to 36{,}506: the detector
+does not become noisy, it becomes quiet, confident and wrong -- the failure
+a dashboard is least likely to reveal.
 
 Nor does the ranking survive. Logistic Regression is last under the random
 split (macro-F1 0.8515 against 0.9879) and first under the day-disjoint one
 (0.7433 against 0.6887), with attack recall 0.4975 against 0.3164. The gap is
-larger for the models that score best, so the conventional protocol can
-recommend the wrong model, not merely inflate a number;
-Section~\ref{sec:operational} qualifies what that inversion does and does not
-imply. One caveat bounds the comparison: the day boundary removes
-near-duplicate flows and attack families at once, and the next section
-separates them.
+largest for the models that score best, so the conventional protocol can
+recommend the wrong model; Section~\ref{sec:operational} qualifies what that
+inversion does and does not imply. The day boundary removes near-duplicate
+flows and attack families at once; the next section separates them.
 
 \resfig{fig_optimism_gap}{The same pipeline, hyperparameters and data
 evaluated two ways. Filled markers are the random split, hollow markers the
-day-disjoint split, and the bar between them is the optimism of the
-conventional protocol. The ordering is not preserved.}{fig:gap}
-\resfig{fig_confusion}{Row-normalised confusion for XGBoost, averaged over
-seeds, raw counts in parentheses. The false-positive rate improves under the
-day-disjoint protocol while false negatives rise by two orders of magnitude:
-the detector does not become noisier, it becomes blind.}{fig:confusion}
+day-disjoint split; the bar between them is the optimism of the conventional
+protocol. The ordering is not preserved.}{fig:gap}
+\resfig{fig_confusion}{Row-normalised confusion for XGBoost, mean over seeds,
+raw counts in parentheses. The false-positive rate improves under the
+day-disjoint protocol while false negatives rise two orders of magnitude.}
+{fig:confusion}
 
 \subsection{P3: Per-Family Behaviour and Unseen Attack Types}
 \label{sec:p3}
-Aggregate scores average over families that behave very differently, weighted
-by flow count. Two things stand out in Figure~\ref{fig:family}. A macro-F1 of
-0.988 coexists with web-attack recalls near zero -- on the same split,
-XGBoost detects SQL injection at 0.000 and cross-site scripting at 0.023.
-These families are a few hundred flows each, so they cost the aggregate
-almost nothing, and they are not the families a defender would choose to
-miss. And the model that looks worst in aggregate is the only one that
-detects them: Logistic Regression reaches 1.00 on XSS and 0.93 on web brute
-force where the three stronger models sit between 0.02 and 0.09. The
-mechanism is its order-of-magnitude higher false-positive rate; whether that
-is a virtue depends on the alert budget, which
-Section~\ref{sec:operational} makes quantitative.
+Aggregate scores average over families weighted by flow count.
+Figure~\ref{fig:family} breaks the random-split result down: a macro-F1 of
+0.988 coexists with XGBoost detecting SQL injection at 0.000 and cross-site
+scripting at 0.023 -- families of a few hundred flows that cost the aggregate
+nothing and are not the ones a defender would choose to miss. And the model
+that looks worst in aggregate is the only one that detects them: Logistic
+Regression reaches 1.00 on XSS and 0.93 on web brute force where the three
+stronger models sit between 0.02 and 0.09, by way of a false-positive rate an
+order of magnitude higher. Whether that is a virtue is a question about the
+alert budget, which Section~\ref{sec:operational} makes quantitative.
 
 \resfig{fig_per_family}{Recall by attack family under the random split. The
 model with the weakest aggregate score is the only one that detects the
 web-attack families at all.}{fig:family}
 
-Leave-one-family-out removes a family from training entirely, then asks the
-detector to flag it, and the outcome divides rather than
-grades. Where a sibling variant remains, generalisation holds: holding out
-DoS~Hulk or DoS~slowloris still yields recall near 0.88. Where the family
-stands alone it collapses: botnet traffic is detected at 0.000 and port
-scanning at 0.0036 across 26{,}822 held-out flows. A supervised flow classifier of this kind interpolates within a family and
-does not extrapolate to a new one; a detector missing 99.6\,\% of port
-scanning when it was absent from training is not performing anomaly detection
-in any useful sense, whatever its benchmark score.
-
-% [trimmed for page limit] \resfig{fig_leave_one_out} -- every
-% value it shows is stated in the paragraph above.
+Leave-one-family-out removes a family from training entirely, and the outcome
+divides rather than grades. Where a sibling variant remains, generalisation
+holds: holding out DoS~Hulk or DoS~slowloris still yields recall near 0.88.
+Where the family stands alone it collapses: botnet traffic is detected at
+0.000 and port scanning at 0.0036 across 26{,}822 held-out flows. A
+supervised flow classifier of this kind interpolates within a family and does
+not extrapolate to a new one; missing 99.6\,\% of port scanning is not
+anomaly detection in any useful sense.
 
 \subsection{Feature Selection: Reproducible but Not Canonical}
 \label{sec:featstab}
-Across seeds the selection is highly reproducible -- mean pairwise Jaccard
-0.756, with 15 of 20 features chosen by every seed. Across \emph{criteria} it
-is not: impurity and permutation importance, computed on the same split with
-the same forest, agree on only 4 of their top 20. Impurity favours
-packet-length statistics; permutation puts destination port, forward
-inter-arrival minimum and initial TCP window sizes first; mutual information
-agrees closely with impurity (0.75) and barely with permutation (0.25). The
-divergence is the known bias of impurity importance towards high-cardinality
-correlated continuous features, and no aggregate score would reveal it, since
-either list yields a similar macro-F1. A published top-$k$ list is therefore
-a property of the criterion as much as of the traffic.
+Across seeds the top-20 selection is stable (mean pairwise Jaccard 0.756; 15
+of 20 chosen by every seed). Across criteria it is not: impurity and
+permutation importance, on the same split with the same forest, agree on 4
+of 20 -- impurity favours packet-length statistics, permutation puts
+destination port, forward inter-arrival minimum and initial TCP window sizes
+first, and mutual information sides with impurity (0.75). Either list yields
+a similar macro-F1, so no aggregate score reveals this; a published top-$k$
+list is a property of the criterion as much as of the traffic.
 
 \subsection{Independent Replication, and P4: Cross-Dataset Transfer}
 \label{sec:transfer}
-Two experiments are commonly conflated under the heading of cross-dataset
-evaluation, as an earlier version of this work conflated them. They answer
-different questions.
+Re-running the whole protocol \emph{within} UNSW-NB15 gives XGBoost macro-F1
+0.9504 and Random Forest 0.9489, so the two-tier ordering reproduces on
+independent data. That is replication, not transfer: no model leaves its own
+corpus.
 
-\emph{Independent-dataset replication} re-runs the whole protocol
-\emph{within} UNSW-NB15 -- same pipeline, same hyperparameters, different
-corpus. There XGBoost reaches macro-F1 0.9504 and Random Forest 0.9489, so
-the two-tier ordering reproduces on independent data. It checks whether a pattern is an artefact of
-one benchmark. It is not evidence that a detector fitted on one corpus works
-on another, since no model leaves its own dataset.
+Transfer fits on one corpus and evaluates on the other with no target-domain
+data. The corpora share no schema, so we align the seven flow-level
+quantities whose semantics match -- duration, forward and backward packet
+and byte counts, mean packet sizes -- rescaling CICIDS2017 duration from
+microseconds to seconds. The restriction is a confound, so we measure it: an
+in-domain holdout on exactly these seven features gives XGBoost 0.9911 on
+CICIDS2017 and 0.9289 on UNSW-NB15 against 0.9879 and 0.9504 on twenty, so
+what follows is domain shift, not feature starvation.
 
-\emph{Transfer} fits on one corpus and evaluates on the other with no
-target-domain data. The datasets share no schema, so we align the seven
-flow-level quantities whose semantics match -- duration, forward and backward
-packet counts, byte counts and mean packet sizes -- rescaling CICIDS2017
-duration from microseconds to seconds. That restriction is itself a confound,
-so we measure it: an ordinary in-domain holdout on exactly these seven
-features gives XGBoost macro-F1 0.9911 on CICIDS2017 and 0.9289 on UNSW-NB15,
-against 0.9879 and 0.9504 on twenty features. The reduced feature space costs
-almost nothing in-domain, so what follows is domain shift, not feature
-starvation.
-
-Transfer fails in both directions, and differently in each
-below. Fitted on CICIDS2017 and tested on UNSW-NB15,
-the models call almost everything benign: attack recall is 0.0000 for Random
-Forest, 0.0001 for XGBoost, 0.0229 for the MLP. Fitted on UNSW-NB15 and
-tested on CICIDS2017 they do the opposite, with false-positive rates from
-0.55 to 0.89 and precision between 0.11 and 0.21 despite recall as high as
-0.85. Each failure runs towards the majority decision of its source corpus --
-CICIDS2017 is 17.7\,\% attack, UNSW-NB15 68.1\,\% -- so what transfers is a
-threshold calibrated to one dataset's prevalence and scaling, not a notion of
-malicious traffic. Macro-F1 lands between 0.24 and 0.42 against 0.99
-in-domain: none of these transferred models is usable.
-
-% [trimmed for page limit] values are given in the text
-%\inputtable{unsw}
-% [trimmed for page limit] every value is quoted in the text
-%\inputtable{transfer}
-
-The conclusion is deliberately narrow. A flow-statistics classifier of this
-family, trained on one public corpus, does not carry to another, which
-contradicts the practice of citing an in-domain score as evidence of general
-applicability. It does not show cross-domain detection to be impossible;
-domain adaptation, recalibration on target traffic, and features chosen for
-invariance are untested here and are the obvious next step.
+Transfer fails in both directions, and differently in each. Fitted on
+CICIDS2017 and tested on UNSW-NB15 the models call almost everything benign:
+attack recall 0.0000 for Random Forest, 0.0001 for XGBoost, 0.0229 for the
+MLP. Fitted on UNSW-NB15 and tested on CICIDS2017 they flag almost
+everything: false-positive rates 0.55--0.89, precision 0.11--0.21 despite
+recall up to 0.85. Each failure runs towards the majority decision of its
+source corpus -- 17.7\,\% attack against 68.1\,\% -- so what transfers is a
+threshold calibrated to one dataset's prevalence, not a notion of malicious
+traffic. Macro-F1 lands between 0.24 and 0.42 against 0.99 in-domain. The
+conclusion is narrow: a flow-statistics classifier trained on one public
+corpus does not carry to another, which contradicts citing an in-domain score
+as evidence of general applicability; domain adaptation and recalibration on
+target traffic are untested here.
 
 \subsection{What the Error Rates Mean in Operation}
 \label{sec:operational}
-Every number so far was measured on a corpus that is 17.7\,\% attack; a
-production link is not. Because precision depends on prevalence while the
-error rates do not, the measured rates carry to a realistic prevalence
-through Equation~\ref{eq:ppv} with no further experiment
-(Table~\ref{tab:operational}).
-
-All four models collapse, and the collapse is governed by the false-positive
-rate rather than the recall the benchmark tables emphasise. Take the most
-favourable case in this paper: XGBoost under the random split, recall 0.9935,
-false-positive rate 0.0073. At one attack in a thousand its precision is
-0.120 -- seven of every eight alerts false -- and it raises 7{,}257 false
-alerts per million flows. At one in ten thousand, precision is 0.013.
+Every number so far was measured at 17.7\,\% attack prevalence. Since TPR and
+FPR do not depend on prevalence, Equation~\ref{eq:ppv} carries them to a
+realistic one (Table~\ref{tab:operational}). All four models collapse, and
+the collapse is governed by the false-positive rate. The most favourable case
+in this paper -- XGBoost, random split, recall 0.9935, FPR 0.0073 -- has
+precision 0.120 at one attack in a thousand, seven of every eight alerts
+false and 7{,}257 false alerts per million flows; at one in ten thousand,
+0.013.
 
 \inputtable{operational}
 
-Comparing protocols in that table produces a result easy to misread. Moving
-to the day-disjoint protocol, the alert burden of XGBoost \emph{improves}:
-false alerts per million fall from 7{,}257 to 3{,}006 and precision at one in
-a thousand barely moves, 0.120 to 0.095, while recall falls from 0.9935 to
-0.3164. An operator watching alert volume would see a system that had got
-quieter and no less accurate. The degradation is invisible in exactly the
-signals a deployment has.
-
-The inversion of Section~\ref{sec:p2} does not, however, recommend Logistic
-Regression. Its false-positive rate is an order of magnitude above the
-ensembles', so at one-in-a-thousand prevalence its precision is 0.0083 and it
-raises 59{,}143 false alerts per million -- twenty times the burden of
-XGBoost for a recall advantage of 0.18. The conclusion is narrower: neither
-the conventional protocol nor macro-F1 can be trusted to rank detectors once
-prevalence is accounted for. The UNSW-NB15 replication sharpens it: the
-ensembles reach recall above 0.96 there at a false-positive rate near 0.075,
-so precision at one in a thousand is 0.013 rather than 0.120 -- an order of
-magnitude of operational value separating two standard benchmarks.
+The comparison across protocols is easy to misread. Under the day-disjoint
+protocol XGBoost's alert burden \emph{improves} -- 7{,}257 to 3{,}006 false
+alerts per million, precision 0.120 to 0.095 -- while recall falls from
+0.9935 to 0.3164. An operator watching alert volume would see a quieter,
+no-less-accurate system; the degradation is invisible in exactly the signals
+a deployment has. Nor does the inversion of Section~\ref{sec:p2} recommend
+Logistic Regression: at one in a thousand its precision is 0.0083 with
+59{,}143 false alerts per million, twenty times XGBoost's burden for a recall
+advantage of 0.18. Neither the conventional protocol nor macro-F1 ranks
+detectors once prevalence is accounted for. The UNSW-NB15 replication
+sharpens this: recall above 0.96 there comes with FPR near 0.075, so
+precision at one in a thousand is 0.013 rather than 0.120 -- an order of
+magnitude of operational value between two standard benchmarks.
 
 \subsection{Computational Cost}
 \label{sec:cost}
-Timings were taken after a discarded warm-up pass, as the mean of five
-repeats, on a 16-core AMD workstation with 27.8~GiB of memory running
-Python 3.13, scikit-learn 1.5.2, XGBoost 3.4.1 and imbalanced-learn 0.14.2.
-XGBoost trains in $5.96 \pm 1.41$~s against $32.65 \pm 2.48$~s for Random Forest
--- roughly a sixth of the cost for a difference in quality that
-Section~\ref{sec:paired} could not distinguish from zero. Since no accuracy
-grounds separate them, cost is a legitimate basis for the choice, and it is
-the only one this paper found.
-
-Amortised inference is 0.001056~ms per flow for XGBoost. That is model cost
-spread over a full batch on all cores: a lower bound on the cost of serving a
-flow, which we do not convert into a throughput. What a service sustains is
-measured in Section~\ref{sec:serving}.
+Timings are the mean of five repeats after a discarded warm-up, on a 16-core
+AMD workstation with 27.8~GiB running Python 3.13, scikit-learn 1.5.2,
+XGBoost 3.4.1 and imbalanced-learn 0.14.2. XGBoost trains in
+$5.96 \pm 1.41$~s against $32.65 \pm 2.48$~s for Random Forest, a sixth of
+the cost for a quality difference Section~\ref{sec:paired} could not
+distinguish from zero; cost is the only basis for the choice this paper
+found. Amortised inference is 0.001056~ms per flow for XGBoost -- model cost
+spread over a full batch on all cores, a lower bound on serving a flow, which
+we do not convert into a throughput.
 
 \section{Deployment and Measured Serving Cost}
 \label{sec:serving}
@@ -535,162 +457,101 @@ system around it costs to run. This section closes that gap by measuring the
 deployed service rather than describing it.
 
 \subsection{The Service and the Load Protocol}
-The selected model is exported with the per-column standardisation statistics
-of its features and wrapped in a stateless FastAPI service exposing liveness,
-readiness (failing until the model is resident), metadata, and single-flow
-and batch scoring endpoints. Every response carries the in-process scoring
-time, letting the client separate model cost from queueing, parsing and
-transport. The image is pinned, runs as a non-root user, and runs one worker
-per replica so pod-level scaling is not confounded by in-process
-parallelism. The artefact served is the artefact evaluated -- same pipeline,
-same training split, same leakage controls.
-
-Load is closed-loop: each of $N$ clients issues its next request as the
-previous response returns, the behaviour of a bounded worker pool, which
-unlike an open-loop rate test cannot mask saturation behind an unbounded
-queue. Each level begins with a discarded warm-up, payloads are held-out
-CICIDS2017 flows replayed in sequence, and we report the distribution from
-median to 99.9th percentile because a mean conceals the tail that decides
-whether an inline sensor is usable.
+The model is exported with the standardisation statistics of its features
+and wrapped in a stateless FastAPI service with liveness, readiness (failing
+until the model is resident), single-flow and batch endpoints; every
+response carries the in-process scoring time. The image is pinned, non-root,
+one worker per replica. The artefact served is the artefact evaluated. Load
+is closed-loop -- each of $N$ clients issues its next request as the previous
+returns, so saturation cannot hide behind an unbounded queue -- with a
+discarded warm-up, held-out CICIDS2017 flows as payloads, and the latency
+distribution reported to the 99.9th percentile.
 
 \subsection{Results}
 \label{sec:servingresults}
-A single replica sustains 309~requests/s at eight concurrent clients, at a
-median of 24~ms and a 95th percentile of 39~ms, with the numerical libraries
-left at their default thread setting. Beyond that, throughput does
-not merely stop rising but falls: 188~requests/s at 32 clients with a 95th
-percentile of 578~ms, and 128~requests/s at 128 clients with a 99th
-percentile of 6.2~s. No request failed at any level. This is ordinary congestion collapse for a single-worker service, and it is
-why we report a distribution and a saturation point rather than a peak
-rate.
-
-% [trimmed for page limit] the concurrency sweep, as a table and as a figure.
-% Every value it carried is quoted in the paragraphs around it, and
-% Figure~\ref{fig:scaling} now carries the serving story visually.
-%\inputtable{serving_latency}
-%\resfig{fig_serving}{...}{fig:serving}
-
-The amortised model cost of Section~\ref{sec:cost}, 0.001056~ms per flow,
-inverts to about $9.5\times10^{5}$~flows/s. The best configuration we
-measured sustains 404~requests/s on the single-flow path
-(Section~\ref{sec:replication}) -- an overstatement by a factor of roughly
-2{,}300, and the sweep above, run at the library's default thread setting,
-is slower still. Batching recovers much but not all of the gap: at a
-batch of 256 the same replica processes 34{,}662~flows/s, still 27 times
-below the extrapolation, at a 95th-percentile request latency of 88~ms. The
-residue is what the amortised figure omits -- HTTP parsing, JSON
-deserialisation, per-request interpreter overhead, scheduling and queueing.
-An earlier version of this work quoted $10^{5}$~predictions/s on exactly that
-basis; no care taken in the offline evaluation would have caught the error,
-only running the service does. Batching is thus a deployment policy with a measurable price on each side
--- 114 times the flow throughput for twice the median request latency --
-invisible in any offline model comparison.
-
-From process launch to the first successful readiness response the service
-takes 7.83~s, of which 1.95~s is loading and warming the model; this bounds
-how fast capacity can be added, excluding the scheduling and image-pull
-components a cluster would add.
+At the library's default thread setting a single replica sustains
+309~requests/s at eight clients (median 24~ms, p95 39~ms), then collapses:
+188~requests/s at 32 clients with p95 578~ms, 128~requests/s at 128 clients
+with p99 6.2~s, no request failing at any level. The amortised model cost
+of Section~\ref{sec:cost} inverts to about $9.5\times10^{5}$~flows/s; the
+best configuration we measured sustains 404~requests/s
+(Section~\ref{sec:replication}), an overstatement by a factor of roughly
+2{,}300. Batching recovers much but not all of it: a batch of 256 reaches
+34{,}662~flows/s, still 27 times below the extrapolation, at p95 88~ms -- 114
+times the flow throughput for twice the median request latency, a policy
+choice invisible in any offline comparison. An earlier version of this work
+quoted $10^{5}$~predictions/s on exactly this basis. Process launch to first
+successful readiness takes 7.83~s, of which 1.95~s is loading and warming
+the model.
 
 \subsection{Replication, Failure and the Resource Envelope}
 \label{sec:replication}
-Three properties usually deferred to a cluster need no scheduler, only more
-than one replica and the willingness to kill one. We run $N$ independent
-service processes, round-robin the load across them at eight clients per
-replica, kill one under load, and record CPU and memory throughout.
+Three properties usually deferred to a cluster need only more than one
+replica and the willingness to kill one. We run $N$ service processes,
+round-robin the load at eight clients per replica, kill one under load, and
+record CPU and memory throughout.
 
-\inputtable{scaling}
 \resfig{fig_scaling}{Replica scaling on a single host. Whether replication
-adds capacity at all is decided by one environment variable: with the maths
-libraries left free to use every core, throughput \emph{falls} as replicas
-are added.}{fig:scaling}
+adds capacity is decided by one environment variable: with the maths
+libraries free to use every core, throughput \emph{falls} as replicas are
+added.}{fig:scaling}
 
-\paragraph{One environment variable decides whether replication works.}
-Each replica scores a single 20-feature row per request, and by default the
-numerical libraries fan that work across every core, so replicas contend for
-the same sixteen: throughput \emph{falls} monotonically from 269 to
-88~requests/s as replicas go from one to eight. Restricting each replica to
-one maths thread -- what the container image sets, and what we had previously
-asserted without evidence -- is worth between 1.5 and 2.8 times the
-throughput at every replica count, and 404 against 269~requests/s even for a
-single replica, where no contention between replicas exists. The fan-out
-costs more than it saves at this problem size. Past two replicas throughput
-declines even when pinned, but the load generator is a Python process on the
-same cores, so that portion of the curve is bounded by client contention as
-well as by the service; the thread setting is the part that transfers to any
-host.
+Each request scores one 20-feature row, and by default the numerical
+libraries fan that across every core, so replicas contend: throughput falls
+from 269 to 88~requests/s as replicas go from one to eight. Pinning each
+replica to one maths thread -- what the image sets, and what we had
+previously asserted without evidence -- is worth 1.5 to 2.8 times at every
+replica count, and 404 against 269~requests/s even for a single replica,
+where no inter-replica contention exists. Past two replicas the pinned curve
+also declines, but the load generator shares the sixteen cores, so that
+portion is bounded by client contention; the thread setting is the part that
+transfers to any host.
 
-\paragraph{Losing a replica costs 35 requests.}
-With four replicas under load we killed one outright and let a supervisor
-restart it, as a Deployment would, repeating the injection three times. Every
-run lost exactly 35 requests of roughly 8{,}000, the replica was serving
-again after 3.13~s, and aggregate throughput returned to its pre-failure
-level 8~s after the kill. A Kubernetes Service would also remove the dead
-endpoint from rotation, which this client does not, so 35 is an upper bound
-on what a cluster would lose.
-
-\paragraph{The resource envelope, measured rather than assumed.}
-Resident memory is 176~MiB per replica when pinned, 189--196~MiB when not,
-and flat in the number of replicas. Our Deployment requested 512~MiB and
-limited at 1~GiB, chosen before any measurement and roughly three and six
-times the observed peak; they are now set from this measurement, which is the
-discipline the rest of the paper applies to accuracy.
-
-\paragraph{What still requires a cluster.}
-Image pull, pod placement and kubelet admission, and the sync delay of the
-autoscaler's own control loop are properties of the scheduler rather than of
-the service. They are not measured here and we do not estimate them.
+Killing one of four replicas under load, three times, lost exactly 35
+requests of roughly 8{,}000 each time; the replica served again after 3.13~s
+and throughput returned to baseline 8~s after the kill. A Kubernetes Service
+would also deregister the dead endpoint, so 35 is an upper bound. Resident
+memory is 176~MiB per replica pinned, 189--196~MiB unpinned, flat in
+replica count; our Deployment had requested 512~MiB and limited at 1~GiB,
+chosen before any measurement, and now derives both from it. What still
+needs a cluster -- image pull, pod placement and the autoscaler's control-loop
+delay -- is not measured and not estimated.
 
 \section{Limitations}
 \label{sec:limitations}
-CICIDS2017 was captured in 2017 and carries documented labelling and capture
+CICIDS2017 carries documented labelling and capture
 defects~\cite{engelen2021troubleshooting,lanvin2023errors}, so absolute
-scores on it are not estimates of field accuracy. The quantities we emphasise
-are differences between protocols on identical data, which are far more
-robust to label noise than levels, since a defect inflating one protocol
-inflates the other; the size of the gap on a corrected or modern corpus is
-not established here.
-
-Day-disjoint is not the only leakage-resistant split: grouping by five-tuple
-or by timestamp~\cite{moczkodan2026transformers} would separate
-near-duplicate flows from unseen families more cleanly. All hyperparameters
-are fixed a priori, so absolute scores are not the best each family could
-reach; we would expect tuning against a random-split validation set to widen
-the gap rather than close it. The operational precision figures follow
-exactly from Equation~\ref{eq:ppv} given the measured rates, but assume those
-rates transfer to a link with a different traffic mix, which
-Section~\ref{sec:transfer} suggests is optimistic; read them as an upper
-bound. Finally, the serving measurements are single-host: replica scaling past
-four replicas is bounded by the co-resident load generator as well as by the
-service, and image pull, pod placement and the autoscaler's control-loop
-delay are properties of a scheduler, named as unmeasured rather than
-estimated.
+scores on it are not field accuracy; the differences between protocols on
+identical data that we emphasise are far more robust to label noise, but
+their size on a corrected or modern corpus is not established. Day-disjoint
+is not the only leakage-resistant split -- five-tuple or timestamp
+grouping~\cite{moczkodan2026transformers} separates near-duplicates from
+unseen families more cleanly. Hyperparameters are fixed a priori, and we
+would expect tuning against a random-split validation set to widen the gap.
+The operational precision figures assume the measured rates transfer to a
+link with a different traffic mix, which Section~\ref{sec:transfer} suggests
+is optimistic; read them as an upper bound. The serving measurements are
+single-host, with the scheduler's contribution named as unmeasured.
 
 \section{Conclusion}
 \label{sec:conclusion}
 On CICIDS2017, with everything but the split held fixed, most of a benchmark
-score belongs to the protocol rather than to the detector: attack recall for
-the tree ensembles falls from about 0.99 to about 0.31 once no attack family
-is shared between training and test, and the ranking inverts, so the
-conventional protocol can recommend the wrong model rather than merely
-inflate a number. A single split is not a result; nor is an aggregate binary
-score, which averages over families whose detectability differs by an order
-of magnitude; nor does precision measured at benchmark prevalence survive the
-move to a production link, where the degradation is invisible to an operator
-watching alert volume. The engineering claim meets the same standard: the
-served endpoint sustains 309~requests/s where its amortised model cost would
-predict $9.5\times10^{5}$~flows/s, and what we did not measure is named
-rather than estimated.
-
-None of this says learned intrusion detection does not work; it says the
-published numbers answer an easier question than the operational one. The gap
-between protocols estimates that difference, is cheap to compute, and belongs
-alongside the conventional figure. Three directions follow: re-run the
-protocol on a corrected~\cite{lanvin2023errors} and on a contemporary corpus;
-evaluate one-class and anomaly-based detectors, built for unseen families,
-under the same day-disjoint protocol, where they may overturn the ordering
-reported here; and complete the cluster-level serving measurements, since
-autoscaling under attack-driven load spikes is precisely the case an
-intrusion detector must survive.
+score belongs to the protocol: attack recall for the tree ensembles falls
+from about 0.99 to about 0.31 once no attack family is shared between
+training and test, and the ranking inverts, so the conventional protocol can
+recommend the wrong model. A single split is not a result; nor is an
+aggregate score over families whose detectability differs by an order of
+magnitude; nor does benchmark precision survive a production prevalence,
+where the degradation is invisible to an operator watching alert volume. The
+served endpoint sustains 404~requests/s where its amortised model cost
+predicts $9.5\times10^{5}$~flows/s, and one environment variable decides
+whether adding replicas helps or hurts. None of this says learned intrusion
+detection does not work; it says the published numbers answer an easier
+question than the operational one, and the gap between protocols, cheap to
+compute, belongs beside the conventional figure. Next: the protocol on a
+corrected~\cite{lanvin2023errors} and a contemporary corpus; one-class and
+anomaly-based detectors under the same day-disjoint split, where they may
+overturn the ordering here; and the cluster-level serving measurements.
 
 
 % Acknowledgements: add here if funding is to be named.
