@@ -13,6 +13,9 @@
 % Set \anontrue only for a double-blind venue.
 \newif\ifanon\anonfalse
 
+% T1 encoding: the default OT1 font has no underscore glyph, so a DOI such
+% as 10.1007/978-3-031-31108-6_2 printed without its "_" in the references.
+\usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{amsmath}
@@ -70,14 +73,14 @@ Leakage-Resistant Evaluation and Measured Serving Cost}
 \author{Anonymous Author(s)}
 \institute{Affiliation withheld for double-blind review}
 \else
-\author{Huy-Thanh Pham\inst{1} \and Tuan-Anh Truong\inst{1} \and
-Vinh-Khuong Truong\inst{2}}
-\authorrunning{H.-T. Pham et al.}
+% Two authors, one institution. The email domain matches the affiliation;
+% to switch the corresponding address, change only the \email line.
+\author{Huy-Thanh Pham \and Tuan-Anh Truong}
+\authorrunning{H.-T. Pham and T.-A. Truong}
 \institute{Faculty of Computer Science and Engineering,\\
-Ho Chi Minh City University of Technology (HCMUT), VNU-HCM, Vietnam \\
-\email{huythanh@clouds.io.vn, anhtt@hcmut.edu.vn}
-\and Ton Duc Thang University, Ho Chi Minh City, Vietnam \\
-\email{trvinhkhuong@gmail.com}}
+Ho Chi Minh City University of Technology (HCMUT), VNU-HCM,
+Ho Chi Minh City, Vietnam\\
+\email{thanh.phamhuy@hcmut.edu.vn, anhtt@hcmut.edu.vn}}
 \fi
 
 \maketitle
@@ -105,7 +108,7 @@ containerised endpoint under controlled load: it sustains 404~requests/s
 before latency collapses, where the amortised per-sample model cost -- the
 figure the literature, and an earlier version of this work, mistakes for a
 service throughput -- would predict $9.5\times10^{5}$~flows/s, an
-overstatement by a factor of 2{,}300. The experiment
+overstatement by a factor of roughly 2{,}300. The experiment
 driver, the serving implementation, the deployment manifests and the raw
 result files from which every table and figure here is generated are released
 with the paper.
@@ -276,8 +279,9 @@ alerts per million flows.
 \label{sec:results}
 We report the four protocols of Section~\ref{sec:method} in order, then the
 feature-selection analysis and the operational reading of the error rates.
-Every number below is generated directly from the stored experiment output;
-none is transcribed by hand.
+Every table and figure below is generated directly from the stored
+experiment output, and every number quoted in the text is cross-checked
+against the same files by a script released with the artefact.
 
 % [trimmed for page limit]
 %\inputtable{dataset}
@@ -289,7 +293,7 @@ Table~\ref{tab:protocols} reports both protocols on identical data. Under the
 random split the two tree ensembles lead clearly, and the interval
 half-widths deserve as much attention as the means: they are tight for Random
 Forest and XGBoost and an order of magnitude wider for Logistic Regression
-and the MLP, whose macro-F1 ranges over 0.907--0.978 across seeds, so a
+and the MLP, whose macro-F1 ranges over 0.908--0.978 across seeds, so a
 single-split number for either is close to uninformative.
 
 \inputtable{protocols}
@@ -321,8 +325,8 @@ testing holds botnet, DDoS, infiltration, port scanning and the three
 web-attack variants. Attack recall for XGBoost falls from 0.9935 to 0.3164
 and for Random Forest from 0.9937 to 0.3109, macro-F1 by roughly 0.30 for
 both: models that find essentially every attack under the conventional
-protocol miss two in three under this one. Figure~\ref{fig:confusion} shows
-where the errors go. The false-positive rate \emph{improves}, from 0.0073 to
+protocol miss two in three under this one (Figure~\ref{fig:gap}).
+Figure~\ref{fig:confusion} shows where the errors go. The false-positive rate \emph{improves}, from 0.0073 to
 0.0030, while false negatives rise from 185 flows to 36{,}506: the detector
 does not become noisy, it becomes quiet, confident and wrong -- the failure
 a dashboard is least likely to reveal.
@@ -489,7 +493,7 @@ the model.
 Three properties usually deferred to a cluster need only more than one
 replica and the willingness to kill one. We run $N$ service processes,
 round-robin the load at eight clients per replica, kill one under load, and
-record CPU and memory throughout.
+record CPU and memory throughout (Figure~\ref{fig:scaling}).
 
 \resfig{fig_scaling}{Replica scaling on a single host. Whether replication
 adds capacity is decided by one environment variable: with the maths
