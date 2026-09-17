@@ -154,7 +154,8 @@ into precision and alert burden at operational prevalence
 deployed service, including replication and failure recovery, reported
 separately from model cost (Section~\ref{sec:serving}). The driver, service,
 container and Kubernetes definitions, load profiles and raw results -- from
-which every table and figure is generated -- are released with the paper.
+which every table and figure is generated -- are released with the
+paper.\footnote{\url{https://github.com/HThanh-how/nids-cicids2017}}
 
 \section{Related Work}
 \label{sec:related}
@@ -171,7 +172,16 @@ but unlabelled attacks -- and Lanvin et al.~\cite{lanvin2023errors} show that
 correcting them changes measured performance materially. We therefore report
 differences between protocols on identical data rather than absolute scores.
 
-That random splits flatter intrusion detectors is not new and we do not claim
+That the evaluation of learned intrusion detectors is the weak link is an
+old observation. Axelsson~\cite{axelsson1999baserate} showed that at
+realistic attack prevalence the false-positive rate, not the detection rate,
+bounds usefulness; Sommer and Paxson~\cite{sommer2010closedworld} argued
+that closed-world benchmarks systematically overstate what machine learning
+delivers on live traffic; Arp et al.~\cite{arp2023lessons} catalogue the
+recurring pitfalls -- sampling bias, data snooping, base-rate neglect -- and
+Kapoor and Narayanan~\cite{kapoor2023leakage} document leakage as a general
+cause of irreproducible machine-learning results. That random splits flatter
+intrusion detectors in particular is likewise not new, and we do not claim
 it. Moczkodan and Ragab~\cite{moczkodan2026transformers} compare random,
 temporal and five-tuple-grouped splits on this corpus and find the random
 convention substantially overestimates performance; Xu and
@@ -302,11 +312,13 @@ single-split number for either is close to uninformative.
 \subsection{Is the Leading Model Actually Leading?}
 \label{sec:paired}
 The usual conclusion from a table like this is that XGBoost wins.
-A paired test over the shared seeds says otherwise. XGBoost does lead Random Forest, but by 0.00044 macro-F1, and
-neither the paired $t$-test ($p=0.13$) nor the Wilcoxon signed-rank test
-($p=0.19$) separates that from zero. Both ensembles are separated from
-Logistic Regression and the MLP by margins that are large and clearly
-significant.
+A paired test over the shared seeds says otherwise. XGBoost does lead Random Forest, but by 0.00044 macro-F1, and the paired
+$t$-test does not separate that from zero ($p=0.13$); the Wilcoxon
+signed-rank test agrees ($p=0.19$), though with five seeds its smallest
+attainable two-sided $p$ is 0.0625, so the effect size carries the argument:
+the difference is an order of magnitude below the seed-to-seed spread of the
+weaker models. Both ensembles are separated from Logistic Regression and the
+MLP by margins that are large and clearly significant.
 
 We therefore do not name a best model. What the data supports is two tiers --
 tree ensembles above the linear and shallow neural baselines -- with the
@@ -420,7 +432,8 @@ target traffic are untested here.
 Every number so far was measured at 17.7\,\% attack prevalence. Since TPR and
 FPR do not depend on prevalence, Equation~\ref{eq:ppv} carries them to a
 realistic one (Table~\ref{tab:operational}). All four models collapse, and
-the collapse is governed by the false-positive rate. The most favourable case
+the collapse is governed by the false-positive rate -- Axelsson's base-rate
+fallacy~\cite{axelsson1999baserate}, here with measured rates. The most favourable case
 in this paper -- XGBoost, random split, recall 0.9935, FPR 0.0073 -- has
 precision 0.120 at one attack in a thousand, seven of every eight alerts
 false and 7{,}257 false alerts per million flows; at one in ten thousand,
@@ -530,8 +543,10 @@ identical data that we emphasise are far more robust to label noise, but
 their size on a corrected or modern corpus is not established. Day-disjoint
 is not the only leakage-resistant split -- five-tuple or timestamp
 grouping~\cite{moczkodan2026transformers} separates near-duplicates from
-unseen families more cleanly. Hyperparameters are fixed a priori, and we
-would expect tuning against a random-split validation set to widen the gap.
+unseen families more cleanly. Hyperparameters are fixed a priori; the perceptron's seed-to-seed spread
+may partly reflect its 50-epoch budget rather than its capacity, and we would
+expect tuning against a random-split validation set to widen the gap rather
+than close it.
 The operational precision figures assume the measured rates transfer to a
 link with a different traffic mix, which Section~\ref{sec:transfer} suggests
 is optimistic; read them as an upper bound. The serving measurements are
