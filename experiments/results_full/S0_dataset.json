@@ -1,0 +1,30 @@
+{
+  "n_rows": 2563107,
+  "n_features": 78,
+  "attack_ratio": 0.16610348299934416,
+  "sample_frac": 1.0,
+  "family_counts": {
+    "BENIGN": 2137366,
+    "DoS Hulk": 172846,
+    "DDoS": 128014,
+    "PortScan": 90694,
+    "DoS GoldenEye": 10286,
+    "FTP-Patator": 5931,
+    "DoS slowloris": 5385,
+    "DoS Slowhttptest": 5228,
+    "SSH-Patator": 3219,
+    "Bot": 1948,
+    "Web Attack \ufffd Brute Force": 1470,
+    "Web Attack \ufffd XSS": 652,
+    "Infiltration": 36,
+    "Web Attack \ufffd Sql Injection": 21,
+    "Heartbleed": 11
+  },
+  "day_counts": {
+    "Fri": 615433,
+    "Wed": 610492,
+    "Mon": 502650,
+    "Tue": 421626,
+    "Thu": 412906
+  }
+}

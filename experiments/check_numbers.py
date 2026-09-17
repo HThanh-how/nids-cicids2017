@@ -47,10 +47,13 @@ def flatten(obj, out):
 
 
 def load_all():
+    """results_v3 holds the reported run; results_full the full-corpus
+    robustness check quoted in one sentence of Section 5.3."""
     blobs = {}
-    for p in sorted(glob.glob(os.path.join(RES, "*.json"))):
-        with open(p, encoding="utf-8") as fh:
-            blobs[os.path.basename(p)[:-5]] = json.load(fh)
+    for d, prefix in ((RES, ""), (os.path.join(HERE, "results_full"), "full:")):
+        for p in sorted(glob.glob(os.path.join(d, "*.json"))):
+            with open(p, encoding="utf-8") as fh:
+                blobs[prefix + os.path.basename(p)[:-5]] = json.load(fh)
     return blobs
 
 

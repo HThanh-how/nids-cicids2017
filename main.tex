@@ -341,7 +341,11 @@ testing holds botnet, DDoS, infiltration, port scanning and the three
 web-attack variants. Attack recall for XGBoost falls from 0.9935 to 0.3164
 and for Random Forest from 0.9937 to 0.3109, macro-F1 by roughly 0.30 for
 both: models that find essentially every attack under the conventional
-protocol miss two in three under this one (Figure~\ref{fig:gap}).
+protocol miss two in three under this one (Figure~\ref{fig:gap}). This is
+not an artefact of the sample: re-running both protocols on the full corpus
+of 2{,}563{,}107 flows over three seeds gives XGBoost recall 0.9946 under the
+random split and 0.3734 under the day-disjoint one, with Logistic Regression
+again first at macro-F1 0.7882 against 0.7294.
 Figure~\ref{fig:confusion} shows where the errors go. The false-positive rate \emph{improves}, from 0.0073 to
 0.0030, while false negatives rise from 185 flows to 36{,}506: the detector
 does not become noisy, it becomes quiet, confident and wrong -- the failure

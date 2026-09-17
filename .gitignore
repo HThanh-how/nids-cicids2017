@@ -24,3 +24,4 @@ serving/artifacts/
 
 __pycache__/
 *.pyc
+experiments/run_full.log
