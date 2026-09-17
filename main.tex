@@ -204,10 +204,14 @@ CICIDS2017~\cite{sharafaldin2018cicids} holds five working days of labelled
 flows -- benign traffic plus denial-of-service, DDoS, brute-force,
 web-attack, botnet, port-scan and infiltration families -- each described by
 more than eighty flow statistics, in eight CSV files, one per capture period.
-We draw a fixed 20\,\% stratified sample from each. After normalising column
-names, replacing infinities, dropping incomplete records and removing exact
-duplicates, the working set holds 535{,}069 flows with 78 numeric features
-and an attack ratio of 0.1769.
+We draw a fixed 20\,\% stratified sample from each file, which preserves
+every family's share and lets the full protocol -- eleven stages, repeated
+seeds, leave-one-family-out over eleven families and permutation importance
+-- complete on one workstation; the sampling fraction is an environment
+variable of the released driver. After normalising column names, replacing
+infinities, dropping incomplete records and removing exact duplicates, the
+working set holds 535{,}069 flows with 78 numeric features and an attack
+ratio of 0.1769.
 
 Each flow keeps its \emph{capture day}, recovered from its source file, and
 its \emph{original multi-class label}: the first makes the day-disjoint split

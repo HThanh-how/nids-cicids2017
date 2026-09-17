@@ -40,12 +40,17 @@ import pandas as pd
 # --------------------------------------------------------------------------
 # Configuration -- every value here must be reported in the paper.
 # --------------------------------------------------------------------------
-SAMPLE_FRAC = 0.20          # per-file stratified subsample (Colab memory)
+# The defaults are what the paper reports. SAMPLE_FRAC and OUT_DIR can be
+# overridden from the environment so the same protocol can be re-run at full
+# scale into a separate directory as a robustness check, without touching the
+# reported results.
+SAMPLE_FRAC = float(os.environ.get("SAMPLE_FRAC", "0.20"))
 TOP_K = 20                  # features kept by the selector
-SEEDS_HOLDOUT = [42, 1, 2, 3, 4]
-SEEDS_DAY = [42, 1, 2]
+SEEDS_HOLDOUT = [int(x) for x in
+                 os.environ.get("SEEDS_HOLDOUT", "42,1,2,3,4").split(",")]
+SEEDS_DAY = [int(x) for x in os.environ.get("SEEDS_DAY", "42,1,2").split(",")]
 TEST_SIZE = 0.30
-OUT_DIR = "results_v3"
+OUT_DIR = os.environ.get("OUT_DIR", "results_v3")
 STAGES = os.environ.get("STAGES", "S1,S2,S3,S4,S5,S6,S7,S8").split(",")
 
 CICIDS_REPO = "c01dsnap/CIC-IDS2017"
