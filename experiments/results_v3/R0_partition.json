@@ -1,0 +1,154 @@
+{
+  "labels": {
+    "BENIGN": {
+      "n": 440417,
+      "days": [
+        "Fri",
+        "Mon",
+        "Thu",
+        "Tue",
+        "Wed"
+      ],
+      "in_random_split_test": true,
+      "in_lofo": false,
+      "side_p2": "both"
+    },
+    "Bot": {
+      "n": 370,
+      "days": [
+        "Fri"
+      ],
+      "in_random_split_test": true,
+      "in_lofo": true,
+      "side_p2": "test"
+    },
+    "DDoS": {
+      "n": 25744,
+      "days": [
+        "Fri"
+      ],
+      "in_random_split_test": true,
+      "in_lofo": true,
+      "side_p2": "test"
+    },
+    "DoS GoldenEye": {
+      "n": 2017,
+      "days": [
+        "Wed"
+      ],
+      "in_random_split_test": true,
+      "in_lofo": true,
+      "side_p2": "train"
+    },
+    "DoS Hulk": {
+      "n": 35087,
+      "days": [
+        "Wed"
+      ],
+      "in_random_split_test": true,
+      "in_lofo": true,
+      "side_p2": "train"
+    },
+    "DoS Slowhttptest": {
+      "n": 1046,
+      "days": [
+        "Wed"
+      ],
+      "in_random_split_test": true,
+      "in_lofo": true,
+      "side_p2": "train"
+    },
+    "DoS slowloris": {
+      "n": 1070,
+      "days": [
+        "Wed"
+      ],
+      "in_random_split_test": true,
+      "in_lofo": true,
+      "side_p2": "train"
+    },
+    "FTP-Patator": {
+      "n": 1267,
+      "days": [
+        "Tue"
+      ],
+      "in_random_split_test": true,
+      "in_lofo": true,
+      "side_p2": "train"
+    },
+    "Heartbleed": {
+      "n": 3,
+      "days": [
+        "Wed"
+      ],
+      "in_random_split_test": false,
+      "in_lofo": false,
+      "side_p2": "train"
+    },
+    "Infiltration": {
+      "n": 7,
+      "days": [
+        "Thu"
+      ],
+      "in_random_split_test": true,
+      "in_lofo": false,
+      "side_p2": "test"
+    },
+    "PortScan": {
+      "n": 26822,
+      "days": [
+        "Fri"
+      ],
+      "in_random_split_test": true,
+      "in_lofo": true,
+      "side_p2": "test"
+    },
+    "SSH-Patator": {
+      "n": 757,
+      "days": [
+        "Tue"
+      ],
+      "in_random_split_test": true,
+      "in_lofo": true,
+      "side_p2": "train"
+    },
+    "Web Attack \ufffd Brute Force": {
+      "n": 314,
+      "days": [
+        "Thu"
+      ],
+      "in_random_split_test": true,
+      "in_lofo": true,
+      "side_p2": "test"
+    },
+    "Web Attack \ufffd Sql Injection": {
+      "n": 5,
+      "days": [
+        "Thu"
+      ],
+      "in_random_split_test": true,
+      "in_lofo": false,
+      "side_p2": "test"
+    },
+    "Web Attack \ufffd XSS": {
+      "n": 143,
+      "days": [
+        "Thu"
+      ],
+      "in_random_split_test": true,
+      "in_lofo": true,
+      "side_p2": "test"
+    }
+  },
+  "n_attack_labels": 14,
+  "n_attack_labels_in_random_test": 13,
+  "n_attack_labels_in_lofo": 11,
+  "lofo_min_flows": 50,
+  "attack_labels_spanning_days": [],
+  "prevalence": {
+    "all": 0.17689681143927233,
+    "p2_train": 0.13118815817512747,
+    "p2_test": 0.242026121871856
+  },
+  "runtime_s": 0.09337539999978617
+}

@@ -1,0 +1,1980 @@
+{
+  "seeds": [
+    42,
+    1,
+    2,
+    3,
+    4
+  ],
+  "runs": [
+    {
+      "seed": 42,
+      "model": "Logistic Regression",
+      "accuracy": 0.8317804022514479,
+      "precision_attack": 0.7174365821094794,
+      "recall_attack": 0.5030989607714633,
+      "macro_f1": 0.7427665653450403,
+      "roc_auc": 0.6434513574112111,
+      "pr_auc": 0.6120042563310024,
+      "mcc": 0.5018387431259635,
+      "balanced_accuracy": 0.7199147712923223,
+      "fpr": 0.06326941818681878,
+      "fnr": 0.4969010392285367,
+      "tn": 156671,
+      "fp": 10582,
+      "fn": 26537,
+      "tp": 26868,
+      "per_family": {
+        "BENIGN": {
+          "n": 167253,
+          "false_positive_rate": 0.06326941818681878
+        },
+        "Bot": {
+          "n": 370,
+          "recall": 0.008108108108108109
+        },
+        "DDoS": {
+          "n": 25744,
+          "recall": 0.997552827843381
+        },
+        "Infiltration": {
+          "n": 7,
+          "recall": 0.14285714285714285
+        },
+        "PortScan": {
+          "n": 26822,
+          "recall": 0.028334948922526283
+        },
+        "Web Attack \ufffd Brute Force": {
+          "n": 314,
+          "recall": 0.8949044585987261
+        },
+        "Web Attack \ufffd Sql Injection": {
+          "n": 5,
+          "recall": 0.6
+        },
+        "Web Attack \ufffd XSS": {
+          "n": 143,
+          "recall": 0.972027972027972
+        }
+      },
+      "recall_at_fpr_of": {
+        "Logistic Regression": {
+          "target_fpr": 0.06326941818681878,
+          "threshold": 0.4999989173703057,
+          "fpr": 0.06326941818681878,
+          "recall": 0.5030989607714633
+        },
+        "Random Forest": {
+          "target_fpr": 0.0030313357607935285,
+          "threshold": 0.9504084048186533,
+          "fpr": 0.0030313357607935285,
+          "recall": 0.3029491620634772
+        },
+        "XGBoost": {
+          "target_fpr": 0.003025356794795908,
+          "threshold": 0.9504158265485523,
+          "fpr": 0.0030193778287982876,
+          "recall": 0.3029491620634772
+        },
+        "MLP": {
+          "target_fpr": 0.015389858477874836,
+          "threshold": 0.5590923300273675,
+          "fpr": 0.015389858477874836,
+          "recall": 0.4197172549386762
+        }
+      }
+    },
+    {
+      "seed": 42,
+      "model": "Random Forest",
+      "accuracy": 0.8307516609413663,
+      "precision_attack": 0.9703039887541732,
+      "recall_attack": 0.3101956745623069,
+      "macro_f1": 0.6846985493462644,
+      "roc_auc": 0.8458926315870706,
+      "pr_auc": 0.7588402672293096,
+      "mcc": 0.4924032413362236,
+      "balanced_accuracy": 0.6535821694007566,
+      "fpr": 0.0030313357607935285,
+      "fnr": 0.6898043254376931,
+      "tn": 166746,
+      "fp": 507,
+      "fn": 36839,
+      "tp": 16566,
+      "per_family": {
+        "BENIGN": {
+          "n": 167253,
+          "false_positive_rate": 0.0030313357607935285
+        },
+        "Bot": {
+          "n": 370,
+          "recall": 0.0
+        },
+        "DDoS": {
+          "n": 25744,
+          "recall": 0.6385565568676196
+        },
+        "Infiltration": {
+          "n": 7,
+          "recall": 0.0
+        },
+        "PortScan": {
+          "n": 26822,
+          "recall": 0.004362090820967862
+        },
+        "Web Attack \ufffd Brute Force": {
+          "n": 314,
+          "recall": 0.012738853503184714
+        },
+        "Web Attack \ufffd Sql Injection": {
+          "n": 5,
+          "recall": 0.0
+        },
+        "Web Attack \ufffd XSS": {
+          "n": 143,
+          "recall": 0.04195804195804196
+        }
+      },
+      "recall_at_fpr_of": {
+        "Logistic Regression": {
+          "target_fpr": 0.06326941818681878,
+          "threshold": 0.005303851053934118,
+          "fpr": 0.0565849342014792,
+          "recall": 0.7418781013013763
+        },
+        "Random Forest": {
+          "target_fpr": 0.0030313357607935285,
+          "threshold": 0.5,
+          "fpr": 0.0030313357607935285,
+          "recall": 0.3101956745623069
+        },
+        "XGBoost": {
+          "target_fpr": 0.003025356794795908,
+          "threshold": 0.505,
+          "fpr": 0.0030133988628006673,
+          "recall": 0.3101020503698156
+        },
+        "MLP": {
+          "target_fpr": 0.015389858477874836,
+          "threshold": 0.03,
+          "fpr": 0.014588677034193706,
+          "recall": 0.3685609961614081
+        }
+      }
+    },
+    {
+      "seed": 42,
+      "model": "XGBoost",
+      "accuracy": 0.8315084882487832,
+      "precision_attack": 0.9706462466643462,
+      "recall_attack": 0.31330399775301937,
+      "macro_f1": 0.68670223639932,
+      "roc_auc": 0.9011779684806143,
+      "pr_auc": 0.7655837906941357,
+      "mcc": 0.4952101473889098,
+      "balanced_accuracy": 0.6551393204791117,
+      "fpr": 0.003025356794795908,
+      "fnr": 0.6866960022469806,
+      "tn": 166747,
+      "fp": 506,
+      "fn": 36673,
+      "tp": 16732,
+      "per_family": {
+        "BENIGN": {
+          "n": 167253,
+          "false_positive_rate": 0.003025356794795908
+        },
+        "Bot": {
+          "n": 370,
+          "recall": 0.0
+        },
+        "DDoS": {
+          "n": 25744,
+          "recall": 0.6413533250466128
+        },
+        "Infiltration": {
+          "n": 7,
+          "recall": 0.0
+        },
+        "PortScan": {
+          "n": 26822,
+          "recall": 0.007941242263813288
+        },
+        "Web Attack \ufffd Brute Force": {
+          "n": 314,
+          "recall": 0.009554140127388535
+        },
+        "Web Attack \ufffd Sql Injection": {
+          "n": 5,
+          "recall": 0.0
+        },
+        "Web Attack \ufffd XSS": {
+          "n": 143,
+          "recall": 0.03496503496503497
+        }
+      },
+      "recall_at_fpr_of": {
+        "Logistic Regression": {
+          "target_fpr": 0.06326941818681878,
+          "threshold": 1.3802077774016652e-05,
+          "fpr": 0.06326941818681878,
+          "recall": 0.5040164778578785
+        },
+        "Random Forest": {
+          "target_fpr": 0.0030313357607935285,
+          "threshold": 0.49411800503730774,
+          "fpr": 0.0030313357607935285,
+          "recall": 0.31356614549199513
+        },
+        "XGBoost": {
+          "target_fpr": 0.003025356794795908,
+          "threshold": 0.5082724094390869,
+          "fpr": 0.0030193778287982876,
+          "recall": 0.31298567549854883
+        },
+        "MLP": {
+          "target_fpr": 0.015389858477874836,
+          "threshold": 0.00021758858929388225,
+          "fpr": 0.015359963647886735,
+          "recall": 0.39664825390881003
+        }
+      }
+    },
+    {
+      "seed": 42,
+      "model": "MLP",
+      "accuracy": 0.8280053295144523,
+      "precision_attack": 0.8750546089995631,
+      "recall_attack": 0.3375526636082764,
+      "macro_f1": 0.6919262739023005,
+      "roc_auc": 0.6513351239029419,
+      "pr_auc": 0.5860813992030052,
+      "mcc": 0.47427724555737344,
+      "balanced_accuracy": 0.6610814025652008,
+      "fpr": 0.015389858477874836,
+      "fnr": 0.6624473363917236,
+      "tn": 164679,
+      "fp": 2574,
+      "fn": 35378,
+      "tp": 18027,
+      "per_family": {
+        "BENIGN": {
+          "n": 167253,
+          "false_positive_rate": 0.015389858477874836
+        },
+        "Bot": {
+          "n": 370,
+          "recall": 0.0
+        },
+        "DDoS": {
+          "n": 25744,
+          "recall": 0.6640770665009322
+        },
+        "Infiltration": {
+          "n": 7,
+          "recall": 0.14285714285714285
+        },
+        "PortScan": {
+          "n": 26822,
+          "recall": 0.03310715084632018
+        },
+        "Web Attack \ufffd Brute Force": {
+          "n": 314,
+          "recall": 0.09554140127388536
+        },
+        "Web Attack \ufffd Sql Injection": {
+          "n": 5,
+          "recall": 0.6
+        },
+        "Web Attack \ufffd XSS": {
+          "n": 143,
+          "recall": 0.06293706293706294
+        }
+      },
+      "recall_at_fpr_of": {
+        "Logistic Regression": {
+          "target_fpr": 0.06326941818681878,
+          "threshold": 0.004165259524883132,
+          "fpr": 0.06326941818681878,
+          "recall": 0.4108604063289954
+        },
+        "Random Forest": {
+          "target_fpr": 0.0030313357607935285,
+          "threshold": 0.66549706877587,
+          "fpr": 0.0030313357607935285,
+          "recall": 0.31485815934837563
+        },
+        "XGBoost": {
+          "target_fpr": 0.003025356794795908,
+          "threshold": 0.6655014234326394,
+          "fpr": 0.0030193778287982876,
+          "recall": 0.31485815934837563
+        },
+        "MLP": {
+          "target_fpr": 0.015389858477874836,
+          "threshold": 0.49978390242859255,
+          "fpr": 0.015389858477874836,
+          "recall": 0.3376088381237712
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "model": "Logistic Regression",
+      "accuracy": 0.8321520180550898,
+      "precision_attack": 0.717937792927141,
+      "recall_attack": 0.504821645913304,
+      "macro_f1": 0.7435480101337546,
+      "roc_auc": 0.6442051880303554,
+      "pr_auc": 0.6157438965116984,
+      "mcc": 0.5031915776990353,
+      "balanced_accuracy": 0.7207462190332545,
+      "fpr": 0.06332920784679498,
+      "fnr": 0.495178354086696,
+      "tn": 156661,
+      "fp": 10592,
+      "fn": 26445,
+      "tp": 26960,
+      "per_family": {
+        "BENIGN": {
+          "n": 167253,
+          "false_positive_rate": 0.06332920784679498
+        },
+        "Bot": {
+          "n": 370,
+          "recall": 0.008108108108108109
+        },
+        "DDoS": {
+          "n": 25744,
+          "recall": 0.997475139838409
+        },
+        "Infiltration": {
+          "n": 7,
+          "recall": 0.14285714285714285
+        },
+        "PortScan": {
+          "n": 26822,
+          "recall": 0.03191410036537171
+        },
+        "Web Attack \ufffd Brute Force": {
+          "n": 314,
+          "recall": 0.8949044585987261
+        },
+        "Web Attack \ufffd Sql Injection": {
+          "n": 5,
+          "recall": 0.2
+        },
+        "Web Attack \ufffd XSS": {
+          "n": 143,
+          "recall": 0.972027972027972
+        }
+      },
+      "recall_at_fpr_of": {
+        "Logistic Regression": {
+          "target_fpr": 0.06332920784679498,
+          "threshold": 0.499284350054843,
+          "fpr": 0.06332920784679498,
+          "recall": 0.5048590955903005
+        },
+        "Random Forest": {
+          "target_fpr": 0.002786198154891093,
+          "threshold": 0.9497510538429335,
+          "fpr": 0.002786198154891093,
+          "recall": 0.3033985581874356
+        },
+        "XGBoost": {
+          "target_fpr": 0.002989482998810186,
+          "threshold": 0.9495675970205927,
+          "fpr": 0.002989482998810186,
+          "recall": 0.3033985581874356
+        },
+        "MLP": {
+          "target_fpr": 0.03367951546459555,
+          "threshold": 0.5292751155199416,
+          "fpr": 0.03367353649859793,
+          "recall": 0.48860593577380396
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "model": "Random Forest",
+      "accuracy": 0.8312954889466958,
+      "precision_attack": 0.9727660569224476,
+      "recall_attack": 0.3116749368036701,
+      "macro_f1": 0.685848848491346,
+      "roc_auc": 0.9549608063329041,
+      "pr_auc": 0.8688311401043843,
+      "mcc": 0.4946635894569867,
+      "balanced_accuracy": 0.6544443693243895,
+      "fpr": 0.002786198154891093,
+      "fnr": 0.6883250631963299,
+      "tn": 166787,
+      "fp": 466,
+      "fn": 36760,
+      "tp": 16645,
+      "per_family": {
+        "BENIGN": {
+          "n": 167253,
+          "false_positive_rate": 0.002786198154891093
+        },
+        "Bot": {
+          "n": 370,
+          "recall": 0.0
+        },
+        "DDoS": {
+          "n": 25744,
+          "recall": 0.6397995649471722
+        },
+        "Infiltration": {
+          "n": 7,
+          "recall": 0.0
+        },
+        "PortScan": {
+          "n": 26822,
+          "recall": 0.005182313026619939
+        },
+        "Web Attack \ufffd Brute Force": {
+          "n": 314,
+          "recall": 0.09554140127388536
+        },
+        "Web Attack \ufffd Sql Injection": {
+          "n": 5,
+          "recall": 0.2
+        },
+        "Web Attack \ufffd XSS": {
+          "n": 143,
+          "recall": 0.027972027972027972
+        }
+      },
+      "recall_at_fpr_of": {
+        "Logistic Regression": {
+          "target_fpr": 0.06332920784679498,
+          "threshold": 0.005,
+          "fpr": 0.06018427173204666,
+          "recall": 0.774908716412321
+        },
+        "Random Forest": {
+          "target_fpr": 0.002786198154891093,
+          "threshold": 0.49922974335433273,
+          "fpr": 0.002786198154891093,
+          "recall": 0.3117123864806666
+        },
+        "XGBoost": {
+          "target_fpr": 0.002989482998810186,
+          "threshold": 0.46,
+          "fpr": 0.002989482998810186,
+          "recall": 0.31201198389663887
+        },
+        "MLP": {
+          "target_fpr": 0.03367951546459555,
+          "threshold": 0.02,
+          "fpr": 0.028854489904515914,
+          "recall": 0.44915270105795335
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "model": "XGBoost",
+      "accuracy": 0.8329088453625066,
+      "precision_attack": 0.9714856002281153,
+      "recall_attack": 0.31897762381799455,
+      "macro_f1": 0.6903587629042891,
+      "roc_auc": 0.8163268038171383,
+      "pr_auc": 0.674544368805968,
+      "mcc": 0.5003988066996577,
+      "balanced_accuracy": 0.6579940704095921,
+      "fpr": 0.002989482998810186,
+      "fnr": 0.6810223761820055,
+      "tn": 166753,
+      "fp": 500,
+      "fn": 36370,
+      "tp": 17035,
+      "per_family": {
+        "BENIGN": {
+          "n": 167253,
+          "false_positive_rate": 0.002989482998810186
+        },
+        "Bot": {
+          "n": 370,
+          "recall": 0.0
+        },
+        "DDoS": {
+          "n": 25744,
+          "recall": 0.6440724052206339
+        },
+        "Infiltration": {
+          "n": 7,
+          "recall": 0.0
+        },
+        "PortScan": {
+          "n": 26822,
+          "recall": 0.016516292595630453
+        },
+        "Web Attack \ufffd Brute Force": {
+          "n": 314,
+          "recall": 0.01910828025477707
+        },
+        "Web Attack \ufffd Sql Injection": {
+          "n": 5,
+          "recall": 0.0
+        },
+        "Web Attack \ufffd XSS": {
+          "n": 143,
+          "recall": 0.03496503496503497
+        }
+      },
+      "recall_at_fpr_of": {
+        "Logistic Regression": {
+          "target_fpr": 0.06332920784679498,
+          "threshold": 1.6012991181924008e-05,
+          "fpr": 0.06331724991479973,
+          "recall": 0.45271042037262427
+        },
+        "Random Forest": {
+          "target_fpr": 0.002786198154891093,
+          "threshold": 0.5695371031761169,
+          "fpr": 0.002780219188893473,
+          "recall": 0.3180788315700777
+        },
+        "XGBoost": {
+          "target_fpr": 0.002989482998810186,
+          "threshold": 0.49735888838768005,
+          "fpr": 0.002989482998810186,
+          "recall": 0.31899634865649285
+        },
+        "MLP": {
+          "target_fpr": 0.03367951546459555,
+          "threshold": 4.704690945800394e-05,
+          "fpr": 0.03367353649859793,
+          "recall": 0.39762194551071994
+        }
+      }
+    },
+    {
+      "seed": 1,
+      "model": "MLP",
+      "accuracy": 0.8216153504518304,
+      "precision_attack": 0.777430953415781,
+      "recall_attack": 0.36842992229192023,
+      "macro_f1": 0.695691098120636,
+      "roc_auc": 0.6851389752709345,
+      "pr_auc": 0.6090282939282087,
+      "mcc": 0.44994138652120996,
+      "balanced_accuracy": 0.6673752034136623,
+      "fpr": 0.03367951546459555,
+      "fnr": 0.6315700777080797,
+      "tn": 161620,
+      "fp": 5633,
+      "fn": 33729,
+      "tp": 19676,
+      "per_family": {
+        "BENIGN": {
+          "n": 167253,
+          "false_positive_rate": 0.03367951546459555
+        },
+        "Bot": {
+          "n": 370,
+          "recall": 0.0
+        },
+        "DDoS": {
+          "n": 25744,
+          "recall": 0.7175652579241765
+        },
+        "Infiltration": {
+          "n": 7,
+          "recall": 0.14285714285714285
+        },
+        "PortScan": {
+          "n": 26822,
+          "recall": 0.043210797106852585
+        },
+        "Web Attack \ufffd Brute Force": {
+          "n": 314,
+          "recall": 0.09872611464968153
+        },
+        "Web Attack \ufffd Sql Injection": {
+          "n": 5,
+          "recall": 0.6
+        },
+        "Web Attack \ufffd XSS": {
+          "n": 143,
+          "recall": 0.06293706293706294
+        }
+      },
+      "recall_at_fpr_of": {
+        "Logistic Regression": {
+          "target_fpr": 0.06332920784679498,
+          "threshold": 0.021719803236630957,
+          "fpr": 0.06332920784679498,
+          "recall": 0.4073026870143245
+        },
+        "Random Forest": {
+          "target_fpr": 0.002786198154891093,
+          "threshold": 0.8274530743775955,
+          "fpr": 0.002786198154891093,
+          "recall": 0.3202509128358768
+        },
+        "XGBoost": {
+          "target_fpr": 0.002989482998810186,
+          "threshold": 0.827438841756606,
+          "fpr": 0.002989482998810186,
+          "recall": 0.32028836251287335
+        },
+        "MLP": {
+          "target_fpr": 0.03367951546459555,
+          "threshold": 0.5002996620285721,
+          "fpr": 0.03367353649859793,
+          "recall": 0.36842992229192023
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "model": "Logistic Regression",
+      "accuracy": 0.8365660886983477,
+      "precision_attack": 0.7520346471340542,
+      "recall_attack": 0.48446774646568674,
+      "macro_f1": 0.743643413485984,
+      "roc_auc": 0.6460413862570937,
+      "pr_auc": 0.6066257087045362,
+      "mcc": 0.5117653297425186,
+      "balanced_accuracy": 0.7167305937699937,
+      "fpr": 0.05100655892569939,
+      "fnr": 0.5155322535343133,
+      "tn": 158722,
+      "fp": 8531,
+      "fn": 27532,
+      "tp": 25873,
+      "per_family": {
+        "BENIGN": {
+          "n": 167253,
+          "false_positive_rate": 0.05100655892569939
+        },
+        "Bot": {
+          "n": 370,
+          "recall": 0.008108108108108109
+        },
+        "DDoS": {
+          "n": 25744,
+          "recall": 0.9606121814791796
+        },
+        "Infiltration": {
+          "n": 7,
+          "recall": 0.14285714285714285
+        },
+        "PortScan": {
+          "n": 26822,
+          "recall": 0.02669450451122213
+        },
+        "Web Attack \ufffd Brute Force": {
+          "n": 314,
+          "recall": 0.8949044585987261
+        },
+        "Web Attack \ufffd Sql Injection": {
+          "n": 5,
+          "recall": 0.6
+        },
+        "Web Attack \ufffd XSS": {
+          "n": 143,
+          "recall": 0.972027972027972
+        }
+      },
+      "recall_at_fpr_of": {
+        "Logistic Regression": {
+          "target_fpr": 0.05100655892569939,
+          "threshold": 0.49998925411097855,
+          "fpr": 0.05100655892569939,
+          "recall": 0.48446774646568674
+        },
+        "Random Forest": {
+          "target_fpr": 0.002965567134819704,
+          "threshold": 0.9669971847752032,
+          "fpr": 0.002965567134819704,
+          "recall": 0.30414755172736635
+        },
+        "XGBoost": {
+          "target_fpr": 0.0030133988628006673,
+          "threshold": 0.9669892195884168,
+          "fpr": 0.0030133988628006673,
+          "recall": 0.30414755172736635
+        },
+        "MLP": {
+          "target_fpr": 0.014140254584372179,
+          "threshold": 0.5762444633030241,
+          "fpr": 0.014140254584372179,
+          "recall": 0.38380301469899825
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "model": "Random Forest",
+      "accuracy": 0.8309238731430539,
+      "precision_attack": 0.9709754813037627,
+      "recall_attack": 0.3107012452017601,
+      "macro_f1": 0.6850772758727032,
+      "roc_auc": 0.7417631687928217,
+      "pr_auc": 0.6274908890739871,
+      "mcc": 0.4931075152913658,
+      "balanced_accuracy": 0.6538678390334702,
+      "fpr": 0.002965567134819704,
+      "fnr": 0.6892987547982399,
+      "tn": 166757,
+      "fp": 496,
+      "fn": 36812,
+      "tp": 16593,
+      "per_family": {
+        "BENIGN": {
+          "n": 167253,
+          "false_positive_rate": 0.002965567134819704
+        },
+        "Bot": {
+          "n": 370,
+          "recall": 0.0
+        },
+        "DDoS": {
+          "n": 25744,
+          "recall": 0.6420525170913611
+        },
+        "Infiltration": {
+          "n": 7,
+          "recall": 0.0
+        },
+        "PortScan": {
+          "n": 26822,
+          "recall": 0.0020505555141301915
+        },
+        "Web Attack \ufffd Brute Force": {
+          "n": 314,
+          "recall": 0.012738853503184714
+        },
+        "Web Attack \ufffd Sql Injection": {
+          "n": 5,
+          "recall": 0.0
+        },
+        "Web Attack \ufffd XSS": {
+          "n": 143,
+          "recall": 0.03496503496503497
+        }
+      },
+      "recall_at_fpr_of": {
+        "Logistic Regression": {
+          "target_fpr": 0.05100655892569939,
+          "threshold": 0.005,
+          "fpr": 0.04650439752949125,
+          "recall": 0.5154386293418219
+        },
+        "Random Forest": {
+          "target_fpr": 0.002965567134819704,
+          "threshold": 0.4986969248389035,
+          "fpr": 0.002965567134819704,
+          "recall": 0.3107199700402584
+        },
+        "XGBoost": {
+          "target_fpr": 0.0030133988628006673,
+          "threshold": 0.47937149513688654,
+          "fpr": 0.0030133988628006673,
+          "recall": 0.3111693661642168
+        },
+        "MLP": {
+          "target_fpr": 0.014140254584372179,
+          "threshold": 0.035,
+          "fpr": 0.0128846717248719,
+          "recall": 0.504053927534875
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "model": "XGBoost",
+      "accuracy": 0.8324103363576213,
+      "precision_attack": 0.9710893133711925,
+      "recall_attack": 0.3169927909371782,
+      "macro_f1": 0.6890734057778944,
+      "roc_auc": 0.9309886332568102,
+      "pr_auc": 0.8293924712626646,
+      "mcc": 0.4985450757217709,
+      "balanced_accuracy": 0.6569896960371887,
+      "fpr": 0.0030133988628006673,
+      "fnr": 0.6830072090628219,
+      "tn": 166749,
+      "fp": 504,
+      "fn": 36476,
+      "tp": 16929,
+      "per_family": {
+        "BENIGN": {
+          "n": 167253,
+          "false_positive_rate": 0.0030133988628006673
+        },
+        "Bot": {
+          "n": 370,
+          "recall": 0.0
+        },
+        "DDoS": {
+          "n": 25744,
+          "recall": 0.6424409571162213
+        },
+        "Infiltration": {
+          "n": 7,
+          "recall": 0.0
+        },
+        "PortScan": {
+          "n": 26822,
+          "recall": 0.014055625978674222
+        },
+        "Web Attack \ufffd Brute Force": {
+          "n": 314,
+          "recall": 0.01910828025477707
+        },
+        "Web Attack \ufffd Sql Injection": {
+          "n": 5,
+          "recall": 0.2
+        },
+        "Web Attack \ufffd XSS": {
+          "n": 143,
+          "recall": 0.04195804195804196
+        }
+      },
+      "recall_at_fpr_of": {
+        "Logistic Regression": {
+          "target_fpr": 0.05100655892569939,
+          "threshold": 2.0784516891581006e-05,
+          "fpr": 0.05100057995970177,
+          "recall": 0.5762381799456979
+        },
+        "Random Forest": {
+          "target_fpr": 0.002965567134819704,
+          "threshold": 0.5119478702545166,
+          "fpr": 0.002959588168822084,
+          "recall": 0.31682426739069375
+        },
+        "XGBoost": {
+          "target_fpr": 0.0030133988628006673,
+          "threshold": 0.49496281147003174,
+          "fpr": 0.0030133988628006673,
+          "recall": 0.3169927909371782
+        },
+        "MLP": {
+          "target_fpr": 0.014140254584372179,
+          "threshold": 0.0003544033970683813,
+          "fpr": 0.013925011808457845,
+          "recall": 0.4393783353618575
+        }
+      }
+    },
+    {
+      "seed": 2,
+      "model": "MLP",
+      "accuracy": 0.8280959675153405,
+      "precision_attack": 0.8829381774983913,
+      "recall_attack": 0.33401366913210373,
+      "macro_f1": 0.6907588191008325,
+      "roc_auc": 0.6354900803230392,
+      "pr_auc": 0.5906225413344699,
+      "mcc": 0.4750503972380805,
+      "balanced_accuracy": 0.6599367072738658,
+      "fpr": 0.014140254584372179,
+      "fnr": 0.6659863308678963,
+      "tn": 164888,
+      "fp": 2365,
+      "fn": 35567,
+      "tp": 17838,
+      "per_family": {
+        "BENIGN": {
+          "n": 167253,
+          "false_positive_rate": 0.014140254584372179
+        },
+        "Bot": {
+          "n": 370,
+          "recall": 0.0
+        },
+        "DDoS": {
+          "n": 25744,
+          "recall": 0.665747358607831
+        },
+        "Infiltration": {
+          "n": 7,
+          "recall": 0.0
+        },
+        "PortScan": {
+          "n": 26822,
+          "recall": 0.0246066661695623
+        },
+        "Web Attack \ufffd Brute Force": {
+          "n": 314,
+          "recall": 0.09235668789808917
+        },
+        "Web Attack \ufffd Sql Injection": {
+          "n": 5,
+          "recall": 0.2
+        },
+        "Web Attack \ufffd XSS": {
+          "n": 143,
+          "recall": 0.06293706293706294
+        }
+      },
+      "recall_at_fpr_of": {
+        "Logistic Regression": {
+          "target_fpr": 0.05100655892569939,
+          "threshold": 0.012159420358105648,
+          "fpr": 0.05100655892569939,
+          "recall": 0.42861155322535344
+        },
+        "Random Forest": {
+          "target_fpr": 0.002965567134819704,
+          "threshold": 0.8285596112638446,
+          "fpr": 0.002965567134819704,
+          "recall": 0.3165808444902163
+        },
+        "XGBoost": {
+          "target_fpr": 0.0030133988628006673,
+          "threshold": 0.8250239721959632,
+          "fpr": 0.0030133988628006673,
+          "recall": 0.3167868177136972
+        },
+        "MLP": {
+          "target_fpr": 0.014140254584372179,
+          "threshold": 0.4996835462098319,
+          "fpr": 0.014140254584372179,
+          "recall": 0.33401366913210373
+        }
+      }
+    },
+    {
+      "seed": 3,
+      "model": "Logistic Regression",
+      "accuracy": 0.8238405133736371,
+      "precision_attack": 0.7251239157372986,
+      "recall_attack": 0.438292294728958,
+      "macro_f1": 0.7185242539143264,
+      "roc_auc": 0.6451043353441026,
+      "pr_auc": 0.5939932100999146,
+      "mcc": 0.46690495835105905,
+      "balanced_accuracy": 0.6926204647160362,
+      "fpr": 0.053051365296885554,
+      "fnr": 0.5617077052710421,
+      "tn": 158380,
+      "fp": 8873,
+      "fn": 29998,
+      "tp": 23407,
+      "per_family": {
+        "BENIGN": {
+          "n": 167253,
+          "false_positive_rate": 0.053051365296885554
+        },
+        "Bot": {
+          "n": 370,
+          "recall": 0.008108108108108109
+        },
+        "DDoS": {
+          "n": 25744,
+          "recall": 0.8568986948415165
+        },
+        "Infiltration": {
+          "n": 7,
+          "recall": 0.0
+        },
+        "PortScan": {
+          "n": 26822,
+          "recall": 0.03437476698232794
+        },
+        "Web Attack \ufffd Brute Force": {
+          "n": 314,
+          "recall": 0.8949044585987261
+        },
+        "Web Attack \ufffd Sql Injection": {
+          "n": 5,
+          "recall": 0.4
+        },
+        "Web Attack \ufffd XSS": {
+          "n": 143,
+          "recall": 0.972027972027972
+        }
+      },
+      "recall_at_fpr_of": {
+        "Logistic Regression": {
+          "target_fpr": 0.053051365296885554,
+          "threshold": 0.4999599461473888,
+          "fpr": 0.053051365296885554,
+          "recall": 0.4385918921449303
+        },
+        "Random Forest": {
+          "target_fpr": 0.0004364645178262871,
+          "threshold": 0.9999999999999893,
+          "fpr": 0.0004364645178262871,
+          "recall": 0.24960209718191181
+        },
+        "XGBoost": {
+          "target_fpr": 0.0003766748578500834,
+          "threshold": 1.0,
+          "fpr": 0.0,
+          "recall": 0.0
+        },
+        "MLP": {
+          "target_fpr": 0.005530543547798843,
+          "threshold": 0.8270813903005491,
+          "fpr": 0.005530543547798843,
+          "recall": 0.3045220484973317
+        }
+      }
+    },
+    {
+      "seed": 3,
+      "model": "Random Forest",
+      "accuracy": 0.8326142718596199,
+      "precision_attack": 0.995606644198363,
+      "recall_attack": 0.30976500327684675,
+      "macro_f1": 0.6865196152342743,
+      "roc_auc": 0.8220997266192948,
+      "pr_auc": 0.6976477427948722,
+      "mcc": 0.5020822640174958,
+      "balanced_accuracy": 0.6546642693795102,
+      "fpr": 0.0004364645178262871,
+      "fnr": 0.6902349967231532,
+      "tn": 167180,
+      "fp": 73,
+      "fn": 36862,
+      "tp": 16543,
+      "per_family": {
+        "BENIGN": {
+          "n": 167253,
+          "false_positive_rate": 0.0004364645178262871
+        },
+        "Bot": {
+          "n": 370,
+          "recall": 0.0
+        },
+        "DDoS": {
+          "n": 25744,
+          "recall": 0.6383234928527035
+        },
+        "Infiltration": {
+          "n": 7,
+          "recall": 0.0
+        },
+        "PortScan": {
+          "n": 26822,
+          "recall": 0.003914696890612184
+        },
+        "Web Attack \ufffd Brute Force": {
+          "n": 314,
+          "recall": 0.0031847133757961785
+        },
+        "Web Attack \ufffd Sql Injection": {
+          "n": 5,
+          "recall": 0.0
+        },
+        "Web Attack \ufffd XSS": {
+          "n": 143,
+          "recall": 0.027972027972027972
+        }
+      },
+      "recall_at_fpr_of": {
+        "Logistic Regression": {
+          "target_fpr": 0.053051365296885554,
+          "threshold": 0.005,
+          "fpr": 0.04402910560647642,
+          "recall": 0.4416065911431514
+        },
+        "Random Forest": {
+          "target_fpr": 0.0004364645178262871,
+          "threshold": 0.4949107142857143,
+          "fpr": 0.0004364645178262871,
+          "recall": 0.309989701338826
+        },
+        "XGBoost": {
+          "target_fpr": 0.0003766748578500834,
+          "threshold": 0.5454661618651285,
+          "fpr": 0.0003766748578500834,
+          "recall": 0.30869768748244547
+        },
+        "MLP": {
+          "target_fpr": 0.005530543547798843,
+          "threshold": 0.08,
+          "fpr": 0.005500648717810742,
+          "recall": 0.35007958056361765
+        }
+      }
+    },
+    {
+      "seed": 3,
+      "model": "XGBoost",
+      "accuracy": 0.8321112309546901,
+      "precision_attack": 0.9961783439490446,
+      "recall_attack": 0.30749929781855634,
+      "macro_f1": 0.6850992767348256,
+      "roc_auc": 0.7395609312257285,
+      "pr_auc": 0.6025309128499783,
+      "mcc": 0.5003179625299271,
+      "balanced_accuracy": 0.6535613114803531,
+      "fpr": 0.0003766748578500834,
+      "fnr": 0.6925007021814437,
+      "tn": 167190,
+      "fp": 63,
+      "fn": 36983,
+      "tp": 16422,
+      "per_family": {
+        "BENIGN": {
+          "n": 167253,
+          "false_positive_rate": 0.0003766748578500834
+        },
+        "Bot": {
+          "n": 370,
+          "recall": 0.0
+        },
+        "DDoS": {
+          "n": 25744,
+          "recall": 0.6340894965817278
+        },
+        "Infiltration": {
+          "n": 7,
+          "recall": 0.0
+        },
+        "PortScan": {
+          "n": 26822,
+          "recall": 0.003467302960256506
+        },
+        "Web Attack \ufffd Brute Force": {
+          "n": 314,
+          "recall": 0.006369426751592357
+        },
+        "Web Attack \ufffd Sql Injection": {
+          "n": 5,
+          "recall": 0.2
+        },
+        "Web Attack \ufffd XSS": {
+          "n": 143,
+          "recall": 0.013986013986013986
+        }
+      },
+      "recall_at_fpr_of": {
+        "Logistic Regression": {
+          "target_fpr": 0.053051365296885554,
+          "threshold": 1.5495070329052396e-05,
+          "fpr": 0.05302744943289508,
+          "recall": 0.34376930998970134
+        },
+        "Random Forest": {
+          "target_fpr": 0.0004364645178262871,
+          "threshold": 0.2707519233226776,
+          "fpr": 0.0004364645178262871,
+          "recall": 0.3082295665199888
+        },
+        "XGBoost": {
+          "target_fpr": 0.0003766748578500834,
+          "threshold": 0.49857214093208313,
+          "fpr": 0.0003766748578500834,
+          "recall": 0.30749929781855634
+        },
+        "MLP": {
+          "target_fpr": 0.005530543547798843,
+          "threshold": 0.00041107163997367024,
+          "fpr": 0.005494669751813121,
+          "recall": 0.32137440314577287
+        }
+      }
+    },
+    {
+      "seed": 3,
+      "model": "MLP",
+      "accuracy": 0.827080821905392,
+      "precision_attack": 0.945903269197029,
+      "recall_attack": 0.30285553787098585,
+      "macro_f1": 0.6779561718937215,
+      "roc_auc": 0.6591893116141373,
+      "pr_auc": 0.5876295128905251,
+      "mcc": 0.47629807542262403,
+      "balanced_accuracy": 0.6486624971615935,
+      "fpr": 0.005530543547798843,
+      "fnr": 0.6971444621290142,
+      "tn": 166328,
+      "fp": 925,
+      "fn": 37231,
+      "tp": 16174,
+      "per_family": {
+        "BENIGN": {
+          "n": 167253,
+          "false_positive_rate": 0.005530543547798843
+        },
+        "Bot": {
+          "n": 370,
+          "recall": 0.0
+        },
+        "DDoS": {
+          "n": 25744,
+          "recall": 0.6260099440646364
+        },
+        "Infiltration": {
+          "n": 7,
+          "recall": 0.0
+        },
+        "PortScan": {
+          "n": 26822,
+          "recall": 0.0013794646185966743
+        },
+        "Web Attack \ufffd Brute Force": {
+          "n": 314,
+          "recall": 0.054140127388535034
+        },
+        "Web Attack \ufffd Sql Injection": {
+          "n": 5,
+          "recall": 0.6
+        },
+        "Web Attack \ufffd XSS": {
+          "n": 143,
+          "recall": 0.006993006993006993
+        }
+      },
+      "recall_at_fpr_of": {
+        "Logistic Regression": {
+          "target_fpr": 0.053051365296885554,
+          "threshold": 0.0007655349076950124,
+          "fpr": 0.053051365296885554,
+          "recall": 0.40895047280217206
+        },
+        "Random Forest": {
+          "target_fpr": 0.0004364645178262871,
+          "threshold": 0.9138739008310341,
+          "fpr": 0.0004364645178262871,
+          "recall": 0.3012452017601348
+        },
+        "XGBoost": {
+          "target_fpr": 0.0003766748578500834,
+          "threshold": 0.9288707728647334,
+          "fpr": 0.0003766748578500834,
+          "recall": 0.30117030240614173
+        },
+        "MLP": {
+          "target_fpr": 0.005530543547798843,
+          "threshold": 0.4999704745531312,
+          "fpr": 0.005530543547798843,
+          "recall": 0.30285553787098585
+        }
+      }
+    },
+    {
+      "seed": 4,
+      "model": "Logistic Regression",
+      "accuracy": 0.8396069936281485,
+      "precision_attack": 0.7553948674322983,
+      "recall_attack": 0.49881097275535996,
+      "macro_f1": 0.7502479209135628,
+      "roc_auc": 0.645405736078019,
+      "pr_auc": 0.6144305574244145,
+      "mcc": 0.5227529140258198,
+      "balanced_accuracy": 0.7236182060299433,
+      "fpr": 0.05157456069547332,
+      "fnr": 0.50118902724464,
+      "tn": 158627,
+      "fp": 8626,
+      "fn": 26766,
+      "tp": 26639,
+      "per_family": {
+        "BENIGN": {
+          "n": 167253,
+          "false_positive_rate": 0.05157456069547332
+        },
+        "Bot": {
+          "n": 370,
+          "recall": 0.008108108108108109
+        },
+        "DDoS": {
+          "n": 25744,
+          "recall": 0.9949891236793039
+        },
+        "Infiltration": {
+          "n": 7,
+          "recall": 0.14285714285714285
+        },
+        "PortScan": {
+          "n": 26822,
+          "recall": 0.03649988815151741
+        },
+        "Web Attack \ufffd Brute Force": {
+          "n": 314,
+          "recall": 0.09554140127388536
+        },
+        "Web Attack \ufffd Sql Injection": {
+          "n": 5,
+          "recall": 0.4
+        },
+        "Web Attack \ufffd XSS": {
+          "n": 143,
+          "recall": 0.06293706293706294
+        }
+      },
+      "recall_at_fpr_of": {
+        "Logistic Regression": {
+          "target_fpr": 0.05157456069547332,
+          "threshold": 0.4998732086619773,
+          "fpr": 0.05157456069547332,
+          "recall": 0.49881097275535996
+        },
+        "Random Forest": {
+          "target_fpr": 0.002780219188893473,
+          "threshold": 0.9722005833657535,
+          "fpr": 0.002780219188893473,
+          "recall": 0.30309896077146337
+        },
+        "XGBoost": {
+          "target_fpr": 0.002959588168822084,
+          "threshold": 0.9608905343941215,
+          "fpr": 0.002959588168822084,
+          "recall": 0.30336110851043907
+        },
+        "MLP": {
+          "target_fpr": 0.011336119531488224,
+          "threshold": 0.6444871046790057,
+          "fpr": 0.011330140565490605,
+          "recall": 0.4060293979964423
+        }
+      }
+    },
+    {
+      "seed": 4,
+      "model": "Random Forest",
+      "accuracy": 0.8306972781408333,
+      "precision_attack": 0.9726100017670967,
+      "recall_attack": 0.30918453328340045,
+      "macro_f1": 0.6842487716668066,
+      "roc_auc": 0.8412825566558821,
+      "pr_auc": 0.7134412085244004,
+      "mcc": 0.49245557690720887,
+      "balanced_accuracy": 0.6532021570472535,
+      "fpr": 0.002780219188893473,
+      "fnr": 0.6908154667165995,
+      "tn": 166788,
+      "fp": 465,
+      "fn": 36893,
+      "tp": 16512,
+      "per_family": {
+        "BENIGN": {
+          "n": 167253,
+          "false_positive_rate": 0.002780219188893473
+        },
+        "Bot": {
+          "n": 370,
+          "recall": 0.0
+        },
+        "DDoS": {
+          "n": 25744,
+          "recall": 0.6385954008701057
+        },
+        "Infiltration": {
+          "n": 7,
+          "recall": 0.0
+        },
+        "PortScan": {
+          "n": 26822,
+          "recall": 0.00246066661695623
+        },
+        "Web Attack \ufffd Brute Force": {
+          "n": 314,
+          "recall": 0.0
+        },
+        "Web Attack \ufffd Sql Injection": {
+          "n": 5,
+          "recall": 0.0
+        },
+        "Web Attack \ufffd XSS": {
+          "n": 143,
+          "recall": 0.04195804195804196
+        }
+      },
+      "recall_at_fpr_of": {
+        "Logistic Regression": {
+          "target_fpr": 0.05157456069547332,
+          "threshold": 0.0056983806310187575,
+          "fpr": 0.04602608024968162,
+          "recall": 0.5006460069281903
+        },
+        "Random Forest": {
+          "target_fpr": 0.002780219188893473,
+          "threshold": 0.498799555311492,
+          "fpr": 0.002780219188893473,
+          "recall": 0.30929688231439006
+        },
+        "XGBoost": {
+          "target_fpr": 0.002959588168822084,
+          "threshold": 0.3999759903961585,
+          "fpr": 0.002947630236826843,
+          "recall": 0.31086976874824457
+        },
+        "MLP": {
+          "target_fpr": 0.011336119531488224,
+          "threshold": 0.045,
+          "fpr": 0.010798012591702391,
+          "recall": 0.3555285085666136
+        }
+      }
+    },
+    {
+      "seed": 4,
+      "model": "XGBoost",
+      "accuracy": 0.8309238731430539,
+      "precision_attack": 0.9710306080646105,
+      "recall_attack": 0.3106825203632619,
+      "macro_f1": 0.6850700394313884,
+      "roc_auc": 0.8749870079520691,
+      "pr_auc": 0.7363468197768406,
+      "mcc": 0.4931135259036759,
+      "balanced_accuracy": 0.6538614660972198,
+      "fpr": 0.002959588168822084,
+      "fnr": 0.6893174796367382,
+      "tn": 166758,
+      "fp": 495,
+      "fn": 36813,
+      "tp": 16592,
+      "per_family": {
+        "BENIGN": {
+          "n": 167253,
+          "false_positive_rate": 0.002959588168822084
+        },
+        "Bot": {
+          "n": 370,
+          "recall": 0.0
+        },
+        "DDoS": {
+          "n": 25744,
+          "recall": 0.6420525170913611
+        },
+        "Infiltration": {
+          "n": 7,
+          "recall": 0.0
+        },
+        "PortScan": {
+          "n": 26822,
+          "recall": 0.0013794646185966743
+        },
+        "Web Attack \ufffd Brute Force": {
+          "n": 314,
+          "recall": 0.04777070063694268
+        },
+        "Web Attack \ufffd Sql Injection": {
+          "n": 5,
+          "recall": 0.6
+        },
+        "Web Attack \ufffd XSS": {
+          "n": 143,
+          "recall": 0.055944055944055944
+        }
+      },
+      "recall_at_fpr_of": {
+        "Logistic Regression": {
+          "target_fpr": 0.05157456069547332,
+          "threshold": 2.4037946786847897e-05,
+          "fpr": 0.051568581729475704,
+          "recall": 0.4981930530849171
+        },
+        "Random Forest": {
+          "target_fpr": 0.002780219188893473,
+          "threshold": 0.5741879343986511,
+          "fpr": 0.002756303324902991,
+          "recall": 0.31021439940080514
+        },
+        "XGBoost": {
+          "target_fpr": 0.002959588168822084,
+          "threshold": 0.46115049719810486,
+          "fpr": 0.002959588168822084,
+          "recall": 0.3107012452017601
+        },
+        "MLP": {
+          "target_fpr": 0.011336119531488224,
+          "threshold": 0.0010232613421976566,
+          "fpr": 0.011222519177533438,
+          "recall": 0.36981556034079205
+        }
+      }
+    },
+    {
+      "seed": 4,
+      "model": "MLP",
+      "accuracy": 0.8238722366739479,
+      "precision_attack": 0.8965799378170513,
+      "recall_attack": 0.30778017039603034,
+      "macro_f1": 0.6765465413716896,
+      "roc_auc": 0.6834980674491212,
+      "pr_auc": 0.6114498552215265,
+      "mcc": 0.46002254187252145,
+      "balanced_accuracy": 0.648222025432271,
+      "fpr": 0.011336119531488224,
+      "fnr": 0.6922198296039697,
+      "tn": 165357,
+      "fp": 1896,
+      "fn": 36968,
+      "tp": 16437,
+      "per_family": {
+        "BENIGN": {
+          "n": 167253,
+          "false_positive_rate": 0.011336119531488224
+        },
+        "Bot": {
+          "n": 370,
+          "recall": 0.0
+        },
+        "DDoS": {
+          "n": 25744,
+          "recall": 0.6354490366687383
+        },
+        "Infiltration": {
+          "n": 7,
+          "recall": 0.0
+        },
+        "PortScan": {
+          "n": 26822,
+          "recall": 0.001938707031541272
+        },
+        "Web Attack \ufffd Brute Force": {
+          "n": 314,
+          "recall": 0.04777070063694268
+        },
+        "Web Attack \ufffd Sql Injection": {
+          "n": 5,
+          "recall": 0.6
+        },
+        "Web Attack \ufffd XSS": {
+          "n": 143,
+          "recall": 0.055944055944055944
+        }
+      },
+      "recall_at_fpr_of": {
+        "Logistic Regression": {
+          "target_fpr": 0.05157456069547332,
+          "threshold": 0.003390061359009355,
+          "fpr": 0.05157456069547332,
+          "recall": 0.42007302687014325
+        },
+        "Random Forest": {
+          "target_fpr": 0.002780219188893473,
+          "threshold": 0.6834106481772299,
+          "fpr": 0.002780219188893473,
+          "recall": 0.3073869487875667
+        },
+        "XGBoost": {
+          "target_fpr": 0.002959588168822084,
+          "threshold": 0.6673057340313117,
+          "fpr": 0.002959588168822084,
+          "recall": 0.3073869487875667
+        },
+        "MLP": {
+          "target_fpr": 0.011336119531488224,
+          "threshold": 0.5000324822491454,
+          "fpr": 0.011330140565490605,
+          "recall": 0.30778017039603034
+        }
+      }
+    }
+  ],
+  "summary": {
+    "Logistic Regression": {
+      "accuracy": {
+        "mean": 0.8327892032013342,
+        "std": 0.005963427375698641,
+        "n": 5,
+        "ci95_low": 0.8275620286368837,
+        "ci95_high": 0.8380163777657847
+      },
+      "precision_attack": {
+        "mean": 0.7335855610680543,
+        "std": 0.01866317384356091,
+        "n": 5,
+        "ci95_low": 0.7172265679151357,
+        "ci95_high": 0.7499445542209728
+      },
+      "recall_attack": {
+        "mean": 0.48589832412695444,
+        "std": 0.027789706234929146,
+        "n": 5,
+        "ci95_low": 0.46153957261826234,
+        "ci95_high": 0.5102570756356466
+      },
+      "macro_f1": {
+        "mean": 0.7397460327585337,
+        "std": 0.012241545835144009,
+        "n": 5,
+        "ci95_low": 0.7290158447328056,
+        "ci95_high": 0.7504762207842618
+      },
+      "roc_auc": {
+        "mean": 0.6448416006241564,
+        "std": 0.0010203628140350177,
+        "n": 5,
+        "ci95_low": 0.6439472131835094,
+        "ci95_high": 0.6457359880648034
+      },
+      "pr_auc": {
+        "mean": 0.6085595258143133,
+        "std": 0.008858153940331872,
+        "n": 5,
+        "ci95_low": 0.6007950115429433,
+        "ci95_high": 0.6163240400856832
+      },
+      "mcc": {
+        "mean": 0.5012907045888794,
+        "std": 0.020956129265534494,
+        "n": 5,
+        "ci95_low": 0.4829218473923403,
+        "ci95_high": 0.5196595617854185
+      },
+      "balanced_accuracy": {
+        "mean": 0.71472605096831,
+        "std": 0.012598718180549405,
+        "n": 5,
+        "ci95_low": 0.7036827875781302,
+        "ci95_high": 0.7257693143584898
+      },
+      "fpr": {
+        "mean": 0.056446222190334405,
+        "std": 0.006300388294256381,
+        "n": 5,
+        "ci95_low": 0.05092368835817873,
+        "ci95_high": 0.06196875602249008
+      },
+      "fnr": {
+        "mean": 0.5141016758730457,
+        "std": 0.027789706234929167,
+        "n": 5,
+        "ci95_low": 0.4897429243643535,
+        "ci95_high": 0.5384604273817378
+      }
+    },
+    "MLP": {
+      "accuracy": {
+        "mean": 0.8257339412121926,
+        "std": 0.002871462794342786,
+        "n": 5,
+        "ci95_low": 0.8232169930990119,
+        "ci95_high": 0.8282508893253733
+      },
+      "precision_attack": {
+        "mean": 0.8755813893855631,
+        "std": 0.06138813754793806,
+        "n": 5,
+        "ci95_low": 0.8217723143463987,
+        "ci95_high": 0.9293904644247274
+      },
+      "recall_attack": {
+        "mean": 0.3301263926598633,
+        "std": 0.026365099901315595,
+        "n": 5,
+        "ci95_low": 0.3070163636596008,
+        "ci95_high": 0.35323642166012587
+      },
+      "macro_f1": {
+        "mean": 0.686575780877836,
+        "std": 0.008719201467557917,
+        "n": 5,
+        "ci95_low": 0.6789330638189737,
+        "ci95_high": 0.6942184979366983
+      },
+      "roc_auc": {
+        "mean": 0.6629303117120349,
+        "std": 0.021317053465917106,
+        "n": 5,
+        "ci95_low": 0.6442450905051579,
+        "ci95_high": 0.6816155329189119
+      },
+      "pr_auc": {
+        "mean": 0.5969623205155471,
+        "std": 0.012259332395079996,
+        "n": 5,
+        "ci95_low": 0.5862165418826347,
+        "ci95_high": 0.6077080991484595
+      },
+      "mcc": {
+        "mean": 0.4671179293223619,
+        "std": 0.011660114539232888,
+        "n": 5,
+        "ci95_low": 0.45689738829817983,
+        "ci95_high": 0.477338470346544
+      },
+      "balanced_accuracy": {
+        "mean": 0.6570555671693187,
+        "std": 0.008358802170871666,
+        "n": 5,
+        "ci95_low": 0.6497287540224183,
+        "ci95_high": 0.6643823803162191
+      },
+      "fpr": {
+        "mean": 0.016015258321225925,
+        "std": 0.010580126748982168,
+        "n": 5,
+        "ci95_low": 0.006741368333681037,
+        "ci95_high": 0.025289148308770812
+      },
+      "fnr": {
+        "mean": 0.6698736073401366,
+        "std": 0.026365099901315612,
+        "n": 5,
+        "ci95_low": 0.646763578339874,
+        "ci95_high": 0.6929836363403992
+      }
+    },
+    "Random Forest": {
+      "accuracy": {
+        "mean": 0.831256514606314,
+        "std": 0.0007942444127167709,
+        "n": 5,
+        "ci95_low": 0.830560328683261,
+        "ci95_high": 0.831952700529367
+      },
+      "precision_attack": {
+        "mean": 0.9764524345891686,
+        "std": 0.010759156792276759,
+        "n": 5,
+        "ci95_low": 0.9670216178496698,
+        "ci95_high": 0.9858832513286675
+      },
+      "recall_attack": {
+        "mean": 0.31030427862559684,
+        "std": 0.0009477247331653051,
+        "n": 5,
+        "ci95_low": 0.3094735612700892,
+        "ci95_high": 0.3111349959811045
+      },
+      "macro_f1": {
+        "mean": 0.6852786121222789,
+        "std": 0.0009086856873841514,
+        "n": 5,
+        "ci95_low": 0.6844821139991475,
+        "ci95_high": 0.6860751102454103
+      },
+      "roc_auc": {
+        "mean": 0.8411997779975946,
+        "std": 0.07618407397189726,
+        "n": 5,
+        "ci95_low": 0.774421492861613,
+        "ci95_high": 0.9079780631335762
+      },
+      "pr_auc": {
+        "mean": 0.7332502495453908,
+        "std": 0.08927766491436334,
+        "n": 5,
+        "ci95_low": 0.6549949259179727,
+        "ci95_high": 0.8115055731728088
+      },
+      "mcc": {
+        "mean": 0.4949424374018562,
+        "std": 0.004094319577441454,
+        "n": 5,
+        "ci95_low": 0.4913536080583234,
+        "ci95_high": 0.49853126674538895
+      },
+      "balanced_accuracy": {
+        "mean": 0.6539521608370761,
+        "std": 0.0006032986999514265,
+        "n": 5,
+        "ci95_low": 0.6534233462107752,
+        "ci95_high": 0.6544809754633769
+      },
+      "fpr": {
+        "mean": 0.002399956951444817,
+        "std": 0.0011031362397476425,
+        "n": 5,
+        "ci95_low": 0.0014330154042012772,
+        "ci95_high": 0.0033668984986883568
+      },
+      "fnr": {
+        "mean": 0.689695721374403,
+        "std": 0.0009477247331653051,
+        "n": 5,
+        "ci95_low": 0.6888650040188954,
+        "ci95_high": 0.6905264387299107
+      }
+    },
+    "XGBoost": {
+      "accuracy": {
+        "mean": 0.8319725548133311,
+        "std": 0.0007750185105991585,
+        "n": 5,
+        "ci95_low": 0.8312932211365112,
+        "ci95_high": 0.832651888490151
+      },
+      "precision_attack": {
+        "mean": 0.9760860224554619,
+        "std": 0.011235888312289843,
+        "n": 5,
+        "ci95_low": 0.9662373321143427,
+        "ci95_high": 0.9859347127965812
+      },
+      "recall_attack": {
+        "mean": 0.31349124613800206,
+        "std": 0.0046418908627420905,
+        "n": 5,
+        "ci95_low": 0.30942244940081726,
+        "ci95_high": 0.31756004287518685
+      },
+      "macro_f1": {
+        "mean": 0.6872607442495434,
+        "std": 0.0023804685377959212,
+        "n": 5,
+        "ci95_low": 0.6851741715777694,
+        "ci95_high": 0.6893473169213175
+      },
+      "roc_auc": {
+        "mean": 0.852608268946472,
+        "std": 0.07599235234452498,
+        "n": 5,
+        "ci95_low": 0.7859980352263825,
+        "ci95_high": 0.9192185026665616
+      },
+      "pr_auc": {
+        "mean": 0.7216796726779174,
+        "std": 0.08683735889782507,
+        "n": 5,
+        "ci95_low": 0.6455633715849409,
+        "ci95_high": 0.797795973770894
+      },
+      "mcc": {
+        "mean": 0.49751710364878826,
+        "std": 0.0032372555378946542,
+        "n": 5,
+        "ci95_low": 0.4946795240590264,
+        "ci95_high": 0.5003546832385501
+      },
+      "balanced_accuracy": {
+        "mean": 0.6555091729006931,
+        "std": 0.0019373020559686803,
+        "n": 5,
+        "ci95_low": 0.6538110527773754,
+        "ci95_high": 0.6572072930240108
+      },
+      "fpr": {
+        "mean": 0.0024729003366157853,
+        "std": 0.0011720954254791898,
+        "n": 5,
+        "ci95_low": 0.0014455133980004866,
+        "ci95_high": 0.003500287275231084
+      },
+      "fnr": {
+        "mean": 0.686508753861998,
+        "std": 0.004641890862742088,
+        "n": 5,
+        "ci95_low": 0.6824399571248132,
+        "ci95_high": 0.6905775505991827
+      }
+    }
+  },
+  "matched_fpr_summary": {
+    "Logistic Regression": {
+      "Logistic Regression": {
+        "recall_mean": 0.4859657335455482,
+        "fpr_mean": 0.056446222190334405
+      },
+      "Random Forest": {
+        "recall_mean": 0.2926392659863309,
+        "fpr_mean": 0.002399956951444817
+      },
+      "XGBoost": {
+        "recall_mean": 0.24277127609774368,
+        "fpr_mean": 0.002396369571846245
+      },
+      "MLP": {
+        "recall_mean": 0.40053553038105044,
+        "fpr_mean": 0.016012866734826877
+      }
+    },
+    "MLP": {
+      "Logistic Regression": {
+        "recall_mean": 0.4151596292481977,
+        "fpr_mean": 0.056446222190334405
+      },
+      "Random Forest": {
+        "recall_mean": 0.31206441344443403,
+        "fpr_mean": 0.002399956951444817
+      },
+      "XGBoost": {
+        "recall_mean": 0.3120981181537309,
+        "fpr_mean": 0.0024717045434162616
+      },
+      "MLP": {
+        "recall_mean": 0.3301376275629623,
+        "fpr_mean": 0.016012866734826877
+      }
+    },
+    "Random Forest": {
+      "Logistic Regression": {
+        "recall_mean": 0.5948956090253722,
+        "fpr_mean": 0.05066575786383502
+      },
+      "Random Forest": {
+        "recall_mean": 0.31038292294728953,
+        "fpr_mean": 0.002399956951444817
+      },
+      "XGBoost": {
+        "recall_mean": 0.31057017133227227,
+        "fpr_mean": 0.0024681171638176896
+      },
+      "MLP": {
+        "recall_mean": 0.40547514277689356,
+        "fpr_mean": 0.01452529999461893
+      }
+    },
+    "XGBoost": {
+      "Logistic Regression": {
+        "recall_mean": 0.4749854882501638,
+        "fpr_mean": 0.056436655844738205
+      },
+      "Random Forest": {
+        "recall_mean": 0.3133826420747121,
+        "fpr_mean": 0.0023927821922476726
+      },
+      "XGBoost": {
+        "recall_mean": 0.3134350716225073,
+        "fpr_mean": 0.0024717045434162616
+      },
+      "MLP": {
+        "recall_mean": 0.38496769965359046,
+        "fpr_mean": 0.015935140176857814
+      }
+    }
+  },
+  "per_family_mean": {
+    "Logistic Regression": {
+      "BENIGN": 0.056446222190334405,
+      "Bot": 0.008108108108108109,
+      "DDoS": 0.961505593536358,
+      "Infiltration": 0.11428571428571428,
+      "PortScan": 0.03156364178659309,
+      "Web Attack \ufffd Brute Force": 0.735031847133758,
+      "Web Attack \ufffd Sql Injection": 0.43999999999999995,
+      "Web Attack \ufffd XSS": 0.7902097902097902
+    },
+    "MLP": {
+      "BENIGN": 0.016015258321225925,
+      "Bot": 0.0,
+      "DDoS": 0.6617697327532629,
+      "Infiltration": 0.05714285714285714,
+      "PortScan": 0.0208485571545746,
+      "Web Attack \ufffd Brute Force": 0.07770700636942675,
+      "Web Attack \ufffd Sql Injection": 0.52,
+      "Web Attack \ufffd XSS": 0.05034965034965035
+    },
+    "Random Forest": {
+      "BENIGN": 0.002399956951444817,
+      "Bot": 0.0,
+      "DDoS": 0.6394655065257924,
+      "Infiltration": 0.0,
+      "PortScan": 0.0035940645738572813,
+      "Web Attack \ufffd Brute Force": 0.024840764331210193,
+      "Web Attack \ufffd Sql Injection": 0.04,
+      "Web Attack \ufffd XSS": 0.03496503496503496
+    },
+    "XGBoost": {
+      "BENIGN": 0.0024729003366157853,
+      "Bot": 0.0,
+      "DDoS": 0.6408017402113113,
+      "Infiltration": 0.0,
+      "PortScan": 0.008671985683394228,
+      "Web Attack \ufffd Brute Force": 0.020382165605095544,
+      "Web Attack \ufffd Sql Injection": 0.2,
+      "Web Attack \ufffd XSS": 0.03636363636363636
+    }
+  },
+  "test_prevalence": 0.242026121871856,
+  "n_test": 220658,
+  "runtime_s": 627.8870617999928
+}
