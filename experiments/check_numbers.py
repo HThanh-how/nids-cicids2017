@@ -9,7 +9,8 @@ value that an experiment actually produced -- directly, or through one of
 the derivations the paper states explicitly (a ratio, a difference, a mean
 over seeds). Anything it cannot account for is printed for a human to judge.
 
-    python check_numbers.py
+    python check_numbers.py        # summary and the unmatched literals
+    python check_numbers.py -v     # also the source of every match
 """
 
 import glob
@@ -37,7 +38,7 @@ def flatten(obj, out):
         return
     elif isinstance(obj, (int, float)):
         v = float(obj)
-        if v == v:                 # drop NaN (undefined precision etc.)
+        if v == v and abs(v) != float("inf"):   # drop NaN and +-inf thresholds
             out.append(v)
     elif isinstance(obj, str):
         try:
@@ -119,9 +120,72 @@ def derived(blobs):
     s5 = blobs.get("S5_unsw_replication", {})
     if s5:
         pass  # means are direct values
-    # UNSW attack ratio is printed in the run log, not stored: 0.6806.
-    d["UNSW attack ratio % (from run log)"] = 68.06
+    if s5:
+        # test-set attack share, from the stored confusion counts
+        r = s5["runs"][0]
+        d["UNSW test prevalence %"] = 100 * (r["tp"] + r["fn"]) / (
+            r["tp"] + r["fn"] + r["tn"] + r["fp"])
+    for blob, tag in ((s1, "P1"), (s2, "P2")):
+        if blob:
+            r = blob["runs"][0]
+            d[f"{tag} test prevalence %"] = 100 * (r["tp"] + r["fn"]) / (
+                r["tp"] + r["fn"] + r["tn"] + r["fp"])
+    r0 = blobs.get("R0_partition", {})
+    for k, v in r0.get("prevalence", {}).items():
+        d[f"R0 prevalence % {k}"] = 100 * v
+    if s1:
+        # 95 % t-interval of the paired macro-F1 difference (Section 5.2)
+        from scipy import stats as sps
+        for pair, e in s1["paired_tests"].items():
+            n = e["n_seeds"]
+            half = sps.t.ppf(0.975, n - 1) * e["std_diff"] / n ** 0.5
+            d[f"paired diff CI low {pair}"] = e["mean_diff_macro_f1"] - half
+            d[f"paired diff CI high {pair}"] = e["mean_diff_macro_f1"] + half
+            d[f"paired diff CI low (abs) {pair}"] = abs(e["mean_diff_macro_f1"] - half)
+            d[f"paired diff CI high (abs) {pair}"] = abs(e["mean_diff_macro_f1"] + half)
+    for key in ("R1_p2_thresholds", "R3_grouped_split", "R4_transfer_rethreshold",
+                "R2_temporal_decomposition", "S11_serving_breakdown"):
+        if key in blobs and "runtime_s" in blobs[key]:
+            d[f"runtime min {key}"] = blobs[key]["runtime_s"] / 60
+    # Revision controls (Section 5.4): interval half-widths of the R-stage
+    # summaries, near-duplicate exposure as a percentage, and the serving
+    # breakdown's one-row versus amortised model cost (Section 6.2).
+    for key in ("R1_p2_thresholds", "R3_grouped_split"):
+        for model, summ in blobs.get(key, {}).get("summary", {}).items():
+            for col, e in summ.items():
+                d[f"ci half {key} {model} {col}"] = e["ci95_high"] - e["mean"]
+    r3 = blobs.get("R3_grouped_split", {})
+    for proto in ("exposure_p1_seed42", "exposure_p2"):
+        for kind, by in r3.get(proto, {}).items():
+            for cls, v in by.items():
+                d[f"exposure % {proto} {kind} {cls}"] = 100 * v
+    s11 = blobs.get("S11_serving_breakdown", {})
+    for label, e in s11.get("settings", {}).items():
+        ip = e["in_process"]
+        d[f"one-row / amortised model cost {label}"] = (
+            ip["model_one_row"]["p50"] / ip["model_amortised_per_row_batch"]["p50"])
     return d
+
+
+def config_values():
+    """Configuration constants quoted in the prose. The paper says the
+    Deployment 'had requested 512 MiB and limited at 1 GiB' before any
+    measurement; that is the manifest as first committed, read from git
+    history rather than typed here."""
+    import subprocess
+    out = []
+    for rev in ("7253b76", "HEAD"):
+        try:
+            txt = subprocess.run(
+                ["git", "show", f"{rev}:serving/k8s/deployment.yaml"], cwd=ROOT,
+                capture_output=True, text=True, timeout=20).stdout
+        except Exception:
+            continue
+        for num, unit in re.findall(r"memory:\s*\"?(\d+)(Mi|Gi)", txt):
+            out.append((f"config:deployment.yaml@{rev} memory {num}{unit}", float(num)))
+        for num in re.findall(r"cpu:\s*\"?(\d+)m", txt):
+            out.append((f"config:deployment.yaml@{rev} cpu {num}m", float(num)))
+    return out
 
 
 # --------------------------------------------------------------------------
@@ -193,6 +257,9 @@ IGNORE = {  # structural numbers, not measurements
 }
 
 
+VERBOSE = "-v" in __import__("sys").argv
+
+
 def main():
     blobs = load_all()
     pool = []
@@ -202,6 +269,7 @@ def main():
         pool += [(name, v) for v in vals]
     for k, v in derived(blobs).items():
         pool.append((f"derived:{k}", v))
+    pool += config_values()
 
     tex = io.open(TEX, encoding="utf-8").read()
     nums = prose_numbers(tex)
@@ -217,6 +285,8 @@ def main():
         hit = matches(raw, val, pool, sci=sci)
         if hit:
             ok += 1
+            if VERBOSE:
+                print(f"  ok {raw:>10s}  <- {hit}")
         else:
             unmatched.append((raw, ctx))
     print(f"checked {ok + len(unmatched)} distinct literals: {ok} matched, "
