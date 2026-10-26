@@ -1,0 +1,17 @@
+\begin{table}[htbp]
+\centering
+\caption{Oracle re-thresholding of the transferred models (macro-F1). \emph{Default}: threshold 0.5, as in Section~\ref{sec:transfer}. \emph{Prev.}: the threshold flags exactly the target's attack share. \emph{Best}: the macro-F1-optimal threshold on the target. Both use target labels, which no deployment has, so they bound what recalibration alone could recover; ROC-AUC does not depend on the threshold at all.}
+\label{tab:recal}
+\footnotesize
+\begin{tabular}{l|cccc|cccc}
+\hline
+ & \multicolumn{4}{c|}{CIC $\rightarrow$ UNSW} & \multicolumn{4}{c}{UNSW $\rightarrow$ CIC} \\
+\hline
+Model & AUC & Default & Prev. & Best & AUC & Default & Prev. & Best \\
+\hline LogReg & 0.658 & 0.254 & 0.664 & 0.698 & 0.492 & 0.220 & 0.507 & 0.557 \\
+RF & 0.382 & 0.242 & 0.317 & 0.405 & 0.254 & 0.302 & 0.395 & 0.451 \\
+XGBoost & 0.563 & 0.242 & 0.575 & 0.618 & 0.459 & 0.402 & 0.526 & 0.531 \\
+MLP & 0.778 & 0.264 & 0.683 & 0.772 & 0.700 & 0.416 & 0.605 & 0.671 \\
+\hline
+\end{tabular}
+\end{table}

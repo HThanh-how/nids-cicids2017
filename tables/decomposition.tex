@@ -1,0 +1,17 @@
+\begin{table}[htbp]
+\centering
+\caption{Separating the three things a day boundary changes. (a) random split; (b) random split grouped so that no near-duplicate (all 78 features equal to two significant figures) crosses it; (c) trained on 70\,\% of Mon--Wed and scored on the other 30\,\% (same days, seen families), on Thu--Fri benign flows (later days, no attack) and on Thu--Fri attacks (unseen families), the last two marked $'$; (d) day-disjoint P2. Means over 5, 5, 3 and 3 seeds.}
+\label{tab:decomp}
+\scriptsize
+\setlength{\tabcolsep}{3.2pt}\begin{tabular}{l|cc|cc|cccc|cc}
+\hline
+ & \multicolumn{2}{c|}{(a) random} & \multicolumn{2}{c|}{(b) grouped} & \multicolumn{4}{c|}{(c) trained on 70\,\% of Mon--Wed} & \multicolumn{2}{c}{(d) P2} \\
+\hline
+Model & Rec. & FPR & Rec. & FPR & Rec. & FPR & FPR$'$ & Rec.$'$ & Rec. & FPR \\
+\hline LogReg & 0.9100 & 0.1010 & 0.8474 & 0.0698 & 0.9707 & 0.0563 & 0.0540 & 0.5041 & 0.4975 & 0.0592 \\
+RF & 0.9937 & 0.0076 & 0.9816 & 0.0055 & 0.9976 & 0.0032 & 0.0030 & 0.3117 & 0.3109 & 0.0029 \\
+XGBoost & 0.9935 & 0.0073 & 0.9821 & 0.0054 & 0.9975 & 0.0030 & 0.0033 & 0.3218 & 0.3164 & 0.0030 \\
+MLP & 0.9857 & 0.0359 & 0.9812 & 0.0206 & 0.9948 & 0.0268 & 0.0242 & 0.3527 & 0.3467 & 0.0211 \\
+\hline
+\end{tabular}
+\end{table}

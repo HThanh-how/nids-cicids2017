@@ -286,16 +286,122 @@ def t_family():
         ["Label", "$n$"] + [esc(m) for m in models], rows))
 
     loo = d.get("leave_one_family_out_xgboost", {})
+    part = (load("R0_partition") or {}).get("labels", {})
     if loo:
-        rows = [[esc(k), f"{v['n_heldout']:,}", f"{v['unseen_recall']:.4f}"]
-                for k, v in sorted(loo.items(),
-                                   key=lambda kv: kv[1]["unseen_recall"])]
+        # Compact form requested by Review 7: all eleven folds, two folds per
+        # row, with the capture day so the sibling structure is visible, and
+        # the labels too small to hold out named in a note.
+        items = sorted(loo.items(), key=lambda kv: kv[1]["unseen_recall"])
+        cells = [[esc(k).replace("Web Attack - ", "Web "),
+                  "/".join(part.get(k, {}).get("days", [])) or "--",
+                  f"{v['n_heldout']:,}", f"{v['unseen_recall']:.4f}"]
+                 for k, v in items]
+        half = (len(cells) + 1) // 2
+        rows = []
+        for i in range(half):
+            right = cells[i + half] if i + half < len(cells) else [""] * 4
+            rows.append(cells[i] + right)
+        small = sorted(((k, v["n"]) for k, v in part.items()
+                        if k.upper() != "BENIGN" and k not in loo),
+                       key=lambda kv: -kv[1])
+        note = None
+        if small:
+            note = ("Not held out (fewer than 50 flows in the sample): "
+                    + ", ".join(f"{esc(k).replace('Web Attack - ', 'Web ')} ({n})"
+                                for k, n in small) + ".")
         write("leave_one_out.tex", table(
-            "Leave-one-family-out with XGBoost: the held-out family is removed "
-            "from training entirely, so the score is the detector's ability to "
-            "flag an attack type it has never seen.",
-            "tab:loo", "lrr",
-            ["Held-out family", "$n$", "Recall on unseen family"], rows))
+            f"Leave-one-family-out with XGBoost, all {len(loo)} folds: the "
+            "held-out family is removed from training entirely and only its "
+            "flows are scored, so the value is recall on an attack type never "
+            "seen in training.",
+            "tab:loo", "llrr|llrr",
+            ["Held-out", "Day", "$n$", "Recall"] * 2, rows, note=note))
+
+
+def t_decomposition():
+    """Review 7 / R2-R6: separate near-duplicate leakage, temporal shift and
+    unseen families. One row per model, protocols left to right."""
+    s1, s2 = load("S1_holdout"), load("S2_day_disjoint")
+    r2, r3 = load("R2_temporal_decomposition"), load("R3_grouped_split")
+    if not (s1 and s2 and r2 and r3):
+        return
+    rows = []
+    for m in models_in(s1["summary"]):
+        a, g, t, p = s1["summary"][m], r3["summary"][m], r2["summary"][m], \
+            s2["summary"][m]
+        rows.append([
+            esc(m).replace("Logistic Regression", "LogReg")
+                  .replace("Random Forest", "RF"),
+            f"{a['recall_attack']['mean']:.4f}", f"{a['fpr']['mean']:.4f}",
+            f"{g['recall_attack']['mean']:.4f}", f"{g['fpr']['mean']:.4f}",
+            f"{t['in_period_recall']['mean']:.4f}", f"{t['in_period_fpr']['mean']:.4f}",
+            f"{t['cross_benign_fpr']['mean']:.4f}",
+            f"{t['cross_attack_recall']['mean']:.4f}",
+            f"{p['recall_attack']['mean']:.4f}", f"{p['fpr']['mean']:.4f}"])
+    n1 = s1["summary"]["XGBoost"]["recall_attack"]["n"]
+    n3 = r3["summary"]["XGBoost"]["recall_attack"]["n"]
+    n2 = len(r2["seeds"])
+    np2 = s2["summary"]["XGBoost"]["recall_attack"]["n"]
+    write("decomposition.tex", _tight(table(
+        "Separating the three things a day boundary changes. (a) random split; "
+        "(b) random split grouped so that no near-duplicate (all 78 features "
+        "equal to two significant figures) crosses it; (c) trained on 70\\,\\% "
+        "of Mon--Wed and scored on the other 30\\,\\% (same days, seen "
+        "families), on Thu--Fri benign flows (later days, no attack) and on "
+        "Thu--Fri attacks (unseen families), the last two marked $'$; (d) "
+        "day-disjoint P2. Means over "
+        f"{n1}, {n3}, {n2} and {np2} seeds.",
+        "tab:decomp", "l|cc|cc|cccc|cc",
+        ["", r"\multicolumn{2}{c|}{(a) random}",
+         r"\multicolumn{2}{c|}{(b) grouped}",
+         r"\multicolumn{4}{c|}{(c) trained on 70\,\% of Mon--Wed}",
+         r"\multicolumn{2}{c}{(d) P2}"],
+        [["Model", "Rec.", "FPR", "Rec.", "FPR", "Rec.", "FPR",
+          "FPR$'$", "Rec.$'$", "Rec.", "FPR"]]
+        + [[r"\hline " + rows[0][0]] + rows[0][1:]] + rows[1:])))
+
+
+def _tight(tex, sep="3.2pt"):
+    """Eleven numeric columns overrun the LNCS text block at the default
+    column padding; narrow the padding for this table only."""
+    tex = tex.replace("\n\\footnotesize\n", "\n\\scriptsize\n", 1)
+    return tex.replace(r"\begin{tabular}",
+                       rf"\setlength{{\tabcolsep}}{{{sep}}}\begin{{tabular}}", 1)
+
+
+def t_recalibration():
+    """Review 7: is the transfer failure a threshold artefact? One row per
+    model, the two directions side by side (page budget)."""
+    d = load("R4_transfer_rethreshold")
+    if not d:
+        return
+    dirs = list(d["results"])
+    rows = []
+    for m in models_in(d["results"][dirs[0]]["models"]):
+        row = [esc(m).replace("Logistic Regression", "LogReg")
+                     .replace("Random Forest", "RF")]
+        for direction in dirs:
+            e = d["results"][direction]["models"][m]
+            row += [f"{e['default']['roc_auc']:.3f}",
+                    f"{e['default']['macro_f1']:.3f}",
+                    f"{e['prevalence_matched']['macro_f1']:.3f}",
+                    f"{e['best_macro_f1']['macro_f1']:.3f}"]
+        rows.append(row)
+    head = [esc(x).replace("cicids2017", "CIC").replace("unsw-nb15", "UNSW")
+            .replace("->", r"$\rightarrow$") for x in dirs]
+    write("recalibration.tex", table(
+        "Oracle re-thresholding of the transferred models (macro-F1). "
+        "\\emph{Default}: threshold 0.5, as in Section~\\ref{sec:transfer}. "
+        "\\emph{Prev.}: the threshold flags exactly the target's attack share. "
+        "\\emph{Best}: the macro-F1-optimal threshold on the target. Both use "
+        "target labels, which no deployment has, so they bound what "
+        "recalibration alone could recover; ROC-AUC does not depend on the "
+        "threshold at all.",
+        "tab:recal", "l|cccc|cccc",
+        ["", rf"\multicolumn{{4}}{{c|}}{{{head[0]}}}",
+         rf"\multicolumn{{4}}{{c}}{{{head[1]}}}"],
+        [["Model"] + ["AUC", "Default", "Prev.", "Best"] * 2]
+        + [[r"\hline " + rows[0][0]] + rows[0][1:]] + rows[1:]))
 
 
 def t_features():
@@ -494,7 +600,7 @@ def t_scaling():
 def main():
     for fn in (t_environment, t_dataset, t_holdout, t_protocols, t_day_disjoint, t_family,
                t_features, t_unsw, t_transfer, t_operational, t_cost,
-               t_serving, t_scaling):
+               t_serving, t_scaling, t_decomposition, t_recalibration):
         try:
             fn()
         except Exception as exc:

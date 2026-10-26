@@ -266,7 +266,14 @@ def fig_per_family():
     ax.set_xticks(range(len(models)))
     ax.set_xticklabels([SHORT[m] for m in models])
     ax.set_yticks(range(len(fams)))
-    ax.set_yticklabels([clean_label(f) for f in fams])
+    # Each label carries its test-set count, and an asterisk marks the labels
+    # too small (< 50 flows in the sample) to enter leave-one-family-out, so
+    # the figure's thirteen rows reconcile with the eleven held-out families.
+    loo = d.get("leave_one_family_out_xgboost", {})
+    n_test = {f: next((per[m][f]["n"] for m in models if f in per[m]), 0)
+              for f in fams}
+    ax.set_yticklabels([f"{clean_label(f)} ({n_test[f]:,})"
+                        + ("" if f in loo else "*") for f in fams])
     for i in range(len(fams)):
         for j in range(len(models)):
             v = M[i, j]

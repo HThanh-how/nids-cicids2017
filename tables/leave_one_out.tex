@@ -1,23 +1,19 @@
 \begin{table}[htbp]
 \centering
-\caption{Leave-one-family-out with XGBoost: the held-out family is removed from training entirely, so the score is the detector's ability to flag an attack type it has never seen.}
+\caption{Leave-one-family-out with XGBoost, all 11 folds: the held-out family is removed from training entirely and only its flows are scored, so the value is recall on an attack type never seen in training.}
 \label{tab:loo}
 \scriptsize
-\begin{tabular}{lrr}
+\begin{tabular}{llrr|llrr}
 \hline
-Held-out family & $n$ & Recall on unseen family \\
+Held-out & Day & $n$ & Recall & Held-out & Day & $n$ & Recall \\
 \hline
-Bot & 370 & 0.0000 \\
-FTP-Patator & 1,267 & 0.0008 \\
-SSH-Patator & 757 & 0.0026 \\
-Web Attack - Brute Force & 314 & 0.0032 \\
-PortScan & 26,822 & 0.0036 \\
-DoS Slowhttptest & 1,046 & 0.1424 \\
-DDoS & 25,744 & 0.6338 \\
-DoS GoldenEye & 2,017 & 0.7600 \\
-DoS Hulk & 35,087 & 0.8824 \\
-DoS slowloris & 1,070 & 0.8841 \\
-Web Attack - XSS & 143 & 0.9510 \\
+Bot & Fri & 370 & 0.0000 & DDoS & Fri & 25,744 & 0.6338 \\
+FTP-Patator & Tue & 1,267 & 0.0008 & DoS GoldenEye & Wed & 2,017 & 0.7600 \\
+SSH-Patator & Tue & 757 & 0.0026 & DoS Hulk & Wed & 35,087 & 0.8824 \\
+Web Brute Force & Thu & 314 & 0.0032 & DoS slowloris & Wed & 1,070 & 0.8841 \\
+PortScan & Fri & 26,822 & 0.0036 & Web XSS & Thu & 143 & 0.9510 \\
+DoS Slowhttptest & Wed & 1,046 & 0.1424 &  &  &  &  \\
 \hline
 \end{tabular}
+\par\smallskip\footnotesize Not held out (fewer than 50 flows in the sample): Infiltration (7), Web Sql Injection (5), Heartbleed (3).
 \end{table}
