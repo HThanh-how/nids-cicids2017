@@ -22,6 +22,7 @@
 \usepackage{multirow}
 \usepackage{array}
 \usepackage{url}
+\usepackage{bbding}
 \usepackage{tikz}
 \usetikzlibrary{positioning,fit,arrows.meta}
 % NOTE: hyperref intentionally NOT loaded — it clashes with llncs
@@ -75,13 +76,7 @@ Leakage-Resistant Evaluation and Measured Serving Cost}
 \else
 % Two authors, one institution. The email domain matches the affiliation;
 % to switch the corresponding address, change only the \email line.
-% TODO(author, camera-ready): Springer and SOICT require exactly ONE
-% corresponding author, marked in the header (envelope sign) and matching
-% the author who signs the Licence to Publish and the corresponding-author
-% text file in the EasyChair ZIP. Not decided here. To mark, add
-% \usepackage{bbding} to the preamble and append \textsuperscript{(\Envelope)}
-% to that author's name below, e.g. "Tuan-Anh Truong\textsuperscript{(\Envelope)}".
-\author{Huy-Thanh Pham \and Tuan-Anh Truong}
+\author{Huy-Thanh Pham\textsuperscript{(\Envelope)} \and Tuan-Anh Truong}
 \authorrunning{H.-T. Pham and T.-A. Truong}
 \institute{Faculty of Computer Science and Engineering,\\
 Ho Chi Minh City University of Technology (HCMUT), VNU-HCM,
@@ -710,12 +705,7 @@ cluster-level serving measurements.
 from Ho Chi Minh City University of Technology (HCMUT), VNU-HCM for this
 study.
 
-% TODO(author, camera-ready): Springer requires a competing-interests
-% statement here. Its wording must come from the authors; replace the bold
-% placeholder below with it (Springer's example for the no-interest case:
-% "The authors have no competing interests to declare that are relevant to
-% the content of this article.").
-\subsubsection{\discintname} \textbf{[TODO: authors' competing-interests statement.]}
+\subsubsection{\discintname} The authors have no competing interests to declare that are relevant to the content of this article.
 
 % Kept from the submitted version.
 % TODO(author): confirm this wording. For the camera-ready revision an AI
