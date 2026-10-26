@@ -1,0 +1,167 @@
+{
+  "host_note": "single host; load generator co-located; one closed-loop client, so no queueing",
+  "settings": {
+    "default_threads": {
+      "in_process": {
+        "parse_validate": {
+          "n": 3000,
+          "mean": 0.026719266666666665,
+          "p50": 0.0225,
+          "p95": 0.0505,
+          "p99": 0.0874
+        },
+        "standardise": {
+          "n": 3000,
+          "mean": 0.023684966666666668,
+          "p50": 0.0212,
+          "p95": 0.0368,
+          "p99": 0.0582
+        },
+        "model_one_row": {
+          "n": 3000,
+          "mean": 1.7245144666666665,
+          "p50": 1.5995,
+          "p95": 2.6251,
+          "p99": 3.3882
+        },
+        "serialise": {
+          "n": 3000,
+          "mean": 0.012963733333333333,
+          "p50": 0.0118,
+          "p95": 0.0196,
+          "p99": 0.0315
+        },
+        "handler_total": {
+          "n": 3000,
+          "mean": 1.7878824333333332,
+          "p50": 1.6569,
+          "p95": 2.7232,
+          "p99": 3.5079
+        },
+        "model_amortised_per_row_batch": {
+          "batch": 2000,
+          "n": 20,
+          "mean": 0.0022597949999999998,
+          "p50": 0.00222795,
+          "p95": 0.0031671,
+          "p99": 0.0033927
+        },
+        "omp_num_threads": "default"
+      },
+      "http_c1": {
+        "end_to_end": {
+          "n": 3116,
+          "mean": 6.4079263157894735,
+          "p50": 6.2186,
+          "p95": 8.787,
+          "p99": 10.8369
+        },
+        "app_total": {
+          "n": 3116,
+          "mean": 4.1555403401797175,
+          "p50": 3.968,
+          "p95": 5.9142,
+          "p99": 7.542
+        },
+        "model_and_standardise": {
+          "n": 3116,
+          "mean": 2.3998526636713735,
+          "p50": 2.2466,
+          "p95": 3.6738,
+          "p99": 4.8778
+        },
+        "attribution_p50_ms": {
+          "model_and_standardise": 2.2466,
+          "framework_parse_validate_serialise": 1.7214,
+          "transport_and_asgi_server": 2.2506000000000004
+        },
+        "attribution_mean_ms": {
+          "model_and_standardise": 2.3998526636713735,
+          "framework_parse_validate_serialise": 1.755687676508344,
+          "transport_and_asgi_server": 2.252385975609756
+        }
+      }
+    },
+    "pinned_one_thread": {
+      "in_process": {
+        "parse_validate": {
+          "n": 3000,
+          "mean": 0.021524033333333335,
+          "p50": 0.0167,
+          "p95": 0.0481,
+          "p99": 0.0771
+        },
+        "standardise": {
+          "n": 3000,
+          "mean": 0.0175632,
+          "p50": 0.0151,
+          "p95": 0.0337,
+          "p99": 0.0614
+        },
+        "model_one_row": {
+          "n": 3000,
+          "mean": 1.1278712,
+          "p50": 1.0293,
+          "p95": 2.1103,
+          "p99": 2.5846
+        },
+        "serialise": {
+          "n": 3000,
+          "mean": 0.009592933333333333,
+          "p50": 0.008,
+          "p95": 0.0178,
+          "p99": 0.0281
+        },
+        "handler_total": {
+          "n": 3000,
+          "mean": 1.1765513666666667,
+          "p50": 1.0734,
+          "p95": 2.199,
+          "p99": 2.678
+        },
+        "model_amortised_per_row_batch": {
+          "batch": 2000,
+          "n": 20,
+          "mean": 0.006988857499999999,
+          "p50": 0.0070022,
+          "p95": 0.0083109,
+          "p99": 0.009368350000000001
+        },
+        "omp_num_threads": "1"
+      },
+      "http_c1": {
+        "end_to_end": {
+          "n": 6815,
+          "mean": 2.9284202347762287,
+          "p50": 2.8439,
+          "p95": 4.1,
+          "p99": 4.6919
+        },
+        "app_total": {
+          "n": 6815,
+          "mean": 1.8511857520176083,
+          "p50": 1.7822,
+          "p95": 2.7057,
+          "p99": 3.2899
+        },
+        "model_and_standardise": {
+          "n": 6815,
+          "mean": 1.0405402054292003,
+          "p50": 0.9917,
+          "p95": 1.6365,
+          "p99": 2.1149
+        },
+        "attribution_p50_ms": {
+          "model_and_standardise": 0.9917,
+          "framework_parse_validate_serialise": 0.7905,
+          "transport_and_asgi_server": 1.0617
+        },
+        "attribution_mean_ms": {
+          "model_and_standardise": 1.0405402054292003,
+          "framework_parse_validate_serialise": 0.8106455465884079,
+          "transport_and_asgi_server": 1.0772344827586204
+        }
+      }
+    }
+  }
+}
