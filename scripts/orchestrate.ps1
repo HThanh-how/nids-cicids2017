@@ -6,13 +6,14 @@
 #  DÙNG:
 #    1) Đặt key cho phiên (KHÔNG hardcode vào file):
 #         $env:ANTHROPIC_API_KEY = "fe_oa_..."
-#    2) cd vào repo:  cd D:\Phd\BCKH\intrusion-detection-cicids2017
+#    2) cd vào thư mục repo (script tự chuyển về gốc repo nếu bạn quên)
 #    3) Chạy:         .\scripts\orchestrate.ps1
 #
 #  Mỗi task là 1 sub-agent độc lập (không nhớ ngữ cảnh chat) — nên prompt phải
 #  tự đủ. Sub-agent tự sửa file trong repo và commit.
 # =====================================================================
 $ErrorActionPreference = "Stop"
+Set-Location (Join-Path $PSScriptRoot "..")  # luôn chạy từ gốc repo
 
 if (-not $env:ANTHROPIC_API_KEY) {
   throw "Chưa set `$env:ANTHROPIC_API_KEY (key proxy công ty). Set rồi chạy lại."

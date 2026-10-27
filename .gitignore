@@ -25,3 +25,6 @@ serving/artifacts/
 __pycache__/
 *.pyc
 experiments/run_full.log
+
+# Confidential reviewer correspondence (kept outside the public repo)
+revision/response_to_reviewers.md
