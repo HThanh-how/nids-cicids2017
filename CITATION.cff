@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use this software or the paper, please cite the paper below."
+title: "Code and data artifact for: How Optimistic Is Your Intrusion-Detection Benchmark? Leakage-Resistant Evaluation and Measured Serving Cost"
+type: software
+license: MIT
+repository-code: "https://github.com/HThanh-how/nids-cicids2017"
+authors:
+  - family-names: Pham
+    given-names: Huy-Thanh
+    affiliation: "Ho Chi Minh City University of Technology (HCMUT), VNU-HCM"
+  - family-names: Truong
+    given-names: Tuan-Anh
+    affiliation: "Ho Chi Minh City University of Technology (HCMUT), VNU-HCM"
+preferred-citation:
+  type: conference-paper
+  title: "How Optimistic Is Your Intrusion-Detection Benchmark? Leakage-Resistant Evaluation and Measured Serving Cost"
+  authors:
+    - family-names: Pham
+      given-names: Huy-Thanh
+    - family-names: Truong
+      given-names: Tuan-Anh
+  collection-title: "SOICT 2026"
+  collection-type: proceedings
+  publisher:
+    name: Springer
+  year: 2026
+  notes: "To appear in Springer CCIS."
