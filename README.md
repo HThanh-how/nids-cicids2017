@@ -8,6 +8,8 @@ Technology (HCMUT), VNU-HCM, Vietnam
 
 Venue: **SOICT 2026 (Springer CCIS, to appear)**
 
+Slides for the SOICT 2026 oral presentation: https://hthanh-how.github.io/nids-cicids2017/ (source: `slides/`).
+
 This repository is the artifact of the paper: the LaTeX source, the
 experiment code, the raw result files from which every table and figure is
 generated, and the serving benchmark (service, Dockerfile, Kubernetes
