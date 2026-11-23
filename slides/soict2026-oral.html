@@ -44,10 +44,10 @@ body.nogl::before{content:'WebGL is unavailable here: static text view.';positio
 .hero .hl{font-size:84px;line-height:1.05}
 .w{visibility:hidden;white-space:nowrap}.w.on{visibility:visible}
 body.static .hl .w::after{display:none!important}
-.slide.col::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1050px;background:linear-gradient(90deg,rgba(3,6,6,.86),rgba(3,6,6,.6) 55%,transparent)}
+.slide.col::before{content:'';position:absolute;left:0;top:0;bottom:0;width:1100px;background:linear-gradient(90deg,rgba(3,6,6,.94),rgba(3,6,6,.78) 60%,transparent)}
 .slide.top::before{content:'';position:absolute;left:0;right:0;top:0;height:320px;background:linear-gradient(180deg,rgba(3,6,6,.86),rgba(3,6,6,.5) 60%,transparent)}
 .slide.top::after{content:'';position:absolute;left:0;right:0;bottom:0;height:300px;background:linear-gradient(0deg,rgba(3,6,6,.82),rgba(3,6,6,.45) 60%,transparent)}
-.slide.hero::before{width:1250px}
+.slide.hero::before{width:1500px;background:linear-gradient(90deg,rgba(3,6,6,.95),rgba(3,6,6,.85) 65%,transparent)}
 .lb.chip .in{background:rgba(3,6,6,.72);padding:1px 8px}
 .slide.on .hl .w:last-child.on::after{content:'';display:inline-block;width:.46em;height:.82em;background:var(--ph);margin-left:.16em;vertical-align:-.08em;opacity:0;animation:blink .9s steps(1) 5}
 @keyframes blink{50%{opacity:.9}}
@@ -168,6 +168,11 @@ body.pen #pen{display:flex}
 }
 .snap{display:none}
 @media print{.snap{display:block}}
+
+/* legibility: dark halo behind every text so bright 3D lines and bars never wash it out */
+.slide .hl,.slide .lines,.slide .lines p,.slide .sub,.slide .who,.slide .where{text-shadow:0 0 3px #030606,0 0 9px #030606,0 0 22px rgba(3,6,6,.95)}
+.lb,.lb.hot,.lb.am,.lb.dim,.lb.ph,.lb.bone,.lb.blue{text-shadow:0 0 3px #030606,0 0 8px #030606,0 0 16px rgba(3,6,6,.9)}
+.lb.dim{color:#a9cfc4}
 </style></head>
 <body><canvas id="gl" aria-hidden="true"></canvas>
 <div id="labels" aria-hidden="true"></div>
@@ -6036,7 +6041,7 @@ var SLIDES = [
   lines: ['XGBoost. Random Forest behaves the same way.', 'False-positive rate improves, 0.0073 to 0.0030.', 'Missed attack flows rise from 185 to 36,506.'],
   notes: "Same pipeline, same hyperparameters, same data. XGBoost attack recall falls from 0.9935 to 0.3164, and macro-F1 from 0.9879 to 0.6887. Random Forest behaves the same way: recall 0.9937 down to 0.3109. Models that find essentially every attack under the random split miss two in three under the day-disjoint one. Now look at the false-positive rate: it improves, from 0.0073 to 0.0030, while false negatives rise from 185 flows to 36,506. The detector does not become noisy; it becomes quiet, confident and wrong." },
 { plan: 60, short: 'Ranking inverts',
-  title: 'The ranking inverts: the weakest detector becomes the strongest',
+  title: 'The ranking inverts: weakest becomes strongest',
   lines: ['At the default threshold LogReg wins by being less selective: FPR 0.0592 against 0.0030 for XGBoost.', 'Threshold-free, the order reverses: ROC-AUC 0.6448 against 0.8526.'],
   notes: "The ranking does not survive either. Under the random split, macro-F1 puts XGBoost and Random Forest at the top and logistic regression last, at 0.8515. Under the day-disjoint split, logistic regression is first at 0.7433. But this is not better generalisation. It comes with a false-positive rate of 0.0592 against 0.0030 for XGBoost, and threshold-free the order reverses: ROC-AUC 0.6448 for logistic regression against 0.8526 for XGBoost. It is a warning about default thresholds, not evidence that the linear model generalises." },
 { plan: 80, short: 'Controls',
@@ -6409,7 +6414,7 @@ function fv(c, k) { var q = V2.col(c, k); return [q.r, q.g, q.b]; }
 
 /* 1: title, a stack of 15 traces (Joy Division style); the front trace is the calm headline score */
 B[0] = function (s) {
-  s.cam = { p: [2, 5.2, 17], l: [3.5, 1.2, -9], fov: 40, shift: .25 };
+  s.cam = { p: [2, 5.2, 17], l: [3.5, 2.6, -9], fov: 40, shift: .36 };
   var ROWS = 15, N = 150, r = V2.rng(11); s.rows = [];
   for (var k = 0; k < ROWS; k++) {
     var tr = new Trace(N, { w: k === 0 ? 2.6 : 1.7, color: k === 0 ? COL.bone : (k > 7 ? COL.ph : COL.ph), k: 2.1 - k * .09, a: k === 0 ? 1 : .92 - k * .03 });
@@ -6549,7 +6554,7 @@ B[3] = function (s) {
 
 /* 5: the cliff */
 B[4] = function (s) {
-  s.cam = { p: [4, 6.0, 27], l: [4, 4.6, 0], fov: 38, shift: .14 };
+  s.cam = { p: [4, 6.0, 27], l: [4, 4.6, 0], fov: 38, shift: .26 };
   var v0r = .9935, v1r = .3164, v0f = .9879, v1f = .6887, SC = 7.2, N = 80, xa = -9, xb = 11;
   function mk(z, c) {
     var L = new Trace(N, { w: 3, color: COL.ph, k: 2.3 }), R = new Trace(N, { w: 3.2, color: COL.am, k: 2.2 });
@@ -6630,7 +6635,7 @@ B[5] = function (s) {
     s.ll.push(V2.label(s, m.n + ' <b>' + m.a.toFixed(4) + '</b>', XL + .5, m.ly[0], 0, 'm chip ' + cc + ' a-l'));
     s.rl.push(V2.label(s, '<b>' + m.b.toFixed(4) + '</b> ' + m.n, XR - .5, m.ly[1], 0, 'm chip ' + cc + ' a-r'));
   });
-  V2.label(s, 'random split', XL, 8.25, 0, 'm ph a-c'); V2.label(s, 'day-disjoint split', XR, 8.25, 0, 'm am a-c'); V2.label(s, 'macro-F1', XL - .5, 7.7, 0, 's bone a-r');
+  V2.label(s, 'random split', XL, 8.25, 0, 'm ph a-c'); V2.label(s, 'day-disjoint split', XR, 8.25, 0, 'm am a-c'); V2.label(s, 'macro-F1', XL - 1.9, 7.6, 0, 's bone a-r');
   s.update = function (t, dt, se) {
     var p = clamp(se / 2.4, 0, 1); s.tr.forEach(function (tr, i) { tr.reveal(clamp(p * 1.15 - i * .02, 0, 1)); });
     s.ll.forEach(function (l) { l.on = se > .3; }); s.rl.forEach(function (l) { l.on = se > 2.2; });
@@ -6761,10 +6766,10 @@ B[9] = function (s) {
   s.g.add(V2.segs(arr, { color: COL.ph, k: 1.6, w: 2.2 }));
   var x1 = xs[2][1]; V2.label(s, '2.93 ms per request', (xs[0][0] + x1) / 2, 4.1, 0, 'm ph a-c');
   s.g.add(V2.segs([xs[0][0], 3.0, 0, x1, 3.0, 0, xs[0][0], 2.7, 0, xs[0][0], 3.3, 0, x1, 2.7, 0, x1, 3.3, 0], { color: COL.ph, k: 1.3, w: 1.4 }));
-  V2.label(s, 'schematic: block width = measured time', (xs[0][0] + x1) / 2, -2.2, 0, 's dim a-c');
+  V2.label(s, 'schematic: block width = measured time', (xs[0][0] + x1) / 2, -3.6, 0, 's dim a-c');
   var NP = 60, pos = new Float32Array(NP * 3), col = new Float32Array(NP * 3), pts = V2.points(pos, col, 5.5, {}); s.g.add(pts);
   // meters
-  var LG = 1.15, BX = [4.6, 8.2, 11.8], vals = [9.5e5, 34662, 404], bc = [COL.am, COL.ph, COL.ph], bk = [2.0, 2.0, 2.4], bars = [];
+  var LG = 1.15, BX = [4.4, 7.8, 11.0], vals = [9.5e5, 34662, 404], bc = [COL.am, COL.ph, COL.ph], bk = [2.0, 2.0, 2.4], bars = [];
   var d = [], dec = [10, 100, 1e3, 1e4, 1e5, 1e6], dl = ['10', '100', '1k', '10k', '100k', '1M'];
   dec.forEach(function (v, k) { var y = Math.log10(v) * LG; d.push(2.4, y, 0, 13.4, y, 0); V2.label(s, dl[k], 2.0, y, 0, 's dim a-r'); });
   d.push(2.4, 0, 0, 13.4, 0, 0, 2.4, 0, 0, 2.4, 6.9, 0);
@@ -7217,7 +7222,7 @@ help.innerHTML = '<h3>Keyboard shortcuts</h3><div class="g">' + [
   ['Right, Down, PageDown, Space, Enter', 'next slide'], ['Left, Up, PageUp', 'previous slide'], ['Home, End', 'first, last slide'], ['number then Enter', 'go to slide'],
   ['S', 'toggle: split (4), protocol (9), mode (10)'], ['M', 'model (slide 9)'], ['F', 'fullscreen'], ['N', 'speaker notes'], ['T', 'timer, R resets'], ['P', 'presenter window'],
   ['O', 'overview'], ['L', 'laser, [ ] or wheel for size'], ['D', 'ink: pen, highlighter, eraser'], ['Ctrl+Z, Ctrl+Y, Delete', 'undo, redo, clear ink'],
-  ['B or period', 'blackout'], ['W', 'whiteout'], ['?', 'this help'], ['Esc', 'close overlays'], ['Right click', 'menu'], ['Swipe', 'previous, next on touch']
+  ['B or period', 'blackout'], ['W', 'whiteout'], ['?', 'this help'], ['Esc', 'close overlays'], ['Left click', 'next slide'], ['Right click', 'previous slide'], ['Shift + right click', 'menu'], ['Swipe', 'previous, next on touch']
 ].map(function (r) { return '<div class="r"><span>' + r[0].replace(/(^|, | or )([A-Za-z0-9?.]+)(?=,| or |$)/g, '$1<kbd>$2</kbd>') + '</span><span>' + r[1] + '</span></div>'; }).join('') + '</div>';
 D.setHelp = function (on) { help.classList.toggle('on', on); };
 
@@ -7227,7 +7232,7 @@ var MENU = [['First slide', 'Home', function () { D.go(0); }], ['Last slide', 'E
   ['Clear ink on this slide', '', function () { inkClear(); }], ['Blackout', 'B', function () { D.setBlackout(!D.blackout); }], ['Fullscreen', 'F', toggleFs], ['Keyboard shortcuts', '?', function () { D.setHelp(true); }]];
 menu.innerHTML = ''; MENU.forEach(function (m, i) { var b = el('button', { type: 'button', role: 'menuitem' }, m[0] + '<span>' + m[1] + '</span>'); b.addEventListener('click', function () { hideMenu(); m[2](); }); menu.appendChild(b); });
 function hideMenu() { menu.classList.remove('on'); }
-document.addEventListener('contextmenu', function (e) { if (e.target.closest('#tray,#pen,#overview,#help')) return; e.preventDefault(); menu.classList.add('on'); var w = menu.offsetWidth, h = menu.offsetHeight; menu.style.left = Math.min(e.clientX, innerWidth - w - 6) + 'px'; menu.style.top = Math.min(e.clientY, innerHeight - h - 6) + 'px'; menu.firstChild.focus(); });
+document.addEventListener('contextmenu', function (e) { if (e.target.closest('#tray,#pen,#overview,#help')) return; e.preventDefault(); if (!e.shiftKey && !e.ctrlKey) { if (!e.target.closest('#menu')) D.prev(); return; } menu.classList.add('on'); var w = menu.offsetWidth, h = menu.offsetHeight; menu.style.left = Math.min(e.clientX, innerWidth - w - 6) + 'px'; menu.style.top = Math.min(e.clientY, innerHeight - h - 6) + 'px'; menu.firstChild.focus(); });
 document.addEventListener('pointerdown', function (e) { if (!e.target.closest('#menu')) hideMenu(); if (!e.target.closest('#help') && help.classList.contains('on') && !e.target.closest('#bHelp')) D.setHelp(false); }, true);
 
 /* ---------------------------------------------------------------- laser */
@@ -7381,6 +7386,21 @@ addEventListener('beforeprint', function () {
 addEventListener('afterprint', function () { printed.forEach(function (n) { n.remove(); }); printed = []; });
 D.printNow = function () { window.print(); };
 if (Q.has('print')) setTimeout(function () { window.print(); }, 600);
+
+/* ---------------------------------------------------------------- mouse navigation: left click = next, right click = previous (handled in contextmenu above), back/forward buttons */
+(function () {
+  var skip = '#tray,#pen,#overview,#help,#menu,#notes,button,a,input,select,textarea,label,.seg,#toast';
+  document.addEventListener('click', function (e) {
+    if (e.button !== 0 || e.defaultPrevented || penOn || D.overview) return;
+    if (e.target.closest(skip)) return;
+    var sel = window.getSelection && window.getSelection(); if (sel && String(sel).length) return;
+    D.next();
+  });
+  document.addEventListener('mouseup', function (e) {
+    if (e.button === 3) { D.prev(); e.preventDefault(); } else if (e.button === 4) { D.next(); e.preventDefault(); }
+  });
+  document.addEventListener('mousedown', function (e) { if (e.button === 3 || e.button === 4) e.preventDefault(); });
+})();
 };
 })();
 </script>
